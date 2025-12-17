@@ -6,7 +6,9 @@
         xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
         xmlns:local="clr-namespace:FotocopiadoraWPF"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="MainWindow"
+        WindowState="Maximized"
+        >
 
     <syncfusion:SfNavigationDrawer
         x:Name="navigationDrawer"
