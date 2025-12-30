@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="FotocopiadoraWPF.Views.FotocopiasView"
+﻿<UserControl
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
@@ -7,9 +7,11 @@
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF"
 
+             xmlns:Globalization="clr-namespace:System.Globalization;assembly=System.Runtime" x:Class="FotocopiadoraWPF.Views.FotocopiasView"
+
              mc:Ignorable="d" d:DesignWidth="800" Background="White" Height="718">
     <UserControl.Resources>
-        <Style TargetType="inputLayout:SfTextInputLayout">
+        <Style TargetType="{x:Type inputLayout:SfTextInputLayout}">
             <Setter Property="Margin" Value="10,0,10,10"/>
         </Style>
     </UserControl.Resources>
@@ -35,46 +37,42 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Content="Datos" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" Height="50" />
-            
-
-            
-
+            <Label Content="Datos" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" BorderBrush="{x:Null}" HorizontalAlignment="Center" Height="40" />
 
             <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="1" Hint="Fecha" HelperText="" ContainerType="Outlined">
                 <syncfusion:DateTimeEdit IsButtonPopUpEnabled="False" Height="13" FontSize="14" MinHeight="15"/>
             </inputLayout:SfTextInputLayout>
 
             <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="0"  Hint="Paginas" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox x:Name="TxtPaginas" Height="15" UseNullOption="True" FontSize="14" Value="{Binding Paginas, UpdateSourceTrigger=PropertyChanged}"/>
+                <syncfusion:IntegerTextBox x:Name="TxtPaginas" Height="15" UseNullOption="True" FontSize="14" Value="{Binding Paginas, UpdateSourceTrigger=PropertyChanged}" NullValue="0"/>
             </inputLayout:SfTextInputLayout>
 
             <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="1"  Hint="Anillados" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Anillados, UpdateSourceTrigger=PropertyChanged}"/>
+                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Anillados, UpdateSourceTrigger=PropertyChanged}" NullValue="0"/>
             </inputLayout:SfTextInputLayout>
             <StackPanel Grid.Row="1">
                 <inputLayout:SfTextInputLayout Grid.Column="0"  Hint="Nombre" HelperText="" ContainerType="Outlined" >
                     <TextBox Height="15" VerticalContentAlignment="Center" VerticalAlignment="Center" FontSize="14" MinHeight="15" />
                 </inputLayout:SfTextInputLayout>
-                <CheckBox  Grid.Column="0" Content="Empleado" />
+                <CheckBox  Grid.Column="0" Content="Empleado" Margin="10,-10,10,0" />
             </StackPanel>
-    
+
 
             <inputLayout:SfTextInputLayout Grid.Row="4" Grid.Column="0"  Grid.ColumnSpan="2" Hint="Comentario" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
                 <TextBox Height="15" FontSize="14" MinHeight="15" />
             </inputLayout:SfTextInputLayout>
 
-            <Label Grid.Row="5" Content="Metodo de pago" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+            <Label Grid.Row="5" Height="40" Content="Metodo de pago" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" />
 
             <inputLayout:SfTextInputLayout Grid.Row="6" Grid.Column="0"  Hint="Efectivo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14"/>
+                <syncfusion:CurrencyTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Efectivo, Mode=TwoWay}" PreviewMouseDoubleClick="Efectivo_DoubleClick" NullValue="0"/>
             </inputLayout:SfTextInputLayout>
 
             <inputLayout:SfTextInputLayout Grid.Row="6" Grid.Column="1"  Hint="Transferencia" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" />
+                <syncfusion:CurrencyTextBox Height="15" FontSize="14" UseNullOption="True" Value="{Binding Transferencia, Mode=TwoWay}" PreviewMouseDoubleClick="Transferencia_DoubleClick" Cursor="IBeam" NullValue="0"></syncfusion:CurrencyTextBox>
             </inputLayout:SfTextInputLayout>
 
-            <CheckBox Grid.Row="8" Grid.Column="0" Content="Empleado" Margin="10,5,0,5"/>
+            <CheckBox  Grid.Row="8" Content="Deudor" Margin="10,-10,10,0" />
             <StackPanel Grid.Row="2"/>
 
 
@@ -94,18 +92,18 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Label Grid.Row="0" Content="Detalle" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+            <Label Grid.Row="0" Height="40" Content="Detalle" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" />
 
-            <syncfusion:SfTextInputLayout Grid.Row="1" Grid.Column="0"  Hint="Paginas" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox Height="15" FontSize="14"  IsReadOnly="True" IsEnabled="False" Value="{Binding TotalPaginas, Mode=OneWay}"/>
-            </syncfusion:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="0"  Hint="Paginas" HelperText="" ContainerType="Outlined" VerticalAlignment="Center" Foreground="Black" BorderBrush="Black">
+                <syncfusion:CurrencyTextBox Height="15" FontSize="14"  IsReadOnly="True" CurrencySymbol="$" IsEnabled="False" Value="{Binding TotalPaginas, Mode=OneWay}" Foreground="Black"/>
+            </inputLayout:SfTextInputLayout>
 
-            <syncfusion:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Anillados" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox Height="15" FontSize="14" IsReadOnly="True" IsEnabled="False" Value="{Binding TotalAnillados, Mode=OneWay}"/>
-            </syncfusion:SfTextInputLayout>
-            <syncfusion:SfTextInputLayout Grid.Row="3" Grid.Column="0"  Hint="Total" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:CurrencyTextBox IsEnabled="False" CurrencySymbol="$" Value="{Binding Total, Mode=OneWay}"/>
-            </syncfusion:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Anillados" HelperText="" ContainerType="Outlined" VerticalAlignment="Center" Foreground="Black" BorderBrush="Black">
+                <syncfusion:CurrencyTextBox Height="15" FontSize="14" IsReadOnly="True" CurrencySymbol="$" IsEnabled="False" Value="{Binding TotalAnillados, Mode=OneWay}" Foreground="Black" BorderBrush="Black"/>
+            </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="0"  Hint="Total" HelperText="" ContainerType="Outlined" VerticalAlignment="Center" Foreground="Black" BorderBrush="Black">
+                <syncfusion:CurrencyTextBox IsEnabled="False" CurrencySymbol="$" Value="{Binding Total, Mode=OneWay}" Foreground="Black" BorderBrush="Black"/>
+            </inputLayout:SfTextInputLayout>
 
         </Grid>
 
