@@ -7,12 +7,11 @@
         xmlns:local="clr-namespace:FotocopiadoraWPF"
         mc:Ignorable="d"
         Title="MainWindow"
-        WindowState="Maximized"
         >
 
     <syncfusion:SfNavigationDrawer
         x:Name="navigationDrawer"
-        DisplayMode="Expanded">
+        DisplayMode="Expanded" DrawerBackground="#FFEAE8E8">
 
         <!--<syncfusion:NavigationItem
                 Header="Inbox"
@@ -43,34 +42,34 @@
 
         <syncfusion:NavigationItem Header="Fotocopias" FontSize="16">
             <syncfusion:NavigationItem.Icon>
-                    <Image Width="20" Height="20" Source="/Assets/Icons/draft.png"/>
+                <Image Width="20" Height="20" Source="/Assets/Icons/draft.png"/>
             </syncfusion:NavigationItem.Icon>
         </syncfusion:NavigationItem>
 
         <syncfusion:NavigationItem Header="Balance" FontSize="16">
-                <syncfusion:NavigationItem.Icon>
-                    <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
-                </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>
+            <syncfusion:NavigationItem.Icon>
+                <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
+            </syncfusion:NavigationItem.Icon>
+        </syncfusion:NavigationItem>
 
         <syncfusion:NavigationItem Header="Deudores" FontSize="16">
-                <syncfusion:NavigationItem.Icon>
-                    <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
-                </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>
+            <syncfusion:NavigationItem.Icon>
+                <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
+            </syncfusion:NavigationItem.Icon>
+        </syncfusion:NavigationItem>
 
         <syncfusion:NavigationItem Header="Precios" FontSize="16">
-                <syncfusion:NavigationItem.Icon>
-                    <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
-                </syncfusion:NavigationItem.Icon>
-            </syncfusion:NavigationItem>
+            <syncfusion:NavigationItem.Icon>
+                <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
+            </syncfusion:NavigationItem.Icon>
+        </syncfusion:NavigationItem>
 
         <syncfusion:SfNavigationDrawer.ContentView >
             <Grid Background="#F5F5F5">
                 <ContentControl x:Name="MainContent"/>
             </Grid>
         </syncfusion:SfNavigationDrawer.ContentView>
-        
+
     </syncfusion:SfNavigationDrawer>
 
 
