@@ -119,6 +119,7 @@ Namespace ViewModels
         Private _paginas As Integer?
         Private _anillados As Integer?
         Private _comentario As String
+        Private _nombre As String
 
         Public Property Paginas As Integer?
             Get
@@ -156,6 +157,36 @@ Namespace ViewModels
                 Avisar(NameOf(TotalAnillados))
                 Avisar(NameOf(Total))
             End Set
+        End Property
+
+        Public Property Nombre As String
+            Get
+                Return _nombre
+            End Get
+            Set(value As String)
+                _nombre = value
+                Avisar(NameOf(Nombre))
+                Avisar(NameOf(NombreTieneError))
+                Avisar(NameOf(NombreErrorText))
+
+            End Set
+        End Property
+
+        Public ReadOnly Property NombreTieneError As Boolean
+            Get
+                If Not MostrarErrores Then Return False
+                Return String.IsNullOrWhiteSpace(Nombre)
+            End Get
+        End Property
+
+
+        Public ReadOnly Property NombreErrorText As String
+            Get
+                If NombreTieneError Then
+                    Return "Ingrese un nombre."
+                End If
+                Return String.Empty
+            End Get
         End Property
 
         Public Property Comentario As String
@@ -209,6 +240,17 @@ Namespace ViewModels
             End Get
         End Property
 
+        Private _fecha As DateTime = Date.Today
+
+        Public Property Fecha As DateTime
+            Get
+                Return _fecha
+            End Get
+            Set(value As DateTime)
+                _fecha = value
+                Avisar(NameOf(Fecha))
+            End Set
+        End Property
 
         '==================== PAGOS ====================
 
@@ -285,10 +327,75 @@ Namespace ViewModels
                 End If
             End Get
         End Property
-
         Private Sub Guardar()
-            _fotocopiasRepo.GuardarFotocopia(Me)
+            Try
+                ' 1) Activar visualización de errores
+                MostrarErrores = True
+
+                ' 2) Validar
+                ' Si hay error, no guardar y listo
+                If NombreTieneError Then
+                    Exit Sub
+                End If
+
+                ' 3) Guardar
+                _fotocopiasRepo.GuardarFotocopia(Me)
+
+                MessageBox.Show("Guardado correctamente")
+
+                ' 4) Limpiar
+                LimpiarFormulario()
+
+
+
+            Catch ex As Exception
+                MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error)
+            End Try
         End Sub
+
+
+        Private _mostrarErrores As Boolean
+
+        Public Property MostrarErrores As Boolean
+            Get
+                Return _mostrarErrores
+            End Get
+            Set(value As Boolean)
+                _mostrarErrores = value
+                Avisar(NameOf(NombreTieneError))
+                Avisar(NameOf(NombreErrorText))
+            End Set
+        End Property
+
+
+
+
+        Private Sub LimpiarFormulario()
+
+            Nombre = String.Empty
+            Comentario = String.Empty
+
+            Paginas = Nothing
+            Anillados = Nothing
+
+            PrecioPagina = PrecioNormal
+
+            Efectivo = Nothing
+            Transferencia = Nothing
+
+            EsEmpleado = False
+
+            Fecha = Date.Today
+
+            MiNumero = Nothing
+
+            Avisar(NameOf(TotalPaginas))
+            Avisar(NameOf(TotalAnillados))
+            Avisar(NameOf(Total))
+            Avisar(NameOf(HelperPrecioPagina))
+
+        End Sub
+
 
     End Class
 

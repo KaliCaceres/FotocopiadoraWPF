@@ -40,7 +40,7 @@
             <Label Content="Datos" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" BorderBrush="{x:Null}" HorizontalAlignment="Center" Height="40" />
 
             <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="1" Hint="Fecha" HelperText="" ContainerType="Outlined">
-                <syncfusion:DateTimeEdit IsButtonPopUpEnabled="False" Height="13" FontSize="14" MinHeight="15"/>
+                <syncfusion:DateTimeEdit IsButtonPopUpEnabled="False" Height="13" FontSize="14" MinHeight="15" DateTime="{Binding Fecha, Mode=TwoWay}"  />
             </inputLayout:SfTextInputLayout>
 
             <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="0"  Hint="Paginas" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
@@ -50,11 +50,12 @@
             <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="1"  Hint="Anillados" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
                 <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Anillados, UpdateSourceTrigger=PropertyChanged}" NullValue="0"/>
             </inputLayout:SfTextInputLayout>
+            
             <StackPanel Grid.Row="1">
-                <inputLayout:SfTextInputLayout Grid.Column="0"  Hint="Nombre" HelperText="" ContainerType="Outlined" >
-                    <TextBox Height="15" VerticalContentAlignment="Center" VerticalAlignment="Center" FontSize="14" MinHeight="15" />
+                <inputLayout:SfTextInputLayout Grid.Column="0"  Hint="Nombre" ContainerType="Outlined" HasError="{Binding NombreTieneError}" ErrorText="{Binding NombreErrorText}" HelperText="">
+                    <TextBox Height="15" VerticalContentAlignment="Center" VerticalAlignment="Center" FontSize="14" MinHeight="15" Text="{Binding Nombre, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </inputLayout:SfTextInputLayout>
-                <CheckBox  Grid.Column="0" Content="Empleado" Margin="10,-10,10,0" IsChecked="{Binding EsEmpleado, Mode=TwoWay}"/>
+                <CheckBox  Grid.Column="0" Content="Empleado" Margin="20,-5,0,10" IsChecked="{Binding EsEmpleado, Mode=TwoWay}"/>
             </StackPanel>
 
 
@@ -64,22 +65,20 @@
 
             <Label Grid.Row="5" Height="40" Content="Metodo de pago" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" />
 
-            <inputLayout:SfTextInputLayout Grid.Row="6" Grid.Column="0"  Hint="Efectivo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:CurrencyTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Efectivo, Mode=TwoWay}" PreviewMouseDoubleClick="Efectivo_DoubleClick" NullValue="0"/>
-            </inputLayout:SfTextInputLayout>
 
-            <inputLayout:SfTextInputLayout Grid.Row="6" Grid.Column="1"  Hint="Transferencia" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+            <inputLayout:SfTextInputLayout Grid.Row="6" Grid.Column="1"  Hint="Transferencia" HelperText="" ContainerType="Outlined" VerticalAlignment="Top">
                 <syncfusion:CurrencyTextBox Height="15" FontSize="14" UseNullOption="True" Value="{Binding Transferencia, Mode=TwoWay}" PreviewMouseDoubleClick="Transferencia_DoubleClick" Cursor="IBeam" NullValue="0"></syncfusion:CurrencyTextBox>
             </inputLayout:SfTextInputLayout>
 
-            <CheckBox  Grid.Row="8" Content="Deudor" Margin="10,-10,10,0" />
+            <StackPanel Grid.Row="6">
+                <inputLayout:SfTextInputLayout Grid.Row="6" Grid.Column="0"  Hint="Efectivo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                    <syncfusion:CurrencyTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Efectivo, Mode=TwoWay}" PreviewMouseDoubleClick="Efectivo_DoubleClick" NullValue="0"/>
+                </inputLayout:SfTextInputLayout>
+                <CheckBox  Grid.Column="0" Content="Deudor" Margin="20,-5,0,10" />
+            </StackPanel>
+            
 
-            <Button Grid.Row="8" Grid.Column="1" Content="Guardar"
-                Command="{Binding GuardarCommand}"
-                Width="120"
-                Height="35"/>
-
-
+            <Button Grid.Row="8" Grid.Column="0" Content="Guardar" Command="{Binding GuardarCommand}" Width="120" Height="35" Grid.ColumnSpan="2"/>
         </Grid>
         <Grid Width="200">
             <Grid.ColumnDefinitions>

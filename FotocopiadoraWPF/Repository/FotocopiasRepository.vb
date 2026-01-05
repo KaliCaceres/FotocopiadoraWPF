@@ -1,4 +1,5 @@
-﻿Imports FotocopiadoraWPF.ViewModels
+﻿Imports System.Data
+Imports FotocopiadoraWPF.ViewModels
 Imports Microsoft.Data.SqlClient
 
 Public Class FotocopiasRepository
@@ -21,16 +22,25 @@ Public Class FotocopiasRepository
                  @precio_unitario, @precio_total, @transferencia,
                  @efectivo, @comentario, @id_estado)", cn)
 
-            cmd.Parameters.AddWithValue("@nombre", Date.Now)
-            cmd.Parameters.AddWithValue("@fecha",
-            cmd.Parameters.AddWithValue("@paginas", If(vm.Paginas, 0))
-            cmd.Parameters.AddWithValue("@anillados", If(vm.Anillados, 0))
-            cmd.Parameters.AddWithValue("@precio_unitario",
-            cmd.Parameters.AddWithValue("@precio_total", vm.Total)
-            cmd.Parameters.AddWithValue("@transferencia", If(vm.Transferencia, 0))
-            cmd.Parameters.AddWithValue("@efectivo", If(vm.Efectivo, 0))
-            cmd.Parameters.AddWithValue("@comentario",
-            cmd.Parameters.AddWithValue("@id_estado", 
+            cmd.Parameters.Add("@nombre", SqlDbType.VarChar).Value =
+    If(String.IsNullOrWhiteSpace(vm.Nombre), "SIN NOMBRE", vm.Nombre)
+
+            cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = vm.Fecha
+
+            cmd.Parameters.Add("@paginas", SqlDbType.Int).Value = If(vm.Paginas, 0)
+            cmd.Parameters.Add("@anillados", SqlDbType.Int).Value = If(vm.Anillados, 0)
+
+            cmd.Parameters.Add("@precio_unitario", SqlDbType.Int).Value = vm.PrecioPagina
+            cmd.Parameters.Add("@precio_total", SqlDbType.Int).Value = vm.Total
+
+            cmd.Parameters.Add("@transferencia", SqlDbType.Int).Value = If(vm.Transferencia, 0)
+            cmd.Parameters.Add("@efectivo", SqlDbType.Int).Value = If(vm.Efectivo, 0)
+
+            cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value =
+    If(vm.Comentario, "")
+
+            cmd.Parameters.Add("@id_estado", SqlDbType.Int).Value = 1
+
 
             cmd.ExecuteNonQuery()
         End Using
