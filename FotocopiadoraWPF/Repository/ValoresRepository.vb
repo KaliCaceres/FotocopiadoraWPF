@@ -3,14 +3,11 @@
 
 Public Class ValoresRepository
 
-    Private ReadOnly _cnString As String =
-        "Data Source=SOPORTE-SISTEMA\SQLEXPRESS;Initial Catalog=fotocopiadora;Integrated Security=True; Encrypt=True;TrustServerCertificate=True"
-
     Public Function ObtenerValores() As List(Of ValorConfiguracion)
 
         Dim lista As New List(Of ValorConfiguracion)
 
-        Using cn As New SqlConnection(_cnString)
+        Using cn As New SqlConnection(Configuracion.ConnectionString)
             cn.Open()
 
             Dim cmd As New SqlCommand("

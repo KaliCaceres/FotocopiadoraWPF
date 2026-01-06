@@ -16,7 +16,7 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Center" Width="400" HorizontalAlignment="Center">
+    <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Center" Width="400" HorizontalAlignment="Center" IsEnabled="{Binding InputsHabilitados}" >
 
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
@@ -59,7 +59,7 @@
             <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" IsReadOnly="True" />
         </inputLayout:SfTextInputLayout>
 
-        <Button Grid.Row="4" Grid.Column="0" Content="Modificar" Command="{Binding GuardarCommand}" Width="120" Height="35"/>
-        <Button Grid.Row="4" Grid.Column="1" Content="Cancelar" Command="{Binding GuardarCommand}" Width="120" Height="35"/>
+        <Button Grid.Row="4" Grid.Column="0" Content="Modificar" Command="{Binding ToggleInputsCommand}" Width="120" Height="35"/>
+        <Button Grid.Row="4" Grid.Column="1" Content="Cancelar"  Width="120" Height="35"/>
     </Grid>
 </UserControl>

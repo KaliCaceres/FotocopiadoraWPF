@@ -6,6 +6,8 @@ Namespace ViewModels
     Public Class FotocopiasViewModel
         Implements INotifyPropertyChanged
 
+
+
         Public Event PropertyChanged As PropertyChangedEventHandler _
             Implements INotifyPropertyChanged.PropertyChanged
 
@@ -14,27 +16,22 @@ Namespace ViewModels
         End Sub
 
 
-        '==================== REPOSITORIO ====================
+        '==================== CAMPOS / REPOS ====================
 
         Private ReadOnly _repo As New ValoresRepository()
-        Private _valores As List(Of ValorConfiguracion)
-
-        Private Function ObtenerValor(descripcion As String) As Integer
-            Return CInt(_valores.First(Function(v) v.Descripcion = descripcion).Valor)
-        End Function
-
         Private ReadOnly _fotocopiasRepo As New FotocopiasRepository()
-
+        Private _valores As List(Of ValorConfiguracion)
 
         '==================== CONSTRUCTOR ====================
 
         Public ReadOnly Property CopiarTotalCommand As ICommand
         Public ReadOnly Property GuardarCommand As ICommand
+
         Public Sub New()
+
             CopiarTotalCommand = New RelayCommand(AddressOf CopiarTotal)
             GuardarCommand = New RelayCommand(AddressOf Guardar)
 
-            ' Cargar valores desde la BD
             _valores = _repo.ObtenerValores()
 
             PrecioNormal = ObtenerValor("1 - 100")
@@ -42,9 +39,83 @@ Namespace ViewModels
             PrecioAnillado = ObtenerValor("Anillado")
 
             PrecioPagina = PrecioNormal
+            Fecha = Date.Today
 
         End Sub
 
+        '==================== DATOS ====================
+
+        Private _nombre As String
+        Private _comentario As String
+        Private _paginas As Integer?
+        Private _anillados As Integer?
+        Private _fecha As DateTime
+
+        Public Property Nombre As String
+            Get
+                Return _nombre
+            End Get
+            Set(value As String)
+                _nombre = value
+                Avisar(NameOf(Nombre))
+                Avisar(NameOf(NombreTieneError))
+                Avisar(NameOf(NombreErrorText))
+            End Set
+        End Property
+
+        Public Property Comentario As String
+            Get
+                Return _comentario
+            End Get
+            Set(value As String)
+                _comentario = value
+                Avisar(NameOf(Comentario))
+            End Set
+        End Property
+
+        Public Property Paginas As Integer?
+            Get
+                Return _paginas
+            End Get
+            Set(value As Integer?)
+
+                If value.HasValue AndAlso (value < 0 OrElse value > 5000) Then Exit Property
+
+                _paginas = value
+
+                If value.HasValue AndAlso value > 0 Then
+                    PrecioPagina = ObtenerPrecioPorCantidad(value.Value)
+                End If
+
+                Avisar(NameOf(Paginas))
+                Avisar(NameOf(PrecioPagina))
+                Avisar(NameOf(TotalPaginas))
+                Avisar(NameOf(Total))
+                Avisar(NameOf(HelperPrecioPagina))
+            End Set
+        End Property
+
+        Public Property Anillados As Integer?
+            Get
+                Return _anillados
+            End Get
+            Set(value As Integer?)
+                _anillados = value
+                Avisar(NameOf(Anillados))
+                Avisar(NameOf(TotalAnillados))
+                Avisar(NameOf(Total))
+            End Set
+        End Property
+
+        Public Property Fecha As DateTime
+            Get
+                Return _fecha
+            End Get
+            Set(value As DateTime)
+                _fecha = value
+                Avisar(NameOf(Fecha))
+            End Set
+        End Property
 
         '==================== PRECIOS ====================
 
@@ -92,114 +163,6 @@ Namespace ViewModels
             End Set
         End Property
 
-
-        '==================== LÓGICA DE PRECIO ====================
-
-        Private Function ObtenerPrecioPorCantidad(paginas As Integer) As Integer
-
-            If EsEmpleado Then
-                Return PrecioEmpleado
-            End If
-
-            If paginas <= 100 Then
-                Return ObtenerValor("1 - 100")
-            ElseIf paginas <= 400 Then
-                Return ObtenerValor("101 - 400")
-            ElseIf paginas <= 700 Then
-                Return ObtenerValor("401 - 700")
-            Else
-                Return ObtenerValor("+700")
-            End If
-
-        End Function
-
-
-        '==================== DATOS ====================
-
-        Private _paginas As Integer?
-        Private _anillados As Integer?
-        Private _comentario As String
-        Private _nombre As String
-
-        Public Property Paginas As Integer?
-            Get
-                Return _paginas
-            End Get
-            Set(value As Integer?)
-
-                ' Bloqueos
-                If value.HasValue Then
-                    If value < 0 Then Exit Property
-                    If value > 5000 Then Exit Property
-                End If
-
-                _paginas = value
-
-                If value.HasValue AndAlso value > 0 Then
-                    PrecioPagina = ObtenerPrecioPorCantidad(value.Value)
-                End If
-
-                Avisar(NameOf(Paginas))
-                Avisar(NameOf(PrecioPagina))
-                Avisar(NameOf(TotalPaginas))
-                Avisar(NameOf(Total))
-                Avisar(NameOf(HelperPrecioPagina))
-            End Set
-        End Property
-
-        Public Property Anillados As Integer?
-            Get
-                Return _anillados
-            End Get
-            Set(value As Integer?)
-                _anillados = value
-                Avisar(NameOf(Anillados))
-                Avisar(NameOf(TotalAnillados))
-                Avisar(NameOf(Total))
-            End Set
-        End Property
-
-        Public Property Nombre As String
-            Get
-                Return _nombre
-            End Get
-            Set(value As String)
-                _nombre = value
-                Avisar(NameOf(Nombre))
-                Avisar(NameOf(NombreTieneError))
-                Avisar(NameOf(NombreErrorText))
-
-            End Set
-        End Property
-
-        Public ReadOnly Property NombreTieneError As Boolean
-            Get
-                If Not MostrarErrores Then Return False
-                Return String.IsNullOrWhiteSpace(Nombre)
-            End Get
-        End Property
-
-
-        Public ReadOnly Property NombreErrorText As String
-            Get
-                If NombreTieneError Then
-                    Return "Ingrese un nombre."
-                End If
-                Return String.Empty
-            End Get
-        End Property
-
-        Public Property Comentario As String
-            Get
-                Return _comentario
-            End Get
-            Set(value As String)
-                _comentario = value
-                Avisar(NameOf(Comentario))
-            End Set
-        End Property
-
-
         '==================== EMPLEADO ====================
 
         Private _esEmpleado As Boolean
@@ -219,7 +182,6 @@ Namespace ViewModels
             End Set
         End Property
 
-
         '==================== TOTALES ====================
 
         Public ReadOnly Property TotalPaginas As Integer
@@ -238,18 +200,6 @@ Namespace ViewModels
             Get
                 Return TotalPaginas + TotalAnillados
             End Get
-        End Property
-
-        Private _fecha As DateTime = Date.Today
-
-        Public Property Fecha As DateTime
-            Get
-                Return _fecha
-            End Get
-            Set(value As DateTime)
-                _fecha = value
-                Avisar(NameOf(Fecha))
-            End Set
         End Property
 
         '==================== PAGOS ====================
@@ -287,72 +237,7 @@ Namespace ViewModels
             Efectivo = 0
         End Sub
 
-
-        '==================== OTROS ====================
-
-        Private _miNumero As Integer?
-
-        Public Property MiNumero As Integer?
-            Get
-                Return _miNumero
-            End Get
-            Set(value As Integer?)
-                _miNumero = value
-                Avisar(NameOf(MiNumero))
-            End Set
-        End Property
-
-        Private Sub CopiarTotal()
-            MiNumero = Total
-        End Sub
-
-        Public ReadOnly Property HelperPrecioPagina As String
-            Get
-                If Not Paginas.HasValue OrElse Paginas = 0 Then
-                    Return ""
-                End If
-
-                If EsEmpleado Then
-                    Return $"${PrecioEmpleado}"
-                End If
-
-                If Paginas <= 100 Then
-                    Return $"${ObtenerValor("1 - 100")}"
-                ElseIf Paginas <= 400 Then
-                    Return $"${ObtenerValor("101 - 400")}"
-                ElseIf Paginas <= 700 Then
-                    Return $"${ObtenerValor("401 - 700")}"
-                Else
-                    Return $"${ObtenerValor("+700")}"
-                End If
-            End Get
-        End Property
-        Private Sub Guardar()
-            Try
-                ' 1) Activar visualización de errores
-                MostrarErrores = True
-
-                ' 2) Validar
-                ' Si hay error, no guardar y listo
-                If NombreTieneError Then
-                    Exit Sub
-                End If
-
-                ' 3) Guardar
-                _fotocopiasRepo.GuardarFotocopia(Me)
-
-                MessageBox.Show("Guardado correctamente")
-
-                ' 4) Limpiar
-                LimpiarFormulario()
-
-
-
-            Catch ex As Exception
-                MessageBox.Show(ex.Message, "Error al guardar", MessageBoxButton.OK, MessageBoxImage.Error)
-            End Try
-        End Sub
-
+        '==================== VALIDACIONES ====================
 
         Private _mostrarErrores As Boolean
 
@@ -367,13 +252,70 @@ Namespace ViewModels
             End Set
         End Property
 
+        Public ReadOnly Property NombreTieneError As Boolean
+            Get
+                If Not MostrarErrores Then Return False
+                Return String.IsNullOrWhiteSpace(Nombre)
+            End Get
+        End Property
 
+        Public ReadOnly Property NombreErrorText As String
+            Get
+                If NombreTieneError Then Return "Ingrese un nombre."
+                Return String.Empty
+            End Get
+        End Property
 
+        '==================== HELPERS ====================
+
+        Public ReadOnly Property HelperPrecioPagina As String
+            Get
+                If Not Paginas.HasValue OrElse Paginas = 0 Then Return ""
+
+                If EsEmpleado Then Return $"${PrecioEmpleado}"
+
+                Return $"${ObtenerPrecioPorCantidad(Paginas.Value)}"
+            End Get
+        End Property
+
+        '==================== MÉTODOS PRIVADOS ====================
+
+        Private Function ObtenerValor(descripcion As String) As Integer
+            Return CInt(_valores.First(Function(v) v.Descripcion = descripcion).Valor)
+        End Function
+
+        Private Function ObtenerPrecioPorCantidad(paginas As Integer) As Integer
+
+            If EsEmpleado Then Return PrecioEmpleado
+
+            If paginas <= 100 Then Return ObtenerValor("1 - 100")
+            If paginas <= 400 Then Return ObtenerValor("101 - 400")
+            If paginas <= 700 Then Return ObtenerValor("401 - 700")
+
+            Return ObtenerValor("+700")
+
+        End Function
+
+        Private Sub CopiarTotal()
+            MiNumero = Total
+        End Sub
+
+        Private Sub Guardar()
+
+            MostrarErrores = True
+            If NombreTieneError Then Exit Sub
+
+            _fotocopiasRepo.GuardarFotocopia(Me)
+
+            MessageBox.Show("Guardado correctamente")
+            LimpiarFormulario()
+
+        End Sub
 
         Private Sub LimpiarFormulario()
 
-            Nombre = String.Empty
-            Comentario = String.Empty
+            Nombre = ""
+            Comentario = ""
 
             Paginas = Nothing
             Anillados = Nothing
@@ -384,18 +326,26 @@ Namespace ViewModels
             Transferencia = Nothing
 
             EsEmpleado = False
-
             Fecha = Date.Today
 
-            MiNumero = Nothing
-
-            Avisar(NameOf(TotalPaginas))
-            Avisar(NameOf(TotalAnillados))
             Avisar(NameOf(Total))
             Avisar(NameOf(HelperPrecioPagina))
 
         End Sub
 
+        '==================== OTROS ====================
+
+        Private _miNumero As Integer?
+
+        Public Property MiNumero As Integer?
+            Get
+                Return _miNumero
+            End Get
+            Set(value As Integer?)
+                _miNumero = value
+                Avisar(NameOf(MiNumero))
+            End Set
+        End Property
 
     End Class
 

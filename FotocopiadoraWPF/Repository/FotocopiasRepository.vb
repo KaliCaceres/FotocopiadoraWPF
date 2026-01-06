@@ -4,12 +4,9 @@ Imports Microsoft.Data.SqlClient
 
 Public Class FotocopiasRepository
 
-    Private ReadOnly _cnString As String =
-        "Data Source=SOPORTE-SISTEMA\SQLEXPRESS;Initial Catalog=fotocopiadora;Integrated Security=True; Encrypt=True;TrustServerCertificate=True"
-
     Public Sub GuardarFotocopia(vm As FotocopiasViewModel)
 
-        Using cn As New SqlConnection(_cnString)
+        Using cn As New SqlConnection(Configuracion.ConnectionString)
             cn.Open()
 
             Dim cmd As New SqlCommand("
@@ -22,8 +19,7 @@ Public Class FotocopiasRepository
                  @precio_unitario, @precio_total, @transferencia,
                  @efectivo, @comentario, @id_estado)", cn)
 
-            cmd.Parameters.Add("@nombre", SqlDbType.VarChar).Value =
-    If(String.IsNullOrWhiteSpace(vm.Nombre), "SIN NOMBRE", vm.Nombre)
+            cmd.Parameters.Add("@nombre", SqlDbType.VarChar).Value = If(String.IsNullOrWhiteSpace(vm.Nombre), "SIN NOMBRE", vm.Nombre)
 
             cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = vm.Fecha
 
@@ -36,8 +32,7 @@ Public Class FotocopiasRepository
             cmd.Parameters.Add("@transferencia", SqlDbType.Int).Value = If(vm.Transferencia, 0)
             cmd.Parameters.Add("@efectivo", SqlDbType.Int).Value = If(vm.Efectivo, 0)
 
-            cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value =
-    If(vm.Comentario, "")
+            cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = If(vm.Comentario, "")
 
             cmd.Parameters.Add("@id_estado", SqlDbType.Int).Value = 1
 
