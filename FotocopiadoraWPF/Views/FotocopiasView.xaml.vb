@@ -20,6 +20,8 @@ Namespace FotocopiadoraWPF.Views
             InitializeComponent()
             DataContext = New FotocopiasViewModel()
         End Sub
+
+
     End Class
 
 
