@@ -63,7 +63,7 @@
                 <TextBox Height="15" FontSize="14" MinHeight="15" />
             </inputLayout:SfTextInputLayout>
 
-            <Label Grid.Row="5" Height="40" Content="Metodo de pago" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" />
+            <Label Grid.Row="5" Height="40" Content="Metodo de pago" ToolTip="Click here and something will happen!" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" />
 
 
             <inputLayout:SfTextInputLayout Grid.Row="6" Grid.Column="1"  Hint="Transferencia" HelperText="" ContainerType="Outlined" VerticalAlignment="Top">

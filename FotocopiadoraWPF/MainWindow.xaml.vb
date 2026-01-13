@@ -24,6 +24,9 @@ Namespace FotocopiadoraWPF
 
                 Case "Precios"
                     MainContent.Content = New PreciosView()
+
+                Case "Listado"
+                    MainContent.Content = New FotocopiasListadoView()
             End Select
 
         End Sub

@@ -1,0 +1,3 @@
+﻿Class FotocopiasListadoView
+
+End Class
