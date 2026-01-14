@@ -31,6 +31,9 @@ Namespace ViewModels
 
             CopiarTotalCommand = New RelayCommand(AddressOf CopiarTotal)
             GuardarCommand = New RelayCommand(AddressOf Guardar)
+            VerDetalleCommand = New RelayCommand(Of Fotocopia)(AddressOf VerDetalle)
+            EditarCommand = New RelayCommand(Of Fotocopia)(AddressOf Editar)
+            AnularCommand = New RelayCommand(Of Fotocopia)(AddressOf Anular)
 
             _valores = _repo.ObtenerValores()
 
@@ -346,6 +349,23 @@ Namespace ViewModels
                 Avisar(NameOf(MiNumero))
             End Set
         End Property
+
+        Public Property VerDetalleCommand As ICommand
+        Public Property EditarCommand As ICommand
+        Public Property AnularCommand As ICommand
+
+        Private Sub VerDetalle(f As Fotocopia)
+            ' abrir modal o view detalle
+        End Sub
+
+        Private Sub Editar(f As Fotocopia)
+            ' navegar a edición
+        End Sub
+
+        Private Sub Anular(f As Fotocopia)
+            ' cambiar estado en BD
+        End Sub
+
 
     End Class
 
