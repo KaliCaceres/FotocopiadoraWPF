@@ -1,0 +1,19 @@
+﻿Imports System.Globalization
+Imports System.Windows.Data
+
+Public Class FechaSoloDiaConverter
+    Implements IValueConverter
+
+    Public Function Convert(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object _
+        Implements IValueConverter.Convert
+
+        Dim fecha = CType(value, Date)
+        Return fecha.Date
+    End Function
+
+    Public Function ConvertBack(value As Object, targetType As Type, parameter As Object, culture As CultureInfo) As Object _
+        Implements IValueConverter.ConvertBack
+
+        Throw New NotImplementedException()
+    End Function
+End Class

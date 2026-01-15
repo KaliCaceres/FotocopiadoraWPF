@@ -11,13 +11,18 @@
     <UserControl.Resources>
         <conv:InicialNombreConverter x:Key="InicialNombreConverter"/>
         <conv:NombreAColorConverter x:Key="NombreAColorConverter"/>
+        <!--<CollectionViewSource x:Key="FotocopiasView"
+                          Source="{Binding Fotocopias}"
+                          IsSourceGrouped="True"/>
+
+        <conv:FechaSoloDiaConverter x:Key="FechaSoloDiaConverter"/>-->
     </UserControl.Resources>
 
     
 
     <Grid Margin="10">
 
-        <ListView ItemsSource="{Binding Fotocopias}"
+        <ListView x:Name="ListaFotocopias" ItemsSource="{Binding FotocopiasView}"
           BorderThickness="0"
           Background="Transparent"
           HorizontalContentAlignment="Stretch"
@@ -33,6 +38,20 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListView.ItemContainerStyle>
+            <!-- HEADER POR FECHA -->
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name, StringFormat=dd/MM}"
+                               FontSize="16"
+                               FontWeight="Bold"
+                               Margin="0,16,0,6"
+                               Foreground="#374151"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
 
             <ListView.ItemTemplate>
                 <DataTemplate>
@@ -72,9 +91,13 @@
                                 <!-- Menú -->
                             </Grid.ColumnDefinitions>
 
+                            <TextBlock Grid.Column="0"
+                               VerticalAlignment="Center"
+                               Foreground="#6B7280"
+                               FontSize="12"
+                               Text="{Binding Fecha, StringFormat=dd/MM/yyyy}"/>
 
-
-                            <Border Grid.Column="0"
+                            <Border Grid.Column="1"
                                     Width="36"
                                     Height="36"
                                     CornerRadius="18"
@@ -91,11 +114,7 @@
                                         VerticalAlignment="Center"/>
                             </Border>
                             <!-- Fecha -->
-                            <TextBlock Grid.Column="1"
-                               VerticalAlignment="Center"
-                               Foreground="#6B7280"
-                               FontSize="12"
-                               Text="{Binding Fecha, StringFormat=dd/MM/yyyy}"/>
+
 
                             <!-- Nombre -->
                             <TextBlock Grid.Column="2"
@@ -147,28 +166,26 @@
                                     BorderThickness="0"
                                     Foreground="#5A6CFF"
                                     Cursor="Hand"
-                                    >
+                                    Click="AbrirMenu"
+                                    Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListView}}">
+
+                                
 
                                 <Button.ContextMenu>
                                     <ContextMenu>
-
-                                        <MenuItem Header="Ver detalle"
-                                                  Command="{Binding DataContext.VerDetalleCommand,
-                                                                    RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}" />
-
                                         <MenuItem Header="Editar"
-                                                  Command="{Binding DataContext.EditarCommand,
-                                                                    RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}" />
+                  Command="{Binding PlacementTarget.Tag.EditarCommand,
+                                    RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext,
+                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
 
-                                        <Separator/>
+                                        <MenuItem Header="Eliminar"
+                  Foreground="#EF4444"
+                  Command="{Binding PlacementTarget.Tag.EliminarCommand,
+                                    RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                  CommandParameter="{Binding PlacementTarget.DataContext,
+                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
 
-                                        <MenuItem Header="Anular"
-                                                  Foreground="#EF4444"
-                                                  Command="{Binding DataContext.AnularCommand,
-                                                                    RelativeSource={RelativeSource AncestorType=ListView}}"
-                                                  CommandParameter="{Binding}" />
 
                                     </ContextMenu>
                                 </Button.ContextMenu>

@@ -1,5 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Windows.Input
+Imports System.Windows.Data
+Imports System.Windows
 
 Namespace ViewModels
 
