@@ -1,4 +1,4 @@
-﻿Imports FotocopiadoraWPF.FotocopiadoraWPF.Views
+﻿Imports FotocopiadoraWPF.Views
 Imports Syncfusion.UI.Xaml.NavigationDrawer
 
 Namespace FotocopiadoraWPF

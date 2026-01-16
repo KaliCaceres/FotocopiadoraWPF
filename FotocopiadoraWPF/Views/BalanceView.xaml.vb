@@ -1,3 +1,9 @@
-﻿Public Class BalanceView
+﻿Namespace Views
+    Partial Public Class BalanceView
+        Inherits UserControl
 
-End Class
+        Public Sub New()
+            InitializeComponent()
+        End Sub
+    End Class
+End Namespace

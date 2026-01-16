@@ -1,11 +1,11 @@
-﻿<Window x:Class="EditarFotocopiaWindow"
+﻿<Window x:Class="Views.EditarFotocopiaWindow"
         xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
         xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-        xmlns:views="clr-namespace:Views"
+        xmlns:views="clr-namespace:FotocopiadoraWPF.Views"
+
         Title="Editar Fotocopia">
 
-
-
+   
     <views:EditarFotocopiaView/>
  
 </Window>

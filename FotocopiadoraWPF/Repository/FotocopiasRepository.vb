@@ -1,12 +1,11 @@
 ﻿Imports System.Data
 Imports Microsoft.Data.SqlClient
-Imports FotocopiadoraWPF.ViewModels
 
 Public Class FotocopiasRepository
 
     '==================== INSERT ====================
 
-    Public Sub GuardarFotocopia(vm As FotocopiasViewModel)
+    Public Sub GuardarFotocopia(f As Fotocopia, precioUnitario As Integer)
 
         Using cn As New SqlConnection(Configuracion.ConnectionString)
             cn.Open()
@@ -22,17 +21,58 @@ Public Class FotocopiasRepository
                  @efectivo, @comentario, @id_estado)", cn)
 
             cmd.Parameters.Add("@nombre", SqlDbType.VarChar).
-                Value = If(String.IsNullOrWhiteSpace(vm.Nombre), "SIN NOMBRE", vm.Nombre)
+                Value = If(String.IsNullOrWhiteSpace(f.Nombre), "SIN NOMBRE", f.Nombre)
 
-            cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = vm.Fecha
-            cmd.Parameters.Add("@paginas", SqlDbType.Int).Value = If(vm.Paginas, 0)
-            cmd.Parameters.Add("@anillados", SqlDbType.Int).Value = If(vm.Anillados, 0)
-            cmd.Parameters.Add("@precio_unitario", SqlDbType.Int).Value = vm.PrecioPagina
-            cmd.Parameters.Add("@precio_total", SqlDbType.Int).Value = vm.Total
-            cmd.Parameters.Add("@transferencia", SqlDbType.Int).Value = If(vm.Transferencia, 0)
-            cmd.Parameters.Add("@efectivo", SqlDbType.Int).Value = If(vm.Efectivo, 0)
-            cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = If(vm.Comentario, "")
+            cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = f.Fecha
+            cmd.Parameters.Add("@paginas", SqlDbType.Int).Value = f.Paginas
+            cmd.Parameters.Add("@anillados", SqlDbType.Int).Value = f.Anillados
+            cmd.Parameters.Add("@precio_unitario", SqlDbType.Int).Value = precioUnitario
+            cmd.Parameters.Add("@precio_total", SqlDbType.Int).Value = f.PrecioTotal
+            cmd.Parameters.Add("@transferencia", SqlDbType.Int).Value = f.Transferencia
+            cmd.Parameters.Add("@efectivo", SqlDbType.Int).Value = f.Efectivo
+            cmd.Parameters.Add("@comentario", SqlDbType.VarChar).
+                Value = If(f.Comentario, "")
             cmd.Parameters.Add("@id_estado", SqlDbType.Int).Value = 1
+
+            cmd.ExecuteNonQuery()
+        End Using
+
+    End Sub
+
+    '==================== UPDATE ====================
+
+    Public Sub ActualizarFotocopia(f As Fotocopia)
+
+        Using cn As New SqlConnection(Configuracion.ConnectionString)
+            cn.Open()
+
+            Dim cmd As New SqlCommand("
+                UPDATE fotocopias
+                SET nombre = @nombre,
+                    fecha = @fecha,
+                    paginas = @paginas,
+                    anillados = @anillados,
+                    precio_unitario = @precio_unitario,
+                    precio_total = @precio_total,
+                    transferencia = @transferencia,
+                    efectivo = @efectivo,
+                    comentario = @comentario
+                WHERE id_fotocopia = @id", cn)
+
+            cmd.Parameters.Add("@id", SqlDbType.Int).Value = f.IdFotocopia
+
+            cmd.Parameters.Add("@nombre", SqlDbType.VarChar).
+                Value = If(String.IsNullOrWhiteSpace(f.Nombre), "SIN NOMBRE", f.Nombre)
+
+            cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = f.Fecha
+            cmd.Parameters.Add("@paginas", SqlDbType.Int).Value = f.Paginas
+            cmd.Parameters.Add("@anillados", SqlDbType.Int).Value = f.Anillados
+            cmd.Parameters.Add("@precio_unitario", SqlDbType.Int).Value = f.PrecioUnitario
+            cmd.Parameters.Add("@precio_total", SqlDbType.Int).Value = f.PrecioTotal
+            cmd.Parameters.Add("@transferencia", SqlDbType.Int).Value = f.Transferencia
+            cmd.Parameters.Add("@efectivo", SqlDbType.Int).Value = f.Efectivo
+            cmd.Parameters.Add("@comentario", SqlDbType.VarChar).
+                Value = If(f.Comentario, "")
 
             cmd.ExecuteNonQuery()
         End Using
