@@ -1,8 +1,8 @@
-﻿<UserControl x:Class="FotocopiadoraWPF.Views.FotocopiasListadoView"
+﻿<UserControl x:Class="FotocopiasListadoView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:vm="clr-namespace:FotocopiadoraWPF.ViewModels"
-             xmlns:conv="clr-namespace:FotocopiadoraWPF.Converters">
+             xmlns:vm="clr-namespace.ViewModels"
+             xmlns:conv="clr-namespace.Converters">
 
     <UserControl.DataContext>
         <vm:FotocopiasListadoViewModel/>

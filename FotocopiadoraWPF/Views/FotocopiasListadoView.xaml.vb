@@ -1,8 +1,6 @@
-﻿Imports FotocopiadoraWPF.ViewModels
-
-Namespace FotocopiadoraWPF.Views
+﻿
+Namespace Views
     Partial Public Class FotocopiasListadoView
-
 
         Inherits UserControl
         Private Sub AbrirMenu(sender As Object, e As RoutedEventArgs)

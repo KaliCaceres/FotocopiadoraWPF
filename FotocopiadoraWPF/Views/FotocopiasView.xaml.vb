@@ -1,6 +1,6 @@
 ﻿Imports FotocopiadoraWPF.ViewModels
 
-Namespace FotocopiadoraWPF.Views
+Namespace Views
 
     Partial Public Class FotocopiasView
         Inherits UserControl

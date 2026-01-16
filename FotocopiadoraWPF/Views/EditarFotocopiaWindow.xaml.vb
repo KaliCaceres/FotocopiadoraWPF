@@ -1,4 +1,4 @@
-﻿Namespace FotocopiadoraWPF.Views
+﻿Namespace Views
     Partial Public Class EditarFotocopiaWindow
         Inherits Window
 

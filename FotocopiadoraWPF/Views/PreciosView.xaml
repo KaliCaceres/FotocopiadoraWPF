@@ -6,10 +6,9 @@
 
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF"
-
-             xmlns:local="clr-namespace:FotocopiadoraWPF"
-             xmlns:vm="clr-namespace:FotocopiadoraWPF.ViewModels"
-             xmlns:conv="clr-namespace:FotocopiadoraWPF.Converters"
+}
+             xmlns:vm="clr-namespace.ViewModels"
+             xmlns:conv="clr-namespace.Converters"
 
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
