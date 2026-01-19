@@ -2,6 +2,7 @@
 Imports System.Windows.Data
 
 Namespace Converters
+
     Public Class FechaSoloDiaConverter
         Implements IValueConverter
 

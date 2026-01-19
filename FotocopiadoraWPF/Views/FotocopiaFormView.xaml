@@ -5,6 +5,7 @@
              xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF">
 
     <UserControl.Resources>
+        
             <Style TargetType="{x:Type inputLayout:SfTextInputLayout}">
                 <Setter Property="Margin" Value="10,0,10,10"/>
             </Style>

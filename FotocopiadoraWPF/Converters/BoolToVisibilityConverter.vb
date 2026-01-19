@@ -4,6 +4,7 @@ Imports System.Windows.Data
 
 Namespace Converters
 
+
     Public Class BoolToVisibilityConverter
         Implements IValueConverter
 

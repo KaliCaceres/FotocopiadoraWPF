@@ -4,10 +4,12 @@ Imports System.Windows.Input
 
 Imports System.Collections.ObjectModel
 Imports System.ComponentModel
+
 Imports FotocopiadoraWPF.Views
 Imports FotocopiadoraWPF.Converters
 
 Namespace ViewModels
+
     Public Class FotocopiasListadoViewModel
         Implements INotifyPropertyChanged
 

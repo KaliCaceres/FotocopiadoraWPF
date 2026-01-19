@@ -4,6 +4,7 @@ Imports System.Windows
 
 Namespace ViewModels
 
+
     Public Class FotocopiasViewModel
         Implements INotifyPropertyChanged
 
@@ -25,11 +26,11 @@ Namespace ViewModels
         Public Property EsEdicion As Boolean
 
         '==================== COMANDOS ====================
-        Public ReadOnly Property PagarConEfectivoCommand As ICommand
-        Public ReadOnly Property PagarConTransferenciaCommand As ICommand
+        Public Property PagarConEfectivoCommand As ICommand
+        Public Property PagarConTransferenciaCommand As ICommand
 
-        Public ReadOnly Property CopiarTotalCommand As ICommand
-        Public ReadOnly Property GuardarCommand As ICommand
+        Public Property CopiarTotalCommand As ICommand
+        Public Property GuardarCommand As ICommand
 
         '==================== ENTIDAD ====================
 
@@ -62,6 +63,21 @@ Namespace ViewModels
             Avisar(NameOf(Fecha))
 
         End Sub
+
+        Private Sub PagarConEfectivo()
+            Fotocopia.Efectivo = Total
+            Fotocopia.Transferencia = 0
+            Avisar(NameOf(Efectivo))
+            Avisar(NameOf(Transferencia))
+        End Sub
+
+        Private Sub PagarConTransferencia()
+            Fotocopia.Transferencia = Total
+            Fotocopia.Efectivo = 0
+            Avisar(NameOf(Transferencia))
+            Avisar(NameOf(Efectivo))
+        End Sub
+
 
         Private Sub Inicializar()
 

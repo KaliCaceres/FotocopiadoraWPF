@@ -1,8 +1,9 @@
 ﻿Imports System.Windows.Controls
 Imports System.Windows.Input
+
 Imports FotocopiadoraWPF.ViewModels
 
-Namespace FotocopiadoraWPF.Views
+Namespace Views
     Partial Public Class FotocopiaFormView
         Inherits UserControl
 

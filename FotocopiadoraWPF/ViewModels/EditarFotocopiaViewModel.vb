@@ -1,5 +1,6 @@
 ﻿
 Namespace ViewModels
+
     Public Class EditarFotocopiaViewModel
 
         Public Property Fotocopia As Fotocopia

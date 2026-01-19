@@ -5,6 +5,7 @@ Imports System.Windows.Media
 
 Namespace Converters
 
+
     Public Class InicialNombreConverter
         Implements IValueConverter
 

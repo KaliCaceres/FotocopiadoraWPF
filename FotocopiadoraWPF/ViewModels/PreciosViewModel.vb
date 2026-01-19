@@ -2,6 +2,7 @@
 Imports System.Windows.Input
 
 Namespace ViewModels
+
     Public Class PreciosViewModel
         Implements INotifyPropertyChanged
 
