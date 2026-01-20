@@ -10,8 +10,6 @@ Namespace Views
             DataContext = New FotocopiasViewModel()
         End Sub
 
-
     End Class
-
 
 End Namespace

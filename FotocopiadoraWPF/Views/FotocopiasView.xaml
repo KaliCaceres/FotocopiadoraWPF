@@ -13,7 +13,7 @@
 
 
              
-             mc:Ignorable="d" Background="White">
+             mc:Ignorable="d" Background="White" Padding="20">
     
     <UserControl.Resources>
         <Style TargetType="{x:Type inputLayout:SfTextInputLayout}">
@@ -22,14 +22,13 @@
     </UserControl.Resources>
 
 
-    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
         <views:FotocopiaFormView/>
 
         <Button Content="Guardar"
                 Command="{Binding GuardarCommand}"
                 Width="120"
                 Height="35"
-                HorizontalAlignment="Center"/>
-
+                HorizontalAlignment="Left" Margin="10,20,0,0"/>
     </StackPanel>
 </UserControl>

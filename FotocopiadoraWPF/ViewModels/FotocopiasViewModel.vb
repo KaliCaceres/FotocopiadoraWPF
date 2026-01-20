@@ -29,6 +29,8 @@ Namespace ViewModels
         Public Property PagarConEfectivoCommand As ICommand
         Public Property PagarConTransferenciaCommand As ICommand
 
+        Public Property CancelarCommand As ICommand
+
         Public Property CopiarTotalCommand As ICommand
         Public Property GuardarCommand As ICommand
 
@@ -48,19 +50,32 @@ Namespace ViewModels
 
             EsEdicion = False
         End Sub
+        Private ReadOnly _fotocopiaOriginal As Fotocopia
 
         ' EDICIÓN
         Public Sub New(f As Fotocopia)
             Inicializar()
 
             Fotocopia = f
+
+            _fotocopiaOriginal = New Fotocopia With {
+            .Nombre = f.Nombre,
+            .Fecha = f.Fecha,
+            .Paginas = f.Paginas,
+            .Anillados = f.Anillados,
+            .Transferencia = f.Transferencia,
+            .Efectivo = f.Efectivo,
+            .Comentario = f.Comentario
+        }
+
             EsEdicion = True
-
-
+            TieneCambios = False
+            PrecioPagina = Fotocopia.PrecioUnitario
             RecalcularTodo()
             Avisar(NameOf(Efectivo))
             Avisar(NameOf(Transferencia))
             Avisar(NameOf(Fecha))
+
 
         End Sub
 
@@ -82,10 +97,13 @@ Namespace ViewModels
         Private Sub Inicializar()
 
             CopiarTotalCommand = New RelayCommand(AddressOf CopiarTotal)
-            GuardarCommand = New RelayCommand(AddressOf Guardar)
             PagarConEfectivoCommand = New RelayCommand(AddressOf PagarConEfectivo)
             PagarConTransferenciaCommand = New RelayCommand(AddressOf PagarConTransferencia)
-
+            CancelarCommand = New RelayCommand(AddressOf Cancelar)
+            GuardarCommand = New RelayCommand(
+    AddressOf Guardar,
+    Function() TieneCambios
+)
             _valores = _repo.ObtenerValores()
 
             PrecioNormal = ObtenerValor("1 - 100")
@@ -106,6 +124,8 @@ Namespace ViewModels
                 Avisar(NameOf(Nombre))
                 Avisar(NameOf(NombreTieneError))
                 Avisar(NameOf(NombreErrorText))
+                EvaluarCambios()
+
             End Set
         End Property
 
@@ -116,6 +136,8 @@ Namespace ViewModels
             Set(value As String)
                 Fotocopia.Comentario = value
                 Avisar(NameOf(Comentario))
+                EvaluarCambios()
+
             End Set
         End Property
 
@@ -129,8 +151,11 @@ Namespace ViewModels
                 PrecioPagina = If(Fotocopia.Paginas > 0,
                                   ObtenerPrecioPorCantidad(Fotocopia.Paginas),
                                   PrecioNormal)
+                Avisar(NameOf(PrecioPagina))
 
                 RecalcularTodo()
+                EvaluarCambios()
+
             End Set
         End Property
 
@@ -141,6 +166,8 @@ Namespace ViewModels
             Set(value As Integer?)
                 Fotocopia.Anillados = If(value, 0)
                 RecalcularTodo()
+                EvaluarCambios()
+
             End Set
         End Property
 
@@ -151,6 +178,8 @@ Namespace ViewModels
             Set(value As Date)
                 Fotocopia.Fecha = value
                 Avisar(NameOf(Fecha))
+                EvaluarCambios()
+
             End Set
         End Property
 
@@ -211,6 +240,8 @@ Namespace ViewModels
                 Avisar(NameOf(EsEmpleado))
                 PrecioPagina = ObtenerPrecioPorCantidad(Fotocopia.Paginas)
                 RecalcularTodo()
+                EvaluarCambios()
+
             End Set
 
         End Property
@@ -327,22 +358,67 @@ Namespace ViewModels
         End Sub
 
         Private Sub Guardar()
+            Try
+                ' recalcular antes de guardar
+                Fotocopia.PrecioTotal =
+            (Fotocopia.Paginas * Fotocopia.PrecioUnitario) +
+            (Fotocopia.Anillados * ObtenerPrecioAnillado())
 
-            MostrarErrores = True
-            If NombreTieneError Then Exit Sub
-
-            Fotocopia.PrecioUnitario = PrecioPagina
-            Fotocopia.PrecioTotal = Total
-
-            If EsEdicion Then
                 _fotocopiasRepo.ActualizarFotocopia(Fotocopia)
-            Else
-                _fotocopiasRepo.GuardarFotocopia(Fotocopia, PrecioPagina)
-            End If
 
-            MessageBox.Show("Guardado correctamente")
+                MessageBox.Show("Cambios guardados correctamente")
+                Cerrar(True)
+
+            Catch ex As Exception
+                MessageBox.Show("ERROR al guardar: " & ex.Message)
+            End Try
         End Sub
 
-    End Class
 
+        Private Function ObtenerPrecioAnillado() As Integer
+            Return 0 ' si luego lo manejás dinámico, acá va
+        End Function
+
+
+        Private Sub Cancelar()
+            Cerrar(False)
+        End Sub
+
+        Private Sub Cerrar(resultado As Boolean)
+            For Each w As Window In Application.Current.Windows
+                If w.IsActive Then
+                    w.DialogResult = resultado
+                    Exit For
+                End If
+            Next
+        End Sub
+
+        Private _tieneCambios As Boolean
+
+        Public Property TieneCambios As Boolean
+            Get
+                Return _tieneCambios
+            End Get
+            Set(value As Boolean)
+                If _tieneCambios <> value Then
+                    _tieneCambios = value
+                    Avisar(NameOf(TieneCambios))
+                    CType(GuardarCommand, RelayCommand).RaiseCanExecuteChanged()
+                End If
+            End Set
+        End Property
+
+        Private Sub EvaluarCambios()
+            TieneCambios =
+        Fotocopia.Nombre <> _fotocopiaOriginal.Nombre OrElse
+        Fotocopia.Fecha <> _fotocopiaOriginal.Fecha OrElse
+        Fotocopia.Paginas <> _fotocopiaOriginal.Paginas OrElse
+        Fotocopia.Anillados <> _fotocopiaOriginal.Anillados OrElse
+        Fotocopia.Transferencia <> _fotocopiaOriginal.Transferencia OrElse
+        Fotocopia.Efectivo <> _fotocopiaOriginal.Efectivo OrElse
+        Fotocopia.Comentario <> _fotocopiaOriginal.Comentario
+        End Sub
+
+
+    End Class
 End Namespace

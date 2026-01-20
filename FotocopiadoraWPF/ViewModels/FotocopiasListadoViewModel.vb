@@ -53,7 +53,7 @@ Namespace ViewModels
         Private Sub EditarFotocopia(f As Fotocopia)
             If f Is Nothing Then Return
 
-            ' Clonamos para no modificar hasta guardar
+            ' Clonamos para no modificar el original hasta guardar
             Dim copia As New Fotocopia With {
         .IdFotocopia = f.IdFotocopia,
         .Nombre = f.Nombre,
@@ -67,26 +67,18 @@ Namespace ViewModels
         .PrecioTotal = f.PrecioTotal
     }
 
-            Dim vm = New EditarFotocopiaViewModel(copia)
+            Dim vm As New FotocopiasViewModel(copia)
             Dim win As New EditarFotocopiaWindow()
 
-            win.DataContext = vm          ' 🔥 CLAVE
+            win.DataContext = vm
             win.Owner = Application.Current.MainWindow
 
-
-
+            ' ✅ UNA SOLA VEZ
             If win.ShowDialog() = True Then
-                ' Persistís cambios (luego haremos UPDATE)
-                f.Nombre = copia.Nombre
-                f.Fecha = copia.Fecha
-                f.Paginas = copia.Paginas
-                f.Anillados = copia.Anillados
-                f.Transferencia = copia.Transferencia
-                f.Efectivo = copia.Efectivo
-                f.Comentario = copia.Comentario
-                f.PrecioTotal = copia.PrecioTotal
+                RefrescarListado()
             End If
         End Sub
+
 
         Private Sub EliminarFotocopia(f As Fotocopia)
             If f Is Nothing Then Return
@@ -98,6 +90,14 @@ Namespace ViewModels
                 Fotocopias.Remove(f)
             End If
         End Sub
+        Private Sub RefrescarListado()
+            Fotocopias.Clear()
+
+            For Each f In _repo.ObtenerFotocopias()
+                Fotocopias.Add(f)
+            Next
+        End Sub
+
 
     End Class
 End Namespace
