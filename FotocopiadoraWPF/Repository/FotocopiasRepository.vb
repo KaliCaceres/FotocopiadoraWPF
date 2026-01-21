@@ -47,23 +47,20 @@ Public Class FotocopiasRepository
             cn.Open()
 
             Dim cmd As New SqlCommand("
-                UPDATE fotocopias
-                SET nombre = @nombre,
-                    fecha = @fecha,
-                    paginas = @paginas,
-                    anillados = @anillados,
-                    precio_unitario = @precio_unitario,
-                    precio_total = @precio_total,
-                    transferencia = @transferencia,
-                    efectivo = @efectivo,
-                    comentario = @comentario
-                WHERE id_fotocopia = @id", cn)
+            UPDATE fotocopias SET
+                nombre = @nombre,
+                fecha = @fecha,
+                paginas = @paginas,
+                anillados = @anillados,
+                precio_unitario = @precio_unitario,
+                precio_total = @precio_total,
+                transferencia = @transferencia,
+                efectivo = @efectivo,
+                comentario = @comentario
+            WHERE id_fotocopia = @id", cn)
 
             cmd.Parameters.Add("@id", SqlDbType.Int).Value = f.IdFotocopia
-
-            cmd.Parameters.Add("@nombre", SqlDbType.VarChar).
-                Value = If(String.IsNullOrWhiteSpace(f.Nombre), "SIN NOMBRE", f.Nombre)
-
+            cmd.Parameters.Add("@nombre", SqlDbType.VarChar).Value = If(String.IsNullOrWhiteSpace(f.Nombre), "SIN NOMBRE", f.Nombre)
             cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = f.Fecha
             cmd.Parameters.Add("@paginas", SqlDbType.Int).Value = f.Paginas
             cmd.Parameters.Add("@anillados", SqlDbType.Int).Value = f.Anillados
@@ -71,10 +68,13 @@ Public Class FotocopiasRepository
             cmd.Parameters.Add("@precio_total", SqlDbType.Int).Value = f.PrecioTotal
             cmd.Parameters.Add("@transferencia", SqlDbType.Int).Value = f.Transferencia
             cmd.Parameters.Add("@efectivo", SqlDbType.Int).Value = f.Efectivo
-            cmd.Parameters.Add("@comentario", SqlDbType.VarChar).
-                Value = If(f.Comentario, "")
+            cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = If(f.Comentario, "")
 
-            cmd.ExecuteNonQuery()
+            Dim filas = cmd.ExecuteNonQuery()
+
+            If filas = 0 Then
+                Throw New Exception("No se actualizó ninguna fila. Revisá el IdFotocopia.")
+            End If
         End Using
 
     End Sub

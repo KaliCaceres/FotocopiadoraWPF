@@ -47,8 +47,9 @@ Namespace ViewModels
             Fotocopia = New Fotocopia With {
                 .Fecha = Date.Today
             }
-
             EsEdicion = False
+            TieneCambios = False
+
         End Sub
         Private ReadOnly _fotocopiaOriginal As Fotocopia
 
@@ -100,10 +101,8 @@ Namespace ViewModels
             PagarConEfectivoCommand = New RelayCommand(AddressOf PagarConEfectivo)
             PagarConTransferenciaCommand = New RelayCommand(AddressOf PagarConTransferencia)
             CancelarCommand = New RelayCommand(AddressOf Cancelar)
-            GuardarCommand = New RelayCommand(
-    AddressOf Guardar,
-    Function() TieneCambios
-)
+            GuardarCommand = New RelayCommand(AddressOf Guardar, Function() TieneCambios)
+
             _valores = _repo.ObtenerValores()
 
             PrecioNormal = ObtenerValor("1 - 100")
@@ -124,7 +123,11 @@ Namespace ViewModels
                 Avisar(NameOf(Nombre))
                 Avisar(NameOf(NombreTieneError))
                 Avisar(NameOf(NombreErrorText))
-                EvaluarCambios()
+                If Not EsEdicion Then
+                    TieneCambios = True
+                Else
+                    EvaluarCambios()
+                End If
 
             End Set
         End Property
@@ -136,7 +139,11 @@ Namespace ViewModels
             Set(value As String)
                 Fotocopia.Comentario = value
                 Avisar(NameOf(Comentario))
-                EvaluarCambios()
+                If Not EsEdicion Then
+                    TieneCambios = True
+                Else
+                    EvaluarCambios()
+                End If
 
             End Set
         End Property
@@ -154,7 +161,12 @@ Namespace ViewModels
                 Avisar(NameOf(PrecioPagina))
 
                 RecalcularTodo()
-                EvaluarCambios()
+                If Not EsEdicion Then
+                    TieneCambios = True
+                Else
+                    EvaluarCambios()
+                End If
+
 
             End Set
         End Property
@@ -166,7 +178,11 @@ Namespace ViewModels
             Set(value As Integer?)
                 Fotocopia.Anillados = If(value, 0)
                 RecalcularTodo()
-                EvaluarCambios()
+                If Not EsEdicion Then
+                    TieneCambios = True
+                Else
+                    EvaluarCambios()
+                End If
 
             End Set
         End Property
@@ -178,7 +194,11 @@ Namespace ViewModels
             Set(value As Date)
                 Fotocopia.Fecha = value
                 Avisar(NameOf(Fecha))
-                EvaluarCambios()
+                If Not EsEdicion Then
+                    TieneCambios = True
+                Else
+                    EvaluarCambios()
+                End If
 
             End Set
         End Property
@@ -240,7 +260,7 @@ Namespace ViewModels
                 Avisar(NameOf(EsEmpleado))
                 PrecioPagina = ObtenerPrecioPorCantidad(Fotocopia.Paginas)
                 RecalcularTodo()
-                EvaluarCambios()
+
 
             End Set
 
@@ -357,22 +377,61 @@ Namespace ViewModels
             Avisar(NameOf(Transferencia))
         End Sub
 
+        'Private Sub Guardar()
+        '    Try
+        '        ' recalcular antes de guardar
+        '        Fotocopia.PrecioTotal =
+        '    (Fotocopia.Paginas * Fotocopia.PrecioUnitario) +
+        '    (Fotocopia.Anillados * ObtenerPrecioAnillado())
+
+        '        _fotocopiasRepo.ActualizarFotocopia(Fotocopia)
+        '        TieneCambios = False
+
+        '        MessageBox.Show("Cambios guardados correctamente")
+        '        Cerrar(True)
+
+        '    Catch ex As Exception
+        '        MessageBox.Show("ERROR al guardar: " & ex.Message)
+        '    End Try
+        'End Sub
+
         Private Sub Guardar()
             Try
-                ' recalcular antes de guardar
+                ' Recalcular precios SIEMPRE
+                Fotocopia.PrecioUnitario = PrecioPagina
                 Fotocopia.PrecioTotal =
-            (Fotocopia.Paginas * Fotocopia.PrecioUnitario) +
-            (Fotocopia.Anillados * ObtenerPrecioAnillado())
+            (Fotocopia.Paginas * PrecioPagina) +
+            (Fotocopia.Anillados * PrecioAnillado)
 
-                _fotocopiasRepo.ActualizarFotocopia(Fotocopia)
+                If EsEdicion Then
+                    ' ====== EDICIÓN ======
+                    If Fotocopia.IdFotocopia <= 0 Then
+                        Throw New Exception("IdFotocopia inválido. No se puede actualizar.")
+                    End If
 
-                MessageBox.Show("Cambios guardados correctamente")
-                Cerrar(True)
+                    _fotocopiasRepo.ActualizarFotocopia(Fotocopia)
+                    MessageBox.Show("Cambios guardados correctamente")
+
+                    TieneCambios = False
+                    Cerrar(True)
+
+                Else
+                    ' ====== ALTA ======
+                    _fotocopiasRepo.GuardarFotocopia(Fotocopia, PrecioPagina)
+                    MessageBox.Show("Fotocopia guardada correctamente")
+
+                    LimpiarFormulario()
+
+                End If
 
             Catch ex As Exception
                 MessageBox.Show("ERROR al guardar: " & ex.Message)
             End Try
         End Sub
+
+
+
+        Public Property GuardadoConExito As Boolean
 
 
         Private Function ObtenerPrecioAnillado() As Integer
@@ -417,8 +476,91 @@ Namespace ViewModels
         Fotocopia.Transferencia <> _fotocopiaOriginal.Transferencia OrElse
         Fotocopia.Efectivo <> _fotocopiaOriginal.Efectivo OrElse
         Fotocopia.Comentario <> _fotocopiaOriginal.Comentario
+
+            Avisar(NameOf(NombreModificado))
+            Avisar(NameOf(FechaModificada))
+            Avisar(NameOf(PaginasModificadas))
+            Avisar(NameOf(AnilladosModificados))
+            Avisar(NameOf(ComentarioModificado))
+            Avisar(NameOf(EfectivoModificado))
+            Avisar(NameOf(TransferenciaModificada))
         End Sub
 
 
+        Private Sub LimpiarFormulario()
+
+            Fotocopia = New Fotocopia With {
+        .Fecha = Date.Today
+    }
+
+            ' Reset de flags
+            EsEdicion = False
+            TieneCambios = False
+            EsEmpleado = False
+
+            ' Reset de precios
+            PrecioPagina = PrecioNormal
+
+            ' Notificar TODO lo que usa la vista
+            Avisar(NameOf(Fotocopia))
+            Avisar(NameOf(Nombre))
+            Avisar(NameOf(Comentario))
+            Avisar(NameOf(Paginas))
+            Avisar(NameOf(Anillados))
+            Avisar(NameOf(Fecha))
+            Avisar(NameOf(Efectivo))
+            Avisar(NameOf(Transferencia))
+            Avisar(NameOf(TotalPaginas))
+            Avisar(NameOf(TotalAnillados))
+            Avisar(NameOf(Total))
+            Avisar(NameOf(HelperPrecioPagina))
+
+            Avisar(NameOf(NombreTieneError))
+            Avisar(NameOf(NombreErrorText))
+
+        End Sub
+        ' ================== CAMPOS MODIFICADOS ==================
+
+        Public ReadOnly Property NombreModificado As Boolean
+            Get
+                Return EsEdicion AndAlso Fotocopia.Nombre <> _fotocopiaOriginal.Nombre
+            End Get
+        End Property
+
+        Public ReadOnly Property FechaModificada As Boolean
+            Get
+                Return EsEdicion AndAlso Fotocopia.Fecha <> _fotocopiaOriginal.Fecha
+            End Get
+        End Property
+
+        Public ReadOnly Property PaginasModificadas As Boolean
+            Get
+                Return EsEdicion AndAlso Fotocopia.Paginas <> _fotocopiaOriginal.Paginas
+            End Get
+        End Property
+
+        Public ReadOnly Property AnilladosModificados As Boolean
+            Get
+                Return EsEdicion AndAlso Fotocopia.Anillados <> _fotocopiaOriginal.Anillados
+            End Get
+        End Property
+
+        Public ReadOnly Property ComentarioModificado As Boolean
+            Get
+                Return EsEdicion AndAlso Fotocopia.Comentario <> _fotocopiaOriginal.Comentario
+            End Get
+        End Property
+
+        Public ReadOnly Property EfectivoModificado As Boolean
+            Get
+                Return EsEdicion AndAlso Fotocopia.Efectivo <> _fotocopiaOriginal.Efectivo
+            End Get
+        End Property
+
+        Public ReadOnly Property TransferenciaModificada As Boolean
+            Get
+                Return EsEdicion AndAlso Fotocopia.Transferencia <> _fotocopiaOriginal.Transferencia
+            End Get
+        End Property
     End Class
 End Namespace
