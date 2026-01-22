@@ -417,7 +417,7 @@ Namespace ViewModels
 
                 Else
                     ' ====== ALTA ======
-                    _fotocopiasRepo.GuardarFotocopia(Fotocopia, PrecioPagina)
+                    _fotocopiasRepo.GuardarFotocopia(Fotocopia)
                     MessageBox.Show("Fotocopia guardada correctamente")
 
                     LimpiarFormulario()

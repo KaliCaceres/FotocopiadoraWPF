@@ -2,11 +2,15 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-             xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF">
+             xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF"
+             xmlns:conv="clr-namespace:FotocopiadoraWPF.Converters">
+
 
     <UserControl.Resources>
-        
-            <Style TargetType="{x:Type inputLayout:SfTextInputLayout}">
+        <conv:ModificadoBorderConverter x:Key="ModificadoBorderConverter"/>
+
+
+        <Style TargetType="{x:Type inputLayout:SfTextInputLayout}">
                 <Setter Property="Margin" Value="10,0,10,10"/>
             </Style>
     </UserControl.Resources>
@@ -47,10 +51,21 @@
                 </inputLayout:SfTextInputLayout>
 
                 <StackPanel Grid.Row="1">
-                    <inputLayout:SfTextInputLayout Grid.Column="0"  Hint="Nombre" ContainerType="Outlined" HasError="{Binding NombreTieneError}" ErrorText="{Binding NombreErrorText}" HelperText="">
-                    <TextBox Height="15" VerticalContentAlignment="Center" VerticalAlignment="Center" FontSize="14" MinHeight="15" Text="{Binding Nombre, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    </inputLayout:SfTextInputLayout>
-                    <CheckBox  Grid.Column="0" Content="Empleado" Margin="20,-5,0,10" IsChecked="{Binding EsEmpleado, Mode=TwoWay}"/>
+                <inputLayout:SfTextInputLayout
+                            Hint="Nombre"
+                            FocusedBorderBrush="{Binding NombreModificado,
+                                                         Converter={StaticResource ModificadoBorderConverter}}"
+                            ContainerType="Outlined"
+                            HasError="{Binding NombreTieneError}"
+                            ErrorText="{Binding NombreErrorText}" FocusedForeground="#FF00AB0A">
+
+                    <TextBox Text="{Binding Nombre,
+                            Mode=TwoWay,
+                            UpdateSourceTrigger=PropertyChanged}"/>
+                </inputLayout:SfTextInputLayout>
+
+
+                <CheckBox  Grid.Column="0" Content="Empleado" Margin="20,-5,0,10" IsChecked="{Binding EsEmpleado, Mode=TwoWay}"/>
                 </StackPanel>
 
 

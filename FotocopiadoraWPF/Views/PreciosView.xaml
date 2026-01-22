@@ -13,9 +13,6 @@
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800" Background="White">
 
-    <UserControl.DataContext>
-        <vm:PreciosViewModel/>
-    </UserControl.DataContext>
 
     <UserControl.Resources>
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibility"/>

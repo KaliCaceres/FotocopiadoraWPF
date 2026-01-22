@@ -24,21 +24,40 @@ Namespace ViewModels
         Public Sub New()
 
             BotonPrincipalCommand =
-            New RelayCommand(AddressOf EjecutarBotonPrincipal,
-                             AddressOf PuedeEjecutarBotonPrincipal)
+        New RelayCommand(AddressOf EjecutarBotonPrincipal,
+                         AddressOf PuedeEjecutarBotonPrincipal)
 
             CancelarCommand = New RelayCommand(AddressOf Cancelar)
 
-            _valores = _repo.ObtenerValores()
+            Inicializar()
+        End Sub
 
-            _valoresOriginales = _valores.
+
+        Public Sub Inicializar()
+            Try
+                _valores = _repo.ObtenerValores()
+
+                If _valores Is Nothing Then
+                    _valores = New List(Of ValorConfiguracion)
+                End If
+
+                _valoresOriginales = _valores.
             Select(Function(v) New ValorConfiguracion With {
                 .Descripcion = v.Descripcion,
                 .Valor = v.Valor
             }).ToList()
 
-            CargarValores()
+                CargarValores()
+
+            Catch ex As Exception
+                MessageBox.Show(
+            "Error cargando precios:" & vbCrLf & ex.Message,
+            "Error",
+            MessageBoxButton.OK,
+            MessageBoxImage.Error)
+            End Try
         End Sub
+
 
 
         '==================== ESTADO UI ====================

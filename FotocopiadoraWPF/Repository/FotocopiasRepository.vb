@@ -1,52 +1,51 @@
 ﻿Imports System.Data
-Imports Microsoft.Data.SqlClient
+Imports Microsoft.Data.Sqlite
+
 
 Public Class FotocopiasRepository
 
     '==================== INSERT ====================
 
-    Public Sub GuardarFotocopia(f As Fotocopia, precioUnitario As Integer)
+    Public Sub GuardarFotocopia(f As Fotocopia)
 
-        Using cn As New SqlConnection(Configuracion.ConnectionString)
+        Using cn As New SqliteConnection(Configuracion.ConnectionString)
             cn.Open()
 
-            Dim cmd As New SqlCommand("
-                INSERT INTO fotocopias
-                (nombre, fecha, paginas, anillados,
-                 precio_unitario, precio_total, transferencia,
-                 efectivo, comentario, id_estado)
-                VALUES
-                (@nombre, @fecha, @paginas, @anillados,
-                 @precio_unitario, @precio_total, @transferencia,
-                 @efectivo, @comentario, @id_estado)", cn)
+            Dim cmd As New SqliteCommand("
+            INSERT INTO fotocopias
+            (nombre, fecha, paginas, anillados,
+             precio_unitario, precio_total,
+             transferencia, efectivo, comentario, id_estado)
+            VALUES
+            (@nombre, @fecha, @paginas, @anillados,
+             @precio_unitario, @precio_total,
+             @transferencia, @efectivo, @comentario, 1)", cn)
 
-            cmd.Parameters.Add("@nombre", SqlDbType.VarChar).
-                Value = If(String.IsNullOrWhiteSpace(f.Nombre), "SIN NOMBRE", f.Nombre)
+            cmd.Parameters.AddWithValue("@nombre",
+            If(String.IsNullOrWhiteSpace(f.Nombre), "SIN NOMBRE", f.Nombre))
 
-            cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = f.Fecha
-            cmd.Parameters.Add("@paginas", SqlDbType.Int).Value = f.Paginas
-            cmd.Parameters.Add("@anillados", SqlDbType.Int).Value = f.Anillados
-            cmd.Parameters.Add("@precio_unitario", SqlDbType.Int).Value = precioUnitario
-            cmd.Parameters.Add("@precio_total", SqlDbType.Int).Value = f.PrecioTotal
-            cmd.Parameters.Add("@transferencia", SqlDbType.Int).Value = f.Transferencia
-            cmd.Parameters.Add("@efectivo", SqlDbType.Int).Value = f.Efectivo
-            cmd.Parameters.Add("@comentario", SqlDbType.VarChar).
-                Value = If(f.Comentario, "")
-            cmd.Parameters.Add("@id_estado", SqlDbType.Int).Value = 1
+            cmd.Parameters.AddWithValue("@fecha", f.Fecha.ToString("yyyy-MM-dd"))
+            cmd.Parameters.AddWithValue("@paginas", f.Paginas)
+            cmd.Parameters.AddWithValue("@anillados", f.Anillados)
+            cmd.Parameters.AddWithValue("@precio_unitario", f.PrecioUnitario)
+            cmd.Parameters.AddWithValue("@precio_total", f.PrecioTotal)
+            cmd.Parameters.AddWithValue("@transferencia", f.Transferencia)
+            cmd.Parameters.AddWithValue("@efectivo", f.Efectivo)
+            cmd.Parameters.AddWithValue("@comentario", If(f.Comentario, ""))
 
             cmd.ExecuteNonQuery()
         End Using
-
     End Sub
+
 
     '==================== UPDATE ====================
 
     Public Sub ActualizarFotocopia(f As Fotocopia)
 
-        Using cn As New SqlConnection(Configuracion.ConnectionString)
+        Using cn As New SqliteConnection(Configuracion.ConnectionString)
             cn.Open()
 
-            Dim cmd As New SqlCommand("
+            Dim cmd As New SqliteCommand("
             UPDATE fotocopias SET
                 nombre = @nombre,
                 fecha = @fecha,
@@ -59,25 +58,24 @@ Public Class FotocopiasRepository
                 comentario = @comentario
             WHERE id_fotocopia = @id", cn)
 
-            cmd.Parameters.Add("@id", SqlDbType.Int).Value = f.IdFotocopia
-            cmd.Parameters.Add("@nombre", SqlDbType.VarChar).Value = If(String.IsNullOrWhiteSpace(f.Nombre), "SIN NOMBRE", f.Nombre)
-            cmd.Parameters.Add("@fecha", SqlDbType.DateTime).Value = f.Fecha
-            cmd.Parameters.Add("@paginas", SqlDbType.Int).Value = f.Paginas
-            cmd.Parameters.Add("@anillados", SqlDbType.Int).Value = f.Anillados
-            cmd.Parameters.Add("@precio_unitario", SqlDbType.Int).Value = f.PrecioUnitario
-            cmd.Parameters.Add("@precio_total", SqlDbType.Int).Value = f.PrecioTotal
-            cmd.Parameters.Add("@transferencia", SqlDbType.Int).Value = f.Transferencia
-            cmd.Parameters.Add("@efectivo", SqlDbType.Int).Value = f.Efectivo
-            cmd.Parameters.Add("@comentario", SqlDbType.VarChar).Value = If(f.Comentario, "")
+            cmd.Parameters.AddWithValue("@id", f.IdFotocopia)
+            cmd.Parameters.AddWithValue("@nombre", f.Nombre)
+            cmd.Parameters.AddWithValue("@fecha", f.Fecha.ToString("yyyy-MM-dd"))
+            cmd.Parameters.AddWithValue("@paginas", f.Paginas)
+            cmd.Parameters.AddWithValue("@anillados", f.Anillados)
+            cmd.Parameters.AddWithValue("@precio_unitario", f.PrecioUnitario)
+            cmd.Parameters.AddWithValue("@precio_total", f.PrecioTotal)
+            cmd.Parameters.AddWithValue("@transferencia", f.Transferencia)
+            cmd.Parameters.AddWithValue("@efectivo", f.Efectivo)
+            cmd.Parameters.AddWithValue("@comentario", f.Comentario)
 
             Dim filas = cmd.ExecuteNonQuery()
-
             If filas = 0 Then
-                Throw New Exception("No se actualizó ninguna fila. Revisá el IdFotocopia.")
+                Throw New Exception("No se actualizó ninguna fila.")
             End If
         End Using
-
     End Sub
+
 
     '==================== SELECT ====================
 
@@ -85,41 +83,28 @@ Public Class FotocopiasRepository
 
         Dim lista As New List(Of Fotocopia)
 
-        Using cn As New SqlConnection(Configuracion.ConnectionString)
+        Using cn As New SqliteConnection(Configuracion.ConnectionString)
             cn.Open()
 
-            Dim cmd As New SqlCommand("
-                SELECT  f.id_fotocopia,
-                        f.nombre,
-                        f.fecha,
-                        f.paginas,
-                        f.anillados,
-                        f.precio_unitario,
-                        f.precio_total,
-                        f.transferencia,
-                        f.efectivo,
-                        f.comentario,
-                        f.id_estado,
-                        e.descripcion AS estado
-                FROM fotocopias f
-                INNER JOIN estados e ON f.id_estado = e.id_estado
-                ORDER BY f.fecha DESC", cn)
+            Dim cmd As New SqliteCommand("
+            SELECT *
+            FROM fotocopias
+            ORDER BY fecha DESC", cn)
 
             Using dr = cmd.ExecuteReader()
                 While dr.Read()
                     lista.Add(New Fotocopia With {
-                        .IdFotocopia = CInt(dr("id_fotocopia")),
-                        .Nombre = dr("nombre").ToString(),
-                        .Fecha = CDate(dr("fecha")),
-                        .Paginas = CInt(dr("paginas")),
-                        .Anillados = CInt(dr("anillados")),
-                        .PrecioUnitario = CInt(dr("precio_unitario")),
-                        .PrecioTotal = CInt(dr("precio_total")),
-                        .Transferencia = CInt(dr("transferencia")),
-                        .Efectivo = CInt(dr("efectivo")),
-                        .Comentario = dr("comentario").ToString(),
-                        .IdEstado = CInt(dr("id_estado")),
-                        .Estado = dr("estado").ToString()
+                        .IdFotocopia = dr.GetInt32(0),
+                        .Nombre = dr.GetString(1),
+                        .Fecha = Date.Parse(dr.GetString(2)),
+                        .Paginas = dr.GetInt32(3),
+                        .Anillados = dr.GetInt32(4),
+                        .PrecioUnitario = dr.GetInt32(5),
+                        .PrecioTotal = dr.GetInt32(6),
+                        .Transferencia = dr.GetInt32(7),
+                        .Efectivo = dr.GetInt32(8),
+                        .Comentario = dr.GetString(9),
+                        .IdEstado = dr.GetInt32(10)
                     })
                 End While
             End Using
@@ -127,5 +112,6 @@ Public Class FotocopiasRepository
 
         Return lista
     End Function
+
 
 End Class

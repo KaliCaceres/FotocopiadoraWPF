@@ -1,11 +1,13 @@
 ﻿
 Imports Syncfusion.UI.Xaml.NavigationDrawer
 Imports FotocopiadoraWPF.Views
-
+Imports Microsoft.Data.Sqlite
 Namespace FotocopiadoraWPF
 
     Partial Class MainWindow
         Inherits Window
+
+
 
         Private Sub NavigationDrawer_ItemClicked(
             sender As Object,
