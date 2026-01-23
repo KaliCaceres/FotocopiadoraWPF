@@ -10,25 +10,29 @@
              xmlns:Globalization="clr-namespace:System.Globalization;assembly=System.Runtime"
 
              xmlns:views="clr-namespace:FotocopiadoraWPF.Views"
-
-
-             
-             mc:Ignorable="d" Background="White" Padding="20">
+             mc:Ignorable="d" 
+             Background="#F2F4F7">
     
-    <UserControl.Resources>
-        <Style TargetType="{x:Type inputLayout:SfTextInputLayout}">
-            <Setter Property="Margin" Value="10,0,10,10"/>
-        </Style>
-    </UserControl.Resources>
 
+    <Border CornerRadius="16"
+            
+            Padding="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
 
-    <StackPanel Orientation="Vertical" HorizontalAlignment="Center" VerticalAlignment="Center">
-        <views:FotocopiaFormView/>
+        <StackPanel Orientation="Vertical"
+            HorizontalAlignment="Center"
+            VerticalAlignment="Center">
 
-        <Button Content="Guardar"
-                Command="{Binding GuardarCommand}"
-                Width="120"
-                Height="35"
-                HorizontalAlignment="Left" Margin="10,20,0,0"/>
-    </StackPanel>
+            <views:FotocopiaFormView/>
+
+            <Button Content="Guardar"
+            Command="{Binding GuardarCommand}"
+            Width="120"
+            Height="35"
+            HorizontalAlignment="Left" Margin="20,20,0,0"/>
+            
+        </StackPanel>
+
+    </Border>
 </UserControl>

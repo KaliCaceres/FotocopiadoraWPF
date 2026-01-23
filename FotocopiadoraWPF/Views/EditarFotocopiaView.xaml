@@ -6,6 +6,7 @@
              xmlns:views="clr-namespace:FotocopiadoraWPF.Views"
              mc:Ignorable="d"
              Padding="20"
+             Background="#F2F4F7"
              >
 
     <!-- CONTENEDOR RAÍZ -->
@@ -21,13 +22,13 @@
                     Command="{Binding GuardarCommand}"
                 Width="120"
                 Height="35"
-                HorizontalAlignment="Left" Margin="10,20,0,0"/>
+                HorizontalAlignment="Left"  Margin="20,20,0,0"/>
 
             <Button Content="Cancelar"
                     Command="{Binding CancelarCommand}"
                 Width="120"
                 Height="35"
-                HorizontalAlignment="Left" Margin="10,20,0,0"/>
+                HorizontalAlignment="Left" Margin="20,20,0,0"/>
 
         </StackPanel>
 

@@ -11,5 +11,8 @@ Imports Microsoft.Data.Sqlite
 
 Public Class Configuracion
     Public Shared ReadOnly ConnectionString As String =
-        "Data Source=fotocopiadora.db"
+        "Data Source=" &
+        IO.Path.Combine(AppDomain.CurrentDomain.BaseDirectory, "fotocopiadora.db") &
+        ";"
 End Class
+

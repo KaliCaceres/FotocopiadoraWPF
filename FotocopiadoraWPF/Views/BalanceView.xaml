@@ -7,70 +7,77 @@
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF"
              mc:Ignorable="d" 
-             d:DesignHeight="800" d:DesignWidth="800" Background="White">
+             Background="#F2F4F7">
     <UserControl.Resources>
         <Style TargetType="inputLayout:SfTextInputLayout">
             <Setter Property="Margin" Value="10,0,10,10"/>
         </Style>
     </UserControl.Resources>
 
-    <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" >
+    <Border CornerRadius="16"
+           Background="White"
+           Padding="20"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center">
+        <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400" >
 
-        <Grid.ColumnDefinitions>
-            <ColumnDefinition Width="*"/>
-            <ColumnDefinition Width="*"/>
-        </Grid.ColumnDefinitions>
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="*"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
 
-        <Grid.RowDefinitions>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-            <RowDefinition Height="Auto"/>
-        </Grid.RowDefinitions>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+                <RowDefinition Height="Auto"/>
+            </Grid.RowDefinitions>
 
-        <Label Grid.Row="0" Content="Contadores" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+            <Label Grid.Row="0" Content="Contadores" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
 
-        <Label Grid.Row="1" Content="Toshiba Studio (307) Equipo 1" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Left" />
+            <Label Grid.Row="1" Content="Toshiba Studio (307) Equipo 1" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Left" />
 
-        <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Contador Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-            <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
-        </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Contador Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
+            </inputLayout:SfTextInputLayout>
 
-        <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="1"  Hint="Contador Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-            <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
-        </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="1"  Hint="Contador Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
+            </inputLayout:SfTextInputLayout>
 
-        <Label Grid.Row="3" Content="Toshiba Studio (307) Equipo 2" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Left" />
+            <Label Grid.Row="3" Content="Toshiba Studio (307) Equipo 2" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Left" />
 
-        <inputLayout:SfTextInputLayout Grid.Row="4" Grid.Column="0"  Hint="Contador Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-            <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
-        </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Grid.Row="4" Grid.Column="0"  Hint="Contador Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
+            </inputLayout:SfTextInputLayout>
 
-        <inputLayout:SfTextInputLayout Grid.Row="4" Grid.Column="1"  Hint="Contador Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-            <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
-        </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Grid.Row="4" Grid.Column="1"  Hint="Contador Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
+            </inputLayout:SfTextInputLayout>
 
-        <Label Grid.Row="5" Content="Caja" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+            <Label Grid.Row="5" Content="Caja" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
 
-        <inputLayout:SfTextInputLayout Grid.Row="6" Grid.Column="0"  Hint="Efectivo Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-            <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
-        </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Grid.Row="6" Grid.Column="0"  Hint="Efectivo Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
+            </inputLayout:SfTextInputLayout>
 
-        <inputLayout:SfTextInputLayout Grid.Row="6" Grid.Column="1"  Hint="Efectivo Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-            <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
-        </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Grid.Row="6" Grid.Column="1"  Hint="Efectivo Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
+            </inputLayout:SfTextInputLayout>
 
-        <inputLayout:SfTextInputLayout Grid.Row="7" Grid.Column="0"  Hint="Transferencia Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-            <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
-        </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Grid.Row="7" Grid.Column="0"  Hint="Transferencia Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
+            </inputLayout:SfTextInputLayout>
 
-        <inputLayout:SfTextInputLayout Grid.Row="7" Grid.Column="1"  Hint="Transferencia Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-            <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
-        </inputLayout:SfTextInputLayout>
-    </Grid>
+            <inputLayout:SfTextInputLayout Grid.Row="7" Grid.Column="1"  Hint="Transferencia Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
+            </inputLayout:SfTextInputLayout>
+        </Grid>
+    </Border>
+
 
 </UserControl>

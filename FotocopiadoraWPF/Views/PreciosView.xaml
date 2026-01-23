@@ -11,7 +11,7 @@
              xmlns:conv="clr-namespace:FotocopiadoraWPF.Converters"
 
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800" Background="White">
+             Background="#F2F4F7">
 
 
     <UserControl.Resources>
@@ -22,7 +22,8 @@
         </Style>
     </UserControl.Resources>
 
-    <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Center" Width="400" HorizontalAlignment="Center">
+
+    <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Center" HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
@@ -33,7 +34,14 @@
             <RowDefinition Height="Auto"/>
         </Grid.RowDefinitions>
 
-        <Grid  IsEnabled="{Binding InputsHabilitados}" Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+        <Border CornerRadius="16"
+           Background="White"
+           Padding="20"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center"
+           Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
+
+            <Grid  IsEnabled="{Binding InputsHabilitados}" Width="350">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -78,14 +86,17 @@
 
 
         </Grid>
+
+        </Border>
         <Button Grid.Row="1" Grid.Column="0" Content="{Binding TextoBotonPrincipal}"
         Command="{Binding BotonPrincipalCommand}"
         Width="120"
-        Height="35"/>
+        Height="35"
+                 Margin="0,20,0,0"/>
         <Button Content="Cancelar" Grid.Row="1" Grid.Column="1"
                     Command="{Binding CancelarCommand}"
                     Width="120" Height="35"
-                    Margin="10,0,0,0"
+                     Margin="0,20,0,0"
                     Visibility="{Binding MostrarCancelar,
                                  Converter={StaticResource BoolToVisibility}}"/>
 

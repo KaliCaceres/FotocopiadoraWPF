@@ -20,8 +20,7 @@
 
     
 
-    <Grid Margin="10">
-
+    <StackPanel Margin="10">
         <ListView x:Name="ListaFotocopias" ItemsSource="{Binding FotocopiasView}"
           BorderThickness="0"
           Background="Transparent"
@@ -77,27 +76,20 @@
 
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <ColumnDefinition Width="48"/>
                                 <!-- Avatar -->
-                                <ColumnDefinition Width="100"/>
+                                <ColumnDefinition Width="*"/>
                                 <!-- Fecha -->
-                                <ColumnDefinition Width="2*"/>
+                                <ColumnDefinition Width="*"/>
                                 <!-- Nombre -->
                                 <ColumnDefinition Width="*"/>
                                 <!-- Total -->
-                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="*"/>
                                 <!-- Estado -->
-                                <ColumnDefinition Width="40"/>
+                                <ColumnDefinition Width="*"/>
                                 <!-- Menú -->
                             </Grid.ColumnDefinitions>
 
-                            <TextBlock Grid.Column="0"
-                               VerticalAlignment="Center"
-                               Foreground="#6B7280"
-                               FontSize="12"
-                               Text="{Binding Fecha, StringFormat=dd/MM/yyyy}"/>
-
-                            <Border Grid.Column="1"
+                            <Border Grid.Column="0"
                                     Width="36"
                                     Height="36"
                                     CornerRadius="18"
@@ -117,7 +109,7 @@
 
 
                             <!-- Nombre -->
-                            <TextBlock Grid.Column="2"
+                            <TextBlock Grid.Column="1"
                                VerticalAlignment="Center"
                                FontWeight="SemiBold"
                                FontSize="14"
@@ -125,7 +117,7 @@
                                Text="{Binding Nombre}"/>
 
                             <!-- Total -->
-                            <TextBlock Grid.Column="3"
+                            <TextBlock Grid.Column="2"
                                VerticalAlignment="Center"
                                FontWeight="Bold"
                                FontSize="14"
@@ -133,7 +125,7 @@
                                Text="{Binding PrecioTotal, StringFormat=$ {0:N0}}"/>
 
                             <!-- Estado -->
-                            <TextBlock Grid.Column="4"
+                            <TextBlock Grid.Column="3"
                                VerticalAlignment="Center"
                                FontWeight="SemiBold"
                                Text="{Binding Estado}">
@@ -157,7 +149,7 @@
                                 </TextBlock.Style>
 
                             </TextBlock>
-                            <Button Grid.Column="5"
+                            <Button Grid.Column="4"
                                     Content="⋮"
                                     FontSize="18"
                                     Width="32"
@@ -174,17 +166,17 @@
                                 <Button.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Editar"
-                  Command="{Binding PlacementTarget.Tag.EditarCommand,
-                                    RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                  CommandParameter="{Binding PlacementTarget.DataContext,
-                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                                  Command="{Binding PlacementTarget.Tag.EditarCommand,
+                                                                    RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext,
+                                                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
 
                                         <MenuItem Header="Eliminar"
-                  Foreground="#EF4444"
-                  Command="{Binding PlacementTarget.Tag.EliminarCommand,
-                                    RelativeSource={RelativeSource AncestorType=ContextMenu}}"
-                  CommandParameter="{Binding PlacementTarget.DataContext,
-                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
+                                                  Foreground="#EF4444"
+                                                  Command="{Binding PlacementTarget.Tag.EliminarCommand,
+                                                                    RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext,
+                                                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
 
 
                                     </ContextMenu>
@@ -201,5 +193,5 @@
 
 
 
-    </Grid>
+    </StackPanel>
 </UserControl>
