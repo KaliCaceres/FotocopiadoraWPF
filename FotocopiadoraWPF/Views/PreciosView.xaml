@@ -41,7 +41,7 @@
            VerticalAlignment="Center"
            Grid.Column="0" Grid.Row="0" Grid.ColumnSpan="2">
 
-            <Grid  IsEnabled="{Binding InputsHabilitados}" Width="350">
+            <Grid Width="350" Cursor="IBeam">
 
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="*"/>
@@ -61,27 +61,27 @@
             <Label Grid.Row="0" Content="Precios" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
 
             <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="0"  Hint="Anillado" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" Value="{Binding Anillado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  UseNullOption="True" FontSize="14" />
+                    <syncfusion:IntegerTextBox IsEnabled="{Binding InputsHabilitados}" Height="15" ValueValidation="OnKeyPress" Value="{Binding Anillado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"  UseNullOption="True" FontSize="14" />
             </inputLayout:SfTextInputLayout>
 
             <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="1"  Hint="Empleado" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Empleado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   />
+                    <syncfusion:IntegerTextBox IsEnabled="{Binding InputsHabilitados}" Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Empleado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   />
             </inputLayout:SfTextInputLayout>
 
             <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="1 - 100" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Precio1a100, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   />
+                    <syncfusion:IntegerTextBox IsEnabled="{Binding InputsHabilitados}" Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Precio1a100, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   />
             </inputLayout:SfTextInputLayout>
 
             <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="1"  Hint="101 - 400" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Precio101a400, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   />
+                    <syncfusion:IntegerTextBox IsEnabled="{Binding InputsHabilitados}" Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Precio101a400, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"   />
             </inputLayout:SfTextInputLayout>
 
             <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="0"  Hint="401 - 700" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Precio401a700, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"    />
+                    <syncfusion:IntegerTextBox IsEnabled="{Binding InputsHabilitados}" Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Precio401a700, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"    />
             </inputLayout:SfTextInputLayout>
 
             <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="1"  Hint="+700" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding PrecioMas700, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"    />
+                    <syncfusion:IntegerTextBox IsEnabled="{Binding InputsHabilitados}" Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding PrecioMas700, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}"    />
             </inputLayout:SfTextInputLayout>
 
 
