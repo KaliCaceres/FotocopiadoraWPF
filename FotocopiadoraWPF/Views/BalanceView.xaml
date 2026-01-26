@@ -3,19 +3,30 @@
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+             xmlns:conv="clr-namespace:FotocopiadoraWPF.Converters"
+             xmlns:vm="clr-namespace:FotocopiadoraWPF.ViewModels"
 
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF"
              mc:Ignorable="d" 
              Background="#F2F4F7">
+    
     <UserControl.Resources>
+        <conv:InvertBoolConverter x:Key="InvertBoolConverter"/>
+        <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
+
         <Style TargetType="inputLayout:SfTextInputLayout">
             <Setter Property="Margin" Value="10,0,10,10"/>
         </Style>
     </UserControl.Resources>
 
+    <UserControl.DataContext>
+        <vm:BalanceViewModel/>
+    </UserControl.DataContext>
+
     <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Center" HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
@@ -27,7 +38,7 @@
         
         <Border CornerRadius="16" Grid.ColumnSpan="2"
            Background="White"
-           Padding="20"
+           Padding="20,20,20,10"
            HorizontalAlignment="Center"
            VerticalAlignment="Center">
             <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400">
@@ -59,21 +70,23 @@
                 <Label Grid.Row="1" Content="Toshiba Studio (307) Equipo 1" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Left" />
 
                 <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
+                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding ContadorEquipo1Inicio}" IsEnabled="False" />
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="1"  Hint="Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
+                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding ContadorEquipo1Final, Mode=TwoWay}" IsEnabled="{Binding InputsHabilitados}"/>
+
                 </inputLayout:SfTextInputLayout>
 
                 <Label Grid.Row="3" Content="Toshiba Studio (307) Equipo 2" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Left" />
 
                 <inputLayout:SfTextInputLayout Grid.Row="4" Grid.Column="0"  Hint="Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
+                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding ContadorEquipo2Inicio}"  IsEnabled="False"/>
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="4" Grid.Column="1"  Hint="Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="0" IsEnabled="False" />
+                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding ContadorEquipo2Final, Mode=TwoWay}" IsEnabled="{Binding InputsHabilitados}"/>
+                    
                 </inputLayout:SfTextInputLayout>
 
                 <Label Grid.Row="5" Content="Caja" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
@@ -81,22 +94,24 @@
                 <Label Grid.Row="6" Content="Efectivo" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Left" />
 
                 <inputLayout:SfTextInputLayout Grid.Row="7" Grid.Column="0"  Hint="Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
+                    <syncfusion:CurrencyTextBox CurrencySymbol="$" Value="{Binding EfectivoInicio}"  IsEnabled="False" />
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="7" Grid.Column="1"  Hint="Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
+                    <syncfusion:CurrencyTextBox CurrencySymbol="$" Value="{Binding EfectivoFinal, Mode=TwoWay}" IsEnabled="{Binding InputsHabilitados}"/>
+                    
                 </inputLayout:SfTextInputLayout>
 
                 <Label Grid.Row="8" Content="Transferencia" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Left" />
 
 
                 <inputLayout:SfTextInputLayout Grid.Row="9" Grid.Column="0"  Hint="Inicio" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
+                    <syncfusion:CurrencyTextBox CurrencySymbol="$" Value="{Binding TransferenciaInicio}"  IsEnabled="False" />
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="9" Grid.Column="1"  Hint="Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:CurrencyTextBox CurrencySymbol="$" IsEnabled="False" />
+                    <syncfusion:CurrencyTextBox CurrencySymbol="$" Value="{Binding TrasferenciaFinal, Mode=TwoWay}" IsEnabled="{Binding InputsHabilitados}"/>
+                   
                 </inputLayout:SfTextInputLayout>
             </Grid>
 
@@ -108,12 +123,68 @@
         Height="35"
                  Margin="0,20,0,0"/>
         <Button Content="Cancelar" Grid.Row="1" Grid.Column="1"
-                    Command="{Binding CancelarCommand}"
-                    Width="120" Height="35"
-                     Margin="0,20,0,0"
-                    />
-        <!--Visibility="{Binding MostrarCancelar,
-             Converter={StaticResource BoolToVisibility}}"-->
+        Width="120"
+        Height="35"
+        Margin="0,20,0,0"
+        Command="{Binding CancelarCommand}"
+        Visibility="{Binding MostrarCancelar,
+                     Converter={StaticResource BoolToVisibilityConverter}}"/>
+
+
+        <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Top" HorizontalAlignment="Center" Width="auto" Grid.ColumnSpan="1" Grid.Column="3"   >
+
+                
+            
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="170"/>
+                    <ColumnDefinition Width="170"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <!--Titulo-->
+                    <RowDefinition Height="Auto"/>
+                    <!--Contadores-->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <!--Caja-->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <!--Botones-->
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+            <Border Grid.Column="0"
+                    Grid.Row="0"
+                    Background="White"
+                    CornerRadius="16"
+                    Grid.ColumnSpan="1"
+                    Padding="10,10,10,10"
+                    Margin="5,0,5,5">
+
+                <StackPanel VerticalAlignment="Center">
+                    <Label FontSize="16" Padding="10,0,0,0" >Fotocopias</Label>
+                    <Label FontSize="25" Padding="10,0,0,0" FontWeight="Bold">3000</Label>
+                </StackPanel>
+            </Border>
+
+            <Border Grid.Column="1"
+                    Grid.Row="0"
+                    Background="White"
+                    CornerRadius="16"
+                    Grid.ColumnSpan="1"
+                    Padding="10,10,10,10"
+                    Margin="5,0,5,5">
+
+                <StackPanel VerticalAlignment="Center">
+                    <Label FontSize="16" Padding="10,0,0,0" >Anillados</Label>
+                    <Label FontSize="25" Padding="10,0,0,0" FontWeight="Bold">50</Label>
+                </StackPanel>
+            </Border>
+        </Grid>
 
     </Grid>
 
