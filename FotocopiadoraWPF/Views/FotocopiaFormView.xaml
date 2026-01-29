@@ -16,7 +16,7 @@
     </UserControl.Resources>
 
 
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
+    <StackPanel Orientation="Horizontal" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Border CornerRadius="16"
            Background="White"
            Padding="20"
@@ -103,70 +103,27 @@
                 <!--<Button Grid.Row="8" Grid.Column="0" Content="Guardar" Command="{Binding GuardarCommand}" Width="120" Height="35" Grid.ColumnSpan="2"/>-->
             </Grid>
         </Border>
-  
-        <Border CornerRadius="16"
-           Background="White"
-           Padding="20"
-           HorizontalAlignment="Center"
-           VerticalAlignment="top">
-            <Grid Width="200">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="*"/>
-                </Grid.ColumnDefinitions>
-
-                <Grid.RowDefinitions>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                    <RowDefinition Height="Auto"/>
-                </Grid.RowDefinitions>
-
+        <Border 
+            CornerRadius="16"
+            Background="White"
+            Padding="20"
+            HorizontalAlignment="Center"
+            VerticalAlignment="top">
+            <StackPanel Width="200">
                 <Label Grid.Row="0" Height="40" Content="Detalle" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" />
 
                 <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="0"  Hint="Paginas" HelperText="{Binding HelperPrecioPagina}" ContainerType="Outlined" VerticalAlignment="Center" Foreground="Black" BorderBrush="Black">
-                    <syncfusion:CurrencyTextBox
-                        Height="15"
-                        FontSize="14"
-                        IsReadOnly="True"
-                        CurrencySymbol="$"
-                        Value="{Binding TotalPaginas,
-                                        Mode=OneWay,
-                                        UpdateSourceTrigger=PropertyChanged,
-                                        NotifyOnTargetUpdated=True}"
-                    />
+                    <syncfusion:CurrencyTextBox Height="15" FontSize="14" IsReadOnly="True" CurrencySymbol="$" Value="{Binding TotalPaginas, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Anillados" HelperText="" ContainerType="Outlined" VerticalAlignment="Center" Foreground="Black" BorderBrush="Black">
-                    <syncfusion:CurrencyTextBox
-                        Height="15"
-                        FontSize="14"
-                        IsReadOnly="True"
-                        CurrencySymbol="$"
-                        Value="{Binding TotalAnillados,
-                                        Mode=OneWay,
-                                        UpdateSourceTrigger=PropertyChanged,
-                                        NotifyOnTargetUpdated=True}"
-                    />
+                    <syncfusion:CurrencyTextBox Height="15" FontSize="14" IsReadOnly="True" CurrencySymbol="$" Value="{Binding TotalAnillados,Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
                 </inputLayout:SfTextInputLayout>
+
                 <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="0"  Hint="Total" HelperText="" ContainerType="Outlined" VerticalAlignment="Center" Foreground="Black" BorderBrush="Black">
-                    <syncfusion:CurrencyTextBox
-                        IsReadOnly="True"
-                        CurrencySymbol="$"
-                        Value="{Binding Total,
-                                        Mode=OneWay,
-                                        UpdateSourceTrigger=PropertyChanged,
-                                        NotifyOnTargetUpdated=True}"
-                    />
+                    <syncfusion:CurrencyTextBox IsReadOnly="True" CurrencySymbol="$" Value="{Binding Total, Mode=OneWay, UpdateSourceTrigger=PropertyChanged, NotifyOnTargetUpdated=True}"/>
                 </inputLayout:SfTextInputLayout>
-
-            </Grid>
+            </StackPanel>
         </Border>
-        
-
-
-        </StackPanel>
-
-    </UserControl>
+    </StackPanel>
+</UserControl>

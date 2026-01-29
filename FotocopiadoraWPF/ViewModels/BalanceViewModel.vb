@@ -1,5 +1,8 @@
 ﻿Imports System.ComponentModel
+Imports System.IO
 Imports System.Windows.Input
+Imports QuestPDF.Fluent
+Imports QuestPDF.Infrastructure
 
 Namespace ViewModels
 
@@ -146,7 +149,6 @@ Namespace ViewModels
 
         Private Sub Guardar()
 
-            ' 1️⃣ Guardar balance
             Dim nuevo As New Balance With {
         .ContadorEquipo1 = ContadorEquipo1Final,
         .ContadorEquipo2 = ContadorEquipo2Final,
@@ -157,30 +159,21 @@ Namespace ViewModels
 
             _repo.GuardarBalance(nuevo)
 
-            ' 2️⃣ Final → Inicio
+            ' 🔹 PDF
+            BalancePdfGenerator.GenerarYMostrar(nuevo)
+
+            ' 🔹 Final → Inicio
             ContadorEquipo1Inicio = ContadorEquipo1Final
             ContadorEquipo2Inicio = ContadorEquipo2Final
             EfectivoInicio = EfectivoFinal
             TransferenciaInicio = TransferenciaFinal
 
-            ' 3️⃣ Resetear Final
+            ' 🔹 Reset finales
             ContadorEquipo1Final = 0
             ContadorEquipo2Final = 0
             EfectivoFinal = 0
             TransferenciaFinal = 0
 
-            ' 4️⃣ Notificar cambios
-            Avisar(NameOf(ContadorEquipo1Inicio))
-            Avisar(NameOf(ContadorEquipo2Inicio))
-            Avisar(NameOf(EfectivoInicio))
-            Avisar(NameOf(TransferenciaInicio))
-
-            Avisar(NameOf(ContadorEquipo1Final))
-            Avisar(NameOf(ContadorEquipo2Final))
-            Avisar(NameOf(EfectivoFinal))
-            Avisar(NameOf(TransferenciaFinal))
-
-            ' 5️⃣ Salir de edición
             InputsHabilitados = False
         End Sub
 
@@ -191,10 +184,54 @@ Namespace ViewModels
             ' Se va a usar cuando conectes DB
         End Sub
 
+        Private _contadorEquipo1Inicio As Integer
         Public Property ContadorEquipo1Inicio As Integer
+            Get
+                Return _contadorEquipo1Inicio
+            End Get
+            Set(value As Integer)
+                If _contadorEquipo1Inicio = value Then Return
+                _contadorEquipo1Inicio = value
+                Avisar(NameOf(ContadorEquipo1Inicio))
+            End Set
+        End Property
+
+        Private _contadorEquipo2Inicio As Integer
         Public Property ContadorEquipo2Inicio As Integer
+            Get
+                Return _contadorEquipo2Inicio
+            End Get
+            Set(value As Integer)
+                If _contadorEquipo2Inicio = value Then Return
+                _contadorEquipo2Inicio = value
+                Avisar(NameOf(ContadorEquipo2Inicio))
+            End Set
+        End Property
+
+        Private _efectivoInicio As Integer
         Public Property EfectivoInicio As Integer
+            Get
+                Return _efectivoInicio
+            End Get
+            Set(value As Integer)
+                If _efectivoInicio = value Then Return
+                _efectivoInicio = value
+                Avisar(NameOf(EfectivoInicio))
+            End Set
+        End Property
+
+        Private _transferenciaInicio As Integer
         Public Property TransferenciaInicio As Integer
+            Get
+                Return _transferenciaInicio
+            End Get
+            Set(value As Integer)
+                If _transferenciaInicio = value Then Return
+                _transferenciaInicio = value
+                Avisar(NameOf(TransferenciaInicio))
+            End Set
+        End Property
+
 
         Private Sub CargarValoresIniciales()
             Dim ultimo = _repo.ObtenerUltimoBalance()

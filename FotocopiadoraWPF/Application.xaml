@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:FotocopiadoraWPF"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-
+            
     </Application.Resources>
 </Application>
