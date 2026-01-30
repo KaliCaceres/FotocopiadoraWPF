@@ -38,6 +38,8 @@ Public Class BalancePdf
                                                      col.Item().Text($"Equipo 2: {_balance.ContadorEquipo2}")
                                                      col.Item().Text($"Efectivo: ${_balance.Efectivo}")
                                                      col.Item().Text($"Transferencia: ${_balance.Transferencia}")
+                                                     col.Item().Text($"Periodo: {_balance.IdMes}/{_balance.Anio}")
+
                                                  End Sub)
                        End Sub)
     End Sub

@@ -8,9 +8,9 @@ Public Class BalanceRepository
 
             Dim cmd As New SqliteCommand("
             INSERT INTO resumenes
-            (contador_equipo1, contador_equipo2, efectivo, transferencia, fecha)
+            (contador_equipo1, contador_equipo2, efectivo, transferencia, fecha, anio, id_mes)
             VALUES
-            (@c1, @c2, @efectivo, @transferencia, @fecha)
+            (@c1, @c2, @efectivo, @transferencia, @fecha, @anio, @id_mes)
         ", cn)
 
             cmd.Parameters.AddWithValue("@c1", b.ContadorEquipo1)
@@ -18,7 +18,8 @@ Public Class BalanceRepository
             cmd.Parameters.AddWithValue("@efectivo", b.Efectivo)
             cmd.Parameters.AddWithValue("@transferencia", b.Transferencia)
             cmd.Parameters.AddWithValue("@fecha", Date.Now.ToString("yyyy-MM-dd HH:mm:ss"))
-
+            cmd.Parameters.AddWithValue("@anio", b.Anio)
+            cmd.Parameters.AddWithValue("@id_mes", b.IdMes)
             cmd.ExecuteNonQuery()
         End Using
     End Sub

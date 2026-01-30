@@ -146,6 +146,32 @@ Namespace ViewModels
             End Set
         End Property
 
+        ' ==================== DETALLE ====================
+
+        Private _anio As Integer = Date.Now.Year
+        Public Property Anio As Integer
+            Get
+                Return _anio
+            End Get
+            Set(value As Integer)
+                If _anio = value Then Return
+                _anio = value
+                Avisar(NameOf(Anio))
+            End Set
+        End Property
+
+
+        Private _mesSeleccionado As Integer = Date.Now.Month
+        Public Property MesSeleccionado As Integer
+            Get
+                Return _mesSeleccionado
+            End Get
+            Set(value As Integer)
+                If _mesSeleccionado = value Then Return
+                _mesSeleccionado = value
+                Avisar(NameOf(MesSeleccionado))
+            End Set
+        End Property
 
         Private Sub Guardar()
 
@@ -154,8 +180,10 @@ Namespace ViewModels
         .ContadorEquipo2 = ContadorEquipo2Final,
         .Efectivo = EfectivoFinal,
         .Transferencia = TransferenciaFinal,
-        .Fecha = Date.Now
-    }
+        .Fecha = Date.Now,
+        .Anio = Anio,
+        .IdMes = MesSeleccionado
+         }
 
             _repo.GuardarBalance(nuevo)
 

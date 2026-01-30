@@ -16,7 +16,7 @@
         <conv:BoolToVisibilityConverter x:Key="BoolToVisibilityConverter"/>
 
         <Style TargetType="inputLayout:SfTextInputLayout">
-            <Setter Property="Margin" Value="10,0,10,10"/>
+            <Setter Property="Margin" Value="10,0,10,0"/>
         </Style>
     </UserControl.Resources>
 
@@ -131,6 +131,7 @@
                      Converter={StaticResource BoolToVisibilityConverter}}"/>
 
         <Border 
+            Margin="20,0,0,0"
             Grid.Column="2"
             CornerRadius="16"
             Background="White"
@@ -141,11 +142,11 @@
                 <Label Grid.Row="0" Height="40" Content="Detalle" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" />
 
                 <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="0"  Hint="Año" HelperText="{Binding HelperPrecioPagina}" ContainerType="Outlined" VerticalAlignment="Center" Foreground="Black" BorderBrush="Black">
-                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" IsEnabled="False" Value="2026" GroupSeperatorEnabled="False" />
+                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" IsEnabled="{Binding InputsHabilitados}" Value="{Binding Anio, Mode=TwoWay}"  GroupSeperatorEnabled="False" />
                 </inputLayout:SfTextInputLayout>
 
-                <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Mes" HelperText="" ContainerType="Outlined" VerticalAlignment="Center" Foreground="Black" BorderBrush="Black">
-                    <ComboBox SelectedValue="{Binding MesSeleccionado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="14">
+                <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Mes" HelperText="" ContainerType="Outlined" VerticalAlignment="Center" Foreground="Black" BorderBrush="Black" >
+                    <ComboBox SelectedValuePath="Tag" SelectedValue="{Binding MesSeleccionado, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" FontSize="14" IsEnabled="{Binding InputsHabilitados}">
                         <ComboBoxItem Content="Enero" Tag="1"/>
                         <ComboBoxItem Content="Febrero" Tag="2"/>
                         <ComboBoxItem Content="Marzo" Tag="3"/>

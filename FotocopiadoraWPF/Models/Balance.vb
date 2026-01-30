@@ -10,4 +10,5 @@
     Public Property IdMes As Integer
     Public Property Anio As Integer
     Public Property Fecha As Date
+
 End Class
