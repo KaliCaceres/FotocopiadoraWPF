@@ -1,8 +1,5 @@
 ﻿Imports System.ComponentModel
-Imports System.IO
 Imports System.Windows.Input
-Imports QuestPDF.Fluent
-Imports QuestPDF.Infrastructure
 
 Namespace ViewModels
 
@@ -12,12 +9,12 @@ Namespace ViewModels
         Public Event PropertyChanged As PropertyChangedEventHandler _
             Implements INotifyPropertyChanged.PropertyChanged
 
-        Private Sub Avisar(p As String)
-            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(p))
+        Private Sub Avisar(nombre As String)
+            RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(nombre))
         End Sub
 
         Private ReadOnly _repo As New BalanceRepository()
-
+        Private _ultimoBalance As BalanceEntity
 
         ' ==================== ESTADO UI ====================
 
@@ -31,17 +28,9 @@ Namespace ViewModels
                 _inputsHabilitados = value
 
                 Avisar(NameOf(InputsHabilitados))
-                Avisar(NameOf(EnModoEdicion))
                 Avisar(NameOf(TextoBotonPrincipal))
                 Avisar(NameOf(MostrarCancelar))
             End Set
-        End Property
-
-        ' Alias claro para el XAML
-        Public ReadOnly Property EnModoEdicion As Boolean
-            Get
-                Return InputsHabilitados
-            End Get
         End Property
 
         Public ReadOnly Property TextoBotonPrincipal As String
@@ -62,30 +51,18 @@ Namespace ViewModels
         Public ReadOnly Property CancelarCommand As ICommand
 
         Public Sub New()
-            _inputsHabilitados = False
+            BotonPrincipalCommand = New RelayCommand(AddressOf EjecutarBotonPrincipal)
+            CancelarCommand = New RelayCommand(AddressOf Cancelar)
 
-            Avisar(NameOf(TextoBotonPrincipal))
-            Avisar(NameOf(MostrarCancelar))
-            Avisar(NameOf(InputsHabilitados))
-
-            BotonPrincipalCommand =
-        New RelayCommand(AddressOf EjecutarBotonPrincipal)
-
-            CancelarCommand =
-        New RelayCommand(AddressOf Cancelar, Function() True)
-
-
+            InputsHabilitados = False
             CargarValoresIniciales()
         End Sub
-
-
 
         ' ==================== ACCIONES ====================
 
         Private Sub EjecutarBotonPrincipal()
             If InputsHabilitados Then
                 Guardar()
-                InputsHabilitados = False
             Else
                 InputsHabilitados = True
             End If
@@ -93,58 +70,22 @@ Namespace ViewModels
 
         Private Sub Cancelar()
             InputsHabilitados = False
-            RestaurarValores()
+            CargarValoresIniciales()
         End Sub
 
-        Private _contadorEquipo1Final As Integer
+        ' ==================== VALORES FINALES ====================
+
         Public Property ContadorEquipo1Final As Integer
-            Get
-                Return _contadorEquipo1Final
-            End Get
-            Set(value As Integer)
-                If _contadorEquipo1Final = value Then Return
-                _contadorEquipo1Final = value
-                Avisar(NameOf(ContadorEquipo1Final))
-            End Set
-        End Property
-
-
-        Private _contadorEquipo2Final As Integer
         Public Property ContadorEquipo2Final As Integer
-            Get
-                Return _contadorEquipo2Final
-            End Get
-            Set(value As Integer)
-                If _contadorEquipo2Final = value Then Return
-                _contadorEquipo2Final = value
-                Avisar(NameOf(ContadorEquipo2Final))
-            End Set
-        End Property
+        Public Property EfectivoFinal As Decimal
+        Public Property TransferenciaFinal As Decimal
 
-        Private _efectivoFinal As Integer
-        Public Property EfectivoFinal As Integer
-            Get
-                Return _efectivoFinal
-            End Get
-            Set(value As Integer)
-                If _efectivoFinal = value Then Return
-                _efectivoFinal = value
-                Avisar(NameOf(EfectivoFinal))
-            End Set
-        End Property
+        ' ==================== VALORES INICIALES ====================
 
-
-        Private _transferenciaFinal As Integer
-        Public Property TransferenciaFinal As Integer
-            Get
-                Return _transferenciaFinal
-            End Get
-            Set(value As Integer)
-                If _transferenciaFinal = value Then Return
-                _transferenciaFinal = value
-                Avisar(NameOf(TransferenciaFinal))
-            End Set
-        End Property
+        Public Property ContadorEquipo1Inicio As Integer
+        Public Property ContadorEquipo2Inicio As Integer
+        Public Property EfectivoInicio As Decimal
+        Public Property TransferenciaInicio As Decimal
 
         ' ==================== DETALLE ====================
 
@@ -160,7 +101,6 @@ Namespace ViewModels
             End Set
         End Property
 
-
         Private _mesSeleccionado As Integer = Date.Now.Month
         Public Property MesSeleccionado As Integer
             Get
@@ -173,22 +113,27 @@ Namespace ViewModels
             End Set
         End Property
 
+        ' ==================== GUARDAR ====================
+
         Private Sub Guardar()
 
-            Dim nuevo As New Balance With {
-        .ContadorEquipo1 = ContadorEquipo1Final,
-        .ContadorEquipo2 = ContadorEquipo2Final,
-        .Efectivo = EfectivoFinal,
-        .Transferencia = TransferenciaFinal,
-        .Fecha = Date.Now,
-        .Anio = Anio,
-        .IdMes = MesSeleccionado
-         }
+            Dim balanceActual = ConstruirBalanceActual()
 
-            _repo.GuardarBalance(nuevo)
+            ' 🔹 Guardar en BD (entity)
+            Dim entity As New BalanceEntity With {
+                .ContadorEquipo1 = balanceActual.ContadorEquipo1Final,
+                .ContadorEquipo2 = balanceActual.ContadorEquipo2Final,
+                .Efectivo = balanceActual.EfectivoFinal,
+                .Transferencia = balanceActual.TransferenciaFinal,
+                .Fecha = balanceActual.FechaFin,
+                .Anio = balanceActual.Anio,
+                .IdMes = balanceActual.IdMes
+            }
+
+            _repo.GuardarBalance(entity)
 
             ' 🔹 PDF
-            BalancePdfGenerator.GenerarYMostrar(nuevo)
+            BalancePdfGenerator.GenerarYMostrar(balanceActual)
 
             ' 🔹 Final → Inicio
             ContadorEquipo1Inicio = ContadorEquipo1Final
@@ -202,78 +147,25 @@ Namespace ViewModels
             EfectivoFinal = 0
             TransferenciaFinal = 0
 
+            _ultimoBalance = entity
             InputsHabilitados = False
         End Sub
 
-
-
-        Private Sub RestaurarValores()
-            ' TODO: Restaurar valores originales
-            ' Se va a usar cuando conectes DB
-        End Sub
-
-        Private _contadorEquipo1Inicio As Integer
-        Public Property ContadorEquipo1Inicio As Integer
-            Get
-                Return _contadorEquipo1Inicio
-            End Get
-            Set(value As Integer)
-                If _contadorEquipo1Inicio = value Then Return
-                _contadorEquipo1Inicio = value
-                Avisar(NameOf(ContadorEquipo1Inicio))
-            End Set
-        End Property
-
-        Private _contadorEquipo2Inicio As Integer
-        Public Property ContadorEquipo2Inicio As Integer
-            Get
-                Return _contadorEquipo2Inicio
-            End Get
-            Set(value As Integer)
-                If _contadorEquipo2Inicio = value Then Return
-                _contadorEquipo2Inicio = value
-                Avisar(NameOf(ContadorEquipo2Inicio))
-            End Set
-        End Property
-
-        Private _efectivoInicio As Integer
-        Public Property EfectivoInicio As Integer
-            Get
-                Return _efectivoInicio
-            End Get
-            Set(value As Integer)
-                If _efectivoInicio = value Then Return
-                _efectivoInicio = value
-                Avisar(NameOf(EfectivoInicio))
-            End Set
-        End Property
-
-        Private _transferenciaInicio As Integer
-        Public Property TransferenciaInicio As Integer
-            Get
-                Return _transferenciaInicio
-            End Get
-            Set(value As Integer)
-                If _transferenciaInicio = value Then Return
-                _transferenciaInicio = value
-                Avisar(NameOf(TransferenciaInicio))
-            End Set
-        End Property
-
+        ' ==================== CARGA INICIAL ====================
 
         Private Sub CargarValoresIniciales()
-            Dim ultimo = _repo.ObtenerUltimoBalance()
+            _ultimoBalance = _repo.ObtenerUltimoBalance()
 
-            If ultimo Is Nothing Then
+            If _ultimoBalance Is Nothing Then
                 ContadorEquipo1Inicio = 0
                 ContadorEquipo2Inicio = 0
                 EfectivoInicio = 0
                 TransferenciaInicio = 0
             Else
-                ContadorEquipo1Inicio = ultimo.ContadorEquipo1
-                ContadorEquipo2Inicio = ultimo.ContadorEquipo2
-                EfectivoInicio = ultimo.Efectivo
-                TransferenciaInicio = ultimo.Transferencia
+                ContadorEquipo1Inicio = _ultimoBalance.ContadorEquipo1
+                ContadorEquipo2Inicio = _ultimoBalance.ContadorEquipo2
+                EfectivoInicio = _ultimoBalance.Efectivo
+                TransferenciaInicio = _ultimoBalance.Transferencia
             End If
 
             Avisar(NameOf(ContadorEquipo1Inicio))
@@ -281,6 +173,26 @@ Namespace ViewModels
             Avisar(NameOf(EfectivoInicio))
             Avisar(NameOf(TransferenciaInicio))
         End Sub
+
+        ' ==================== BALANCE OPERATIVO ====================
+
+        Private Function ConstruirBalanceActual() As Balance
+            Return New Balance With {
+                .FechaInicio = _ultimoBalance.Fecha,
+                .FechaFin = Date.Now,
+                .ContadorEquipo1Inicio = ContadorEquipo1Inicio,
+                .ContadorEquipo1Final = ContadorEquipo1Final,
+                .ContadorEquipo2Inicio = ContadorEquipo2Inicio,
+                .ContadorEquipo2Final = ContadorEquipo2Final,
+                .EfectivoInicio = EfectivoInicio,
+                .EfectivoFinal = EfectivoFinal,
+                .TransferenciaInicio = TransferenciaInicio,
+                .TransferenciaFinal = TransferenciaFinal,
+                .IdMes = MesSeleccionado,
+                .Anio = Anio
+                }
+        End Function
+
 
     End Class
 End Namespace

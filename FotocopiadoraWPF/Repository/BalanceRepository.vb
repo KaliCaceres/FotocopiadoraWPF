@@ -2,7 +2,7 @@
 
 Public Class BalanceRepository
 
-    Public Sub GuardarBalance(b As Balance)
+    Public Sub GuardarBalance(b As BalanceEntity)
         Using cn As New SqliteConnection(Configuracion.ConnectionString)
             cn.Open()
 
@@ -25,24 +25,27 @@ Public Class BalanceRepository
     End Sub
 
 
-    Public Function ObtenerUltimoBalance() As Balance
+    Public Function ObtenerUltimoBalance() As BalanceEntity
         Using cn As New SqliteConnection(Configuracion.ConnectionString)
             cn.Open()
 
             Dim cmd As New SqliteCommand("
-                SELECT *
-                FROM resumenes
-                ORDER BY fecha DESC
-                LIMIT 1
-            ", cn)
+            SELECT *
+            FROM resumenes
+            ORDER BY fecha DESC
+            LIMIT 1
+        ", cn)
 
             Using dr = cmd.ExecuteReader()
                 If dr.Read() Then
-                    Return New Balance With {
+                    Return New BalanceEntity With {
                         .ContadorEquipo1 = If(IsDBNull(dr("contador_equipo1")), 0, CInt(dr("contador_equipo1"))),
                         .ContadorEquipo2 = If(IsDBNull(dr("contador_equipo2")), 0, CInt(dr("contador_equipo2"))),
                         .Efectivo = If(IsDBNull(dr("efectivo")), 0, CInt(dr("efectivo"))),
-                        .Transferencia = If(IsDBNull(dr("transferencia")), 0, CInt(dr("transferencia")))
+                        .Transferencia = If(IsDBNull(dr("transferencia")), 0, CInt(dr("transferencia"))),
+                        .Fecha = Date.Parse(dr("fecha").ToString()),
+                        .Anio = CInt(dr("anio")),
+                        .IdMes = CInt(dr("id_mes"))
                     }
                 End If
             End Using
@@ -50,5 +53,6 @@ Public Class BalanceRepository
 
         Return Nothing
     End Function
+
 
 End Class
