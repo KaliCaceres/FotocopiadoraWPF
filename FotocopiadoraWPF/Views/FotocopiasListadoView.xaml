@@ -2,7 +2,9 @@
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:vm="clr-namespace:FotocopiadoraWPF.ViewModels"
-             xmlns:conv="clr-namespace:FotocopiadoraWPF.Converters">
+             xmlns:conv="clr-namespace:FotocopiadoraWPF.Converters"
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF">
 
     <UserControl.DataContext>
         <vm:FotocopiasListadoViewModel/>
@@ -11,21 +13,39 @@
     <UserControl.Resources>
         <conv:InicialNombreConverter x:Key="InicialNombreConverter"/>
         <conv:NombreAColorConverter x:Key="NombreAColorConverter"/>
-        <!--<CollectionViewSource x:Key="FotocopiasView"
-                          Source="{Binding Fotocopias}"
-                          IsSourceGrouped="True"/>
-
-        <conv:FechaSoloDiaConverter x:Key="FechaSoloDiaConverter"/>-->
     </UserControl.Resources>
 
-    
+    <!-- 🔹 GRID en lugar de StackPanel -->
+    <Grid Margin="10" Width="550">
+        <Grid.RowDefinitions>
+            <!-- Filtro -->
+            <RowDefinition Height="Auto"/>
+            <!-- Listado con scroll -->
+            <RowDefinition Height="*"/>
+        </Grid.RowDefinitions>
 
-    <StackPanel Margin="10">
-        <ListView x:Name="ListaFotocopias" ItemsSource="{Binding FotocopiasView}"
-          BorderThickness="0"
-          Background="Transparent"
-          HorizontalContentAlignment="Stretch"
-          ScrollViewer.HorizontalScrollBarVisibility="Disabled">
+        <!-- ===================== FILTRO ===================== -->
+        <inputLayout:SfTextInputLayout
+            Grid.Row="0"
+            Hint="Estado"
+            ContainerType="Outlined"
+            Margin="0,0,0,10">
+
+            <ComboBox ItemsSource="{Binding EstadosFiltro}"
+                      SelectedItem="{Binding EstadoSeleccionado}"
+                      DisplayMemberPath="Nombre"
+                      Width="200"/>
+        </inputLayout:SfTextInputLayout>
+
+        <!-- ===================== LISTADO ===================== -->
+        <ListView Grid.Row="1"
+                  x:Name="ListaFotocopias"
+                  ItemsSource="{Binding FotocopiasView}"
+                  BorderThickness="0"
+                  Background="Transparent"
+                  HorizontalContentAlignment="Stretch"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled">
 
             <!-- Estilo del item -->
             <ListView.ItemContainerStyle>
@@ -37,30 +57,31 @@
                     <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
                 </Style>
             </ListView.ItemContainerStyle>
+
             <!-- HEADER POR FECHA -->
             <ListView.GroupStyle>
                 <GroupStyle>
                     <GroupStyle.HeaderTemplate>
                         <DataTemplate>
                             <TextBlock Text="{Binding Name, StringFormat=dd/MM}"
-                               FontSize="16"
-                               FontWeight="Bold"
-                               Margin="0,16,0,6"
-                               Foreground="#374151"/>
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Margin="0,16,0,6"
+                                       Foreground="#374151"/>
                         </DataTemplate>
                     </GroupStyle.HeaderTemplate>
                 </GroupStyle>
             </ListView.GroupStyle>
 
+            <!-- ===================== ITEM ===================== -->
             <ListView.ItemTemplate>
                 <DataTemplate>
 
-                    <!-- CARD -->
                     <Border CornerRadius="12"
-                    BorderBrush="#E6E8FF"
-                    BorderThickness="1"
-                    Padding="14"
-                    Background="White">
+                            BorderBrush="#E6E8FF"
+                            BorderThickness="1"
+                            Padding="12"
+                            Background="White">
 
                         <!-- Hover -->
                         <Border.Style>
@@ -76,19 +97,14 @@
 
                         <Grid>
                             <Grid.ColumnDefinitions>
-                                <!-- Avatar -->
+                                <ColumnDefinition Width="48"/>
                                 <ColumnDefinition Width="*"/>
-                                <!-- Fecha -->
-                                <ColumnDefinition Width="*"/>
-                                <!-- Nombre -->
-                                <ColumnDefinition Width="*"/>
-                                <!-- Total -->
-                                <ColumnDefinition Width="*"/>
-                                <!-- Estado -->
-                                <ColumnDefinition Width="*"/>
-                                <!-- Menú -->
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
                             </Grid.ColumnDefinitions>
 
+                            <!-- AVATAR -->
                             <Border Grid.Column="0"
                                     Width="36"
                                     Height="36"
@@ -96,59 +112,122 @@
                                     VerticalAlignment="Center"
                                     Background="{Binding Nombre,
                                                  Converter={StaticResource NombreAColorConverter}}">
-                                
                                 <TextBlock Text="{Binding Nombre,
-                                                Converter={StaticResource InicialNombreConverter}}"
-                                        FontSize="14"
-                                        FontWeight="Bold"
-                                        Foreground="White"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"/>
+                                                  Converter={StaticResource InicialNombreConverter}}"
+                                           FontWeight="Bold"
+                                           Foreground="White"
+                                           HorizontalAlignment="Center"
+                                           VerticalAlignment="Center"/>
                             </Border>
-                            <!-- Fecha -->
 
+                            <!-- NOMBRE + HORA -->
+                            <StackPanel Grid.Column="1"
+                                        VerticalAlignment="Center"
+                                        Margin="6,0">
+                                <TextBlock Text="{Binding Nombre}"
+                                           FontWeight="SemiBold"
+                                           FontSize="14"
+                                           Foreground="#1F2937"/>
+                                <TextBlock Text="{Binding Fecha, StringFormat=HH:mm}"
+                                           FontSize="11"
+                                           Foreground="#6B7280"/>
+                            </StackPanel>
 
-                            <!-- Nombre -->
-                            <TextBlock Grid.Column="1"
-                               VerticalAlignment="Center"
-                               FontWeight="SemiBold"
-                               FontSize="14"
-                               Foreground="#1F2937"
-                               Text="{Binding Nombre}"/>
+                            <!-- CHIPS -->
+                            <StackPanel Grid.Column="2"
+                                        Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        Margin="8,0">
 
-                            <!-- Total -->
-                            <TextBlock Grid.Column="2"
-                               VerticalAlignment="Center"
-                               FontWeight="Bold"
-                               FontSize="14"
-                               Foreground="#1F2A8A"
-                               Text="{Binding PrecioTotal, StringFormat=$ {0:N0}}"/>
+                                <!-- CHIP ESTADO -->
+                                <Border Padding="6,2" CornerRadius="10">
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <Setter Property="Background" Value="#D1FAE5"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IdEstado}" Value="0">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IdEstado}" Value="1">
+                                                    <Setter Property="Background" Value="#FEF3C7"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IdEstado}" Value="2">
+                                                    <Setter Property="Background" Value="#FEE2E2"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
 
-                            <!-- Estado -->
+                                    <StackPanel Orientation="Horizontal">
+                                        <Ellipse Width="6" Height="6" Margin="0,0,4,0">
+                                            <Ellipse.Style>
+                                                <Style TargetType="Ellipse">
+                                                    <Setter Property="Fill" Value="#059669"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IdEstado}" Value="0">
+                                                            <Setter Property="Visibility" Value="Collapsed"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IdEstado}" Value="1">
+                                                            <Setter Property="Fill" Value="#D97706"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IdEstado}" Value="2">
+                                                            <Setter Property="Fill" Value="#DC2626"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </Ellipse.Style>
+                                        </Ellipse>
+
+                                        <TextBlock FontSize="11" FontWeight="SemiBold">
+                                            <TextBlock.Style>
+                                                <Style TargetType="TextBlock">
+                                                    <Setter Property="Text" Value="Pagado"/>
+                                                    <Style.Triggers>
+                                                        <DataTrigger Binding="{Binding IdEstado}" Value="1">
+                                                            <Setter Property="Text" Value="Deudor"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IdEstado}" Value="2">
+                                                            <Setter Property="Text" Value="Perdida"/>
+                                                        </DataTrigger>
+                                                    </Style.Triggers>
+                                                </Style>
+                                            </TextBlock.Style>
+                                        </TextBlock>
+                                    </StackPanel>
+                                </Border>
+
+                                <!-- CHIP PAGO -->
+                                <Border Padding="6,2"
+                                        CornerRadius="10"
+                                        Background="#E5E7EB"
+                                        Margin="6,0,0,0">
+                                    <TextBlock FontSize="11"
+                                               FontWeight="SemiBold"
+                                               Foreground="#374151">
+                                        <TextBlock.Style>
+                                            <Style TargetType="TextBlock">
+                                                <Setter Property="Text" Value="Efectivo"/>
+                                                <Style.Triggers>
+                                                    <DataTrigger Binding="{Binding Efectivo}" Value="0">
+                                                        <Setter Property="Text" Value="Transferencia"/>
+                                                    </DataTrigger>
+                                                </Style.Triggers>
+                                            </Style>
+                                        </TextBlock.Style>
+                                    </TextBlock>
+                                </Border>
+                            </StackPanel>
+
+                            <!-- TOTAL -->
                             <TextBlock Grid.Column="3"
-                               VerticalAlignment="Center"
-                               FontWeight="SemiBold"
-                               Text="{Binding Estado}">
+                                       VerticalAlignment="Center"
+                                       Margin="16,0"
+                                       FontWeight="Bold"
+                                       FontSize="14"
+                                       Foreground="#1F2A8A"
+                                       Text="{Binding PrecioTotal, StringFormat=$ {0:N0}}"/>
 
-                        <!-- Color según estado -->
-                                <TextBlock.Style>
-                                    <Style TargetType="TextBlock">
-                                        <Setter Property="Foreground" Value="#10B981"/>
-                                        <!-- verde -->
-                                        <Style.Triggers>
-                                            <DataTrigger Binding="{Binding Estado}" Value="ANULADO">
-                                                <Setter Property="Foreground" Value="#EF4444"/>
-                                                <!-- rojo -->
-                                            </DataTrigger>
-                                            <DataTrigger Binding="{Binding Estado}" Value="PENDIENTE">
-                                                <Setter Property="Foreground" Value="#F59E0B"/>
-                                                <!-- amarillo -->
-                                            </DataTrigger>
-                                        </Style.Triggers>
-                                    </Style>
-                                </TextBlock.Style>
-
-                            </TextBlock>
+                            <!-- MENÚ -->
                             <Button Grid.Column="4"
                                     Content="⋮"
                                     FontSize="18"
@@ -159,39 +238,28 @@
                                     Foreground="#5A6CFF"
                                     Cursor="Hand"
                                     Click="AbrirMenu"
-                                    Tag="{Binding DataContext, RelativeSource={RelativeSource AncestorType=ListView}}">
-
-                                
-
+                                    Tag="{Binding DataContext,
+                                          RelativeSource={RelativeSource AncestorType=ListView}}">
                                 <Button.ContextMenu>
                                     <ContextMenu>
                                         <MenuItem Header="Editar"
                                                   Command="{Binding PlacementTarget.Tag.EditarCommand,
-                                                                    RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
-                                                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
-
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                         <MenuItem Header="Eliminar"
                                                   Foreground="#EF4444"
                                                   Command="{Binding PlacementTarget.Tag.EliminarCommand,
-                                                                    RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
-                                                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}" />
-
-
+                                                  RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
                                     </ContextMenu>
                                 </Button.ContextMenu>
-
                             </Button>
-
                         </Grid>
                     </Border>
-
                 </DataTemplate>
             </ListView.ItemTemplate>
         </ListView>
-
-
-
-    </StackPanel>
+    </Grid>
 </UserControl>

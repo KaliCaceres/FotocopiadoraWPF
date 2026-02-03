@@ -10,5 +10,4 @@
     Public Property Efectivo As Integer
     Public Property Comentario As String
     Public Property IdEstado As Integer
-    Public Property Estado As String ' opcional (JOIN)
 End Class

@@ -19,12 +19,12 @@ Public Class FotocopiasRepository
             VALUES
             (@nombre, @fecha, @paginas, @anillados,
              @precio_unitario, @precio_total,
-             @transferencia, @efectivo, @comentario, 1)", cn)
+             @transferencia, @efectivo, @comentario, @estado)", cn)
 
             cmd.Parameters.AddWithValue("@nombre",
             If(String.IsNullOrWhiteSpace(f.Nombre), "SIN NOMBRE", f.Nombre))
 
-            cmd.Parameters.AddWithValue("@fecha", f.Fecha.ToString("yyyy-MM-dd"))
+            cmd.Parameters.AddWithValue("@fecha", f.Fecha.ToString("yyyy-MM-dd HH:mm:ss"))
             cmd.Parameters.AddWithValue("@paginas", f.Paginas)
             cmd.Parameters.AddWithValue("@anillados", f.Anillados)
             cmd.Parameters.AddWithValue("@precio_unitario", f.PrecioUnitario)
@@ -32,7 +32,7 @@ Public Class FotocopiasRepository
             cmd.Parameters.AddWithValue("@transferencia", f.Transferencia)
             cmd.Parameters.AddWithValue("@efectivo", f.Efectivo)
             cmd.Parameters.AddWithValue("@comentario", If(f.Comentario, ""))
-
+            cmd.Parameters.AddWithValue("@estado", f.IdEstado)
             cmd.ExecuteNonQuery()
         End Using
     End Sub
@@ -55,12 +55,13 @@ Public Class FotocopiasRepository
                 precio_total = @precio_total,
                 transferencia = @transferencia,
                 efectivo = @efectivo,
-                comentario = @comentario
+                comentario = @comentario,
+                id_estado = @estado
             WHERE id_fotocopia = @id", cn)
 
             cmd.Parameters.AddWithValue("@id", f.IdFotocopia)
             cmd.Parameters.AddWithValue("@nombre", f.Nombre)
-            cmd.Parameters.AddWithValue("@fecha", f.Fecha.ToString("yyyy-MM-dd"))
+            cmd.Parameters.AddWithValue("@fecha", f.Fecha.ToString("yyyy-MM-dd HH:mm:ss"))
             cmd.Parameters.AddWithValue("@paginas", f.Paginas)
             cmd.Parameters.AddWithValue("@anillados", f.Anillados)
             cmd.Parameters.AddWithValue("@precio_unitario", f.PrecioUnitario)
@@ -68,6 +69,7 @@ Public Class FotocopiasRepository
             cmd.Parameters.AddWithValue("@transferencia", f.Transferencia)
             cmd.Parameters.AddWithValue("@efectivo", f.Efectivo)
             cmd.Parameters.AddWithValue("@comentario", f.Comentario)
+            cmd.Parameters.AddWithValue("@estado", f.IdEstado)
 
             Dim filas = cmd.ExecuteNonQuery()
             If filas = 0 Then
@@ -112,6 +114,24 @@ Public Class FotocopiasRepository
 
         Return lista
     End Function
+
+    Public Sub ActualizarEstado(idFotocopia As Integer, idEstado As Integer)
+        Using cn = New SqliteConnection(Configuracion.ConnectionString)
+            cn.Open()
+
+            Dim cmd = cn.CreateCommand()
+            cmd.CommandText = "
+            UPDATE fotocopias
+            SET id_estado = @estado
+            WHERE id_fotocopia = @id
+        "
+
+            cmd.Parameters.AddWithValue("@estado", idEstado)
+            cmd.Parameters.AddWithValue("@id", idFotocopia)
+
+            cmd.ExecuteNonQuery()
+        End Using
+    End Sub
 
 
 End Class

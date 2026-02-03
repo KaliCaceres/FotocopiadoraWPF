@@ -76,7 +76,7 @@ Namespace Infrastructure
                 cn.Open()
 
                 Dim sql As String = "
-        INSERT OR IGNORE INTO estados (id_estado, descripcion) VALUES (1, 'Deudor');
+        INSERT OR IGNORE INTO estados (id_estado, descripcion) VALUES (0, 'Pagado'), (1, 'Deudor'), (2, 'Perdida'), (3, 'Eliminada');
 
         INSERT OR IGNORE INTO categorias (id_categoria, descripcion) VALUES
         (1,'Anillado'),
