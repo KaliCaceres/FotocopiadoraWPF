@@ -6,30 +6,24 @@ Imports FotocopiadoraWPF.ViewModels
 Namespace Views
     Partial Public Class FotocopiaFormView
         Inherits UserControl
+
         Private Sub Efectivo_DoubleClick(sender As Object, e As MouseButtonEventArgs)
-            Dim vm = CType(DataContext, FotocopiasViewModel)
+            Dim vm = TryCast(Me.DataContext, FotocopiasViewModel)
+            If vm Is Nothing Then Return
 
-            If Not vm.PuedeEditarPago Then
-                e.Handled = True
-                Return
+            If vm.PagarConEfectivoCommand.CanExecute(Nothing) Then
+                vm.PagarConEfectivoCommand.Execute(Nothing)
             End If
-
-            vm.Efectivo = vm.Total
-            vm.Transferencia = 0
         End Sub
 
         Private Sub Transferencia_DoubleClick(sender As Object, e As MouseButtonEventArgs)
-            Dim vm = CType(DataContext, FotocopiasViewModel)
+            Dim vm = TryCast(Me.DataContext, FotocopiasViewModel)
+            If vm Is Nothing Then Return
 
-            If Not vm.PuedeEditarPago Then
-                e.Handled = True
-                Return
+            If vm.PagarConTransferenciaCommand.CanExecute(Nothing) Then
+                vm.PagarConTransferenciaCommand.Execute(Nothing)
             End If
-
-            vm.Transferencia = vm.Total
-            vm.Efectivo = 0
         End Sub
-
 
     End Class
 End Namespace

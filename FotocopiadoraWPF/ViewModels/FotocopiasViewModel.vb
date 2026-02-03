@@ -45,7 +45,7 @@ Namespace ViewModels
             Inicializar()
 
             Fotocopia = New Fotocopia With {
-                .Fecha = DateTime.Now
+                .Fecha = Date.Today
             }
             EsEdicion = False
             TieneCambios = False
@@ -66,20 +66,11 @@ Namespace ViewModels
             .Anillados = f.Anillados,
             .Transferencia = f.Transferencia,
             .Efectivo = f.Efectivo,
-            .Comentario = f.Comentario,
-            .IdEstado = f.IdEstado
-            }
+            .Comentario = f.Comentario
+        }
 
             EsEdicion = True
             TieneCambios = False
-
-            EsDeudor = (Fotocopia.IdEstado = 1)
-            EsPerdida = (Fotocopia.IdEstado = 2)
-
-            Avisar(NameOf(EsDeudor))
-            Avisar(NameOf(EsPerdida))
-
-
             PrecioPagina = Fotocopia.PrecioUnitario
             RecalcularTodo()
             Avisar(NameOf(Efectivo))
@@ -218,7 +209,6 @@ Namespace ViewModels
         Private _precioNormal As Integer
         Private _precioEmpleado As Integer
         Private _precioAnillado As Integer
-        Public Property IdEstado As Integer
 
         Public Property PrecioPagina As Integer
             Get
@@ -276,82 +266,6 @@ Namespace ViewModels
 
         End Property
 
-        Private _esDeudor As Boolean
-
-        Public ReadOnly Property PuedeEditarPago As Boolean
-            Get
-                Return Not EsDeudor AndAlso Not EsPerdida
-            End Get
-        End Property
-
-        Public Property EsDeudor As Boolean
-            Get
-                Return _esDeudor
-            End Get
-            Set(value As Boolean)
-                If _esDeudor <> value Then
-                    _esDeudor = value
-                    Avisar(NameOf(EsDeudor))
-
-                    If value Then
-                        ' 👉 DEUDOR
-                        EsPerdida = False
-                        Fotocopia.IdEstado = 1
-
-                        Fotocopia.Efectivo = 0
-                        Fotocopia.Transferencia = 0
-
-                        Avisar(NameOf(Efectivo))
-                        Avisar(NameOf(Transferencia))
-
-                    ElseIf Not EsPerdida Then
-                        Fotocopia.IdEstado = 0
-                    End If
-
-
-                    Avisar(NameOf(IdEstado))
-
-                    If Not EsEdicion Then
-                        TieneCambios = True
-                    Else
-                        EvaluarCambios()
-                    End If
-                End If
-            End Set
-        End Property
-
-
-        Private _esPerdida As Boolean
-
-        Public Property EsPerdida As Boolean
-            Get
-                Return _esPerdida
-            End Get
-            Set(value As Boolean)
-                If _esPerdida <> value Then
-                    _esPerdida = value
-                    Avisar(NameOf(EsPerdida))
-
-                    If value Then
-                        ' 👉 Perdida gana siempre
-                        EsDeudor = False
-                        Fotocopia.IdEstado = 2
-                    Else
-                        ' vuelve a normal si no es deudor
-                        Fotocopia.IdEstado = If(EsDeudor, 1, 0)
-                    End If
-
-                    Avisar(NameOf(IdEstado))
-
-                    If Not EsEdicion Then
-                        TieneCambios = True
-                    Else
-                        EvaluarCambios()
-                    End If
-                End If
-            End Set
-        End Property
-
         '==================== TOTALES ====================
 
         Public ReadOnly Property TotalPaginas As Integer
@@ -379,13 +293,9 @@ Namespace ViewModels
                 Return If(Fotocopia.Efectivo = 0, CType(Nothing, Integer?), Fotocopia.Efectivo)
             End Get
             Set(value As Integer?)
-                If Not PuedeEditarPago Then Return
-
                 Fotocopia.Efectivo = If(value, 0)
                 Avisar(NameOf(Efectivo))
             End Set
-
-
         End Property
 
         Public Property Transferencia As Integer?
@@ -393,13 +303,9 @@ Namespace ViewModels
                 Return If(Fotocopia.Transferencia = 0, CType(Nothing, Integer?), Fotocopia.Transferencia)
             End Get
             Set(value As Integer?)
-                If Not PuedeEditarPago Then Return
-
                 Fotocopia.Transferencia = If(value, 0)
                 Avisar(NameOf(Transferencia))
             End Set
-
-
         End Property
 
         '==================== VALIDACIONES ====================
@@ -494,8 +400,8 @@ Namespace ViewModels
                 ' Recalcular precios SIEMPRE
                 Fotocopia.PrecioUnitario = PrecioPagina
                 Fotocopia.PrecioTotal =
-                (Fotocopia.Paginas * PrecioPagina) +
-                (Fotocopia.Anillados * PrecioAnillado)
+            (Fotocopia.Paginas * PrecioPagina) +
+            (Fotocopia.Anillados * PrecioAnillado)
 
                 If EsEdicion Then
                     ' ====== EDICIÓN ======
@@ -563,14 +469,13 @@ Namespace ViewModels
 
         Private Sub EvaluarCambios()
             TieneCambios =
-            Fotocopia.Nombre <> _fotocopiaOriginal.Nombre OrElse
-            Fotocopia.Fecha <> _fotocopiaOriginal.Fecha OrElse
-            Fotocopia.Paginas <> _fotocopiaOriginal.Paginas OrElse
-            Fotocopia.Anillados <> _fotocopiaOriginal.Anillados OrElse
-            Fotocopia.Transferencia <> _fotocopiaOriginal.Transferencia OrElse
-            Fotocopia.Efectivo <> _fotocopiaOriginal.Efectivo OrElse
-            Fotocopia.Comentario <> _fotocopiaOriginal.Comentario OrElse
-            Fotocopia.IdEstado <> _fotocopiaOriginal.IdEstado
+        Fotocopia.Nombre <> _fotocopiaOriginal.Nombre OrElse
+        Fotocopia.Fecha <> _fotocopiaOriginal.Fecha OrElse
+        Fotocopia.Paginas <> _fotocopiaOriginal.Paginas OrElse
+        Fotocopia.Anillados <> _fotocopiaOriginal.Anillados OrElse
+        Fotocopia.Transferencia <> _fotocopiaOriginal.Transferencia OrElse
+        Fotocopia.Efectivo <> _fotocopiaOriginal.Efectivo OrElse
+        Fotocopia.Comentario <> _fotocopiaOriginal.Comentario
 
             Avisar(NameOf(NombreModificado))
             Avisar(NameOf(FechaModificada))
@@ -585,23 +490,16 @@ Namespace ViewModels
         Private Sub LimpiarFormulario()
 
             Fotocopia = New Fotocopia With {
-        .Fecha = DateTime.Now
+        .Fecha = Date.Today
     }
 
             ' Reset de flags
             EsEdicion = False
             TieneCambios = False
             EsEmpleado = False
-            EsDeudor = False
+
             ' Reset de precios
             PrecioPagina = PrecioNormal
-            EsDeudor = False
-            EsPerdida = False
-            Fotocopia.IdEstado = 0
-
-            Avisar(NameOf(EsDeudor))
-            Avisar(NameOf(EsPerdida))
-            Avisar(NameOf(IdEstado))
 
             ' Notificar TODO lo que usa la vista
             Avisar(NameOf(Fotocopia))
@@ -664,7 +562,5 @@ Namespace ViewModels
                 Return EsEdicion AndAlso Fotocopia.Transferencia <> _fotocopiaOriginal.Transferencia
             End Get
         End Property
-
-
     End Class
 End Namespace
