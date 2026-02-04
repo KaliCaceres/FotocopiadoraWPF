@@ -177,20 +177,25 @@ Namespace ViewModels
         ' ==================== BALANCE OPERATIVO ====================
 
         Private Function ConstruirBalanceActual() As Balance
+            Dim fechaInicio As Date =
+        If(_ultimoBalance Is Nothing,
+           Date.Now,
+           _ultimoBalance.Fecha)
+
             Return New Balance With {
-                .FechaInicio = _ultimoBalance.Fecha,
-                .FechaFin = Date.Now,
-                .ContadorEquipo1Inicio = ContadorEquipo1Inicio,
-                .ContadorEquipo1Final = ContadorEquipo1Final,
-                .ContadorEquipo2Inicio = ContadorEquipo2Inicio,
-                .ContadorEquipo2Final = ContadorEquipo2Final,
-                .EfectivoInicio = EfectivoInicio,
-                .EfectivoFinal = EfectivoFinal,
-                .TransferenciaInicio = TransferenciaInicio,
-                .TransferenciaFinal = TransferenciaFinal,
-                .IdMes = MesSeleccionado,
-                .Anio = Anio
-                }
+        .FechaInicio = fechaInicio,
+        .FechaFin = Date.Now,
+        .ContadorEquipo1Inicio = ContadorEquipo1Inicio,
+        .ContadorEquipo1Final = ContadorEquipo1Final,
+        .ContadorEquipo2Inicio = ContadorEquipo2Inicio,
+        .ContadorEquipo2Final = ContadorEquipo2Final,
+        .EfectivoInicio = EfectivoInicio,
+        .EfectivoFinal = EfectivoFinal,
+        .TransferenciaInicio = TransferenciaInicio,
+        .TransferenciaFinal = TransferenciaFinal,
+        .IdMes = MesSeleccionado,
+        .Anio = Anio
+    }
         End Function
 
 

@@ -21,6 +21,7 @@ Namespace ViewModels
         Public Property Fotocopias As ObservableCollection(Of Fotocopia)
         Public ReadOnly Property EditarCommand As ICommand
         Public ReadOnly Property EliminarCommand As ICommand
+
         Public Property FotocopiasView As ICollectionView
 
         Public Sub New()
@@ -48,7 +49,6 @@ Namespace ViewModels
 
             EditarCommand = New RelayCommand(Of Fotocopia)(AddressOf EditarFotocopia)
             EliminarCommand = New RelayCommand(Of Fotocopia)(AddressOf EliminarFotocopia)
-
         End Sub
 
 

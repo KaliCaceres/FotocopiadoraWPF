@@ -29,12 +29,15 @@
             Grid.Row="0"
             Hint="Estado"
             ContainerType="Outlined"
-            Margin="0,0,0,10">
+            Margin="0,0,0,10"
+            Width="200"
+            HorizontalAlignment="Left"
+            >
 
             <ComboBox ItemsSource="{Binding EstadosFiltro}"
                       SelectedItem="{Binding EstadoSeleccionado}"
                       DisplayMemberPath="Nombre"
-                      Width="200"/>
+                      />
         </inputLayout:SfTextInputLayout>
 
         <!-- ===================== LISTADO ===================== -->
@@ -197,13 +200,31 @@
                                 </Border>
 
                                 <!-- CHIP PAGO -->
+                                <!-- CHIP PAGO -->
                                 <Border Padding="6,2"
-                                        CornerRadius="10"
-                                        Background="#E5E7EB"
-                                        Margin="6,0,0,0">
+        CornerRadius="10"
+        Background="#E5E7EB"
+        Margin="6,0,0,0">
+
+                                    <Border.Style>
+                                        <Style TargetType="Border">
+                                            <!-- visible solo si está pagado -->
+                                            <Setter Property="Visibility" Value="Visible"/>
+
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding IdEstado}" Value="1">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IdEstado}" Value="2">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Border.Style>
+
                                     <TextBlock FontSize="11"
-                                               FontWeight="SemiBold"
-                                               Foreground="#374151">
+               FontWeight="SemiBold"
+               Foreground="#374151">
                                         <TextBlock.Style>
                                             <Style TargetType="TextBlock">
                                                 <Setter Property="Text" Value="Efectivo"/>
@@ -216,6 +237,7 @@
                                         </TextBlock.Style>
                                     </TextBlock>
                                 </Border>
+
                             </StackPanel>
 
                             <!-- TOTAL -->
@@ -253,6 +275,12 @@
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}"
                                                   CommandParameter="{Binding PlacementTarget.DataContext,
                                                   RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>
+                                        <!--<MenuItem Header="Pagar"
+                                                  Command="{Binding PlacementTarget.Tag.PagarCommand,
+                                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}"
+                                                  CommandParameter="{Binding PlacementTarget.DataContext,
+                                                            RelativeSource={RelativeSource AncestorType=ContextMenu}}"/>-->
+
                                     </ContextMenu>
                                 </Button.ContextMenu>
                             </Button>
