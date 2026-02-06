@@ -13,7 +13,7 @@
     <StackPanel>
 
         <!-- FORMULARIO REUTILIZABLE -->
-        <views:FotocopiaFormView/>
+        <views:FotocopiaFormView Loaded="FotocopiaFormView_Loaded"/>
 
         <!-- BOTONES DE EDICIÓN -->
         <StackPanel Orientation="Horizontal">

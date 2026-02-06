@@ -1,0 +1,203 @@
+﻿<UserControl x:Class="Views.MovimientosCajaView"
+             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
+             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
+             xmlns:local="clr-namespace:FotocopiadoraWPF"
+             xmlns:vm="clr-namespace:FotocopiadoraWPF.ViewModels"
+            
+             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+             xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF">
+
+    <UserControl.Resources>
+        <Style TargetType="inputLayout:SfTextInputLayout">
+            <Setter Property="Margin" Value="10,0,10,0"/>
+        </Style>
+    </UserControl.Resources>
+
+    <StackPanel Margin="12" Width="auto" Orientation="Horizontal">
+        <Border 
+           CornerRadius="16" 
+           Background="White"
+           Padding="20,20,20,10"
+           HorizontalAlignment="Center"
+           VerticalAlignment="Center">
+            <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Center" HorizontalAlignment="Center" Width="400">
+
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="*"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Grid.RowDefinitions>
+                    <!--Titulo-->
+                    <RowDefinition Height="Auto"/>
+                    <!--Contadores-->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <!--Caja-->
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <RowDefinition Height="Auto"/>
+                    <!--Botones-->
+                    <RowDefinition Height="Auto"/>
+                </Grid.RowDefinitions>
+
+                <Label Grid.Row="0" Content="Contadores" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+
+                <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="0"  Hint="Empleado" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                    <ComboBox SelectedValuePath="Tag" FontSize="14" SelectedValue="0">
+                        <ComboBoxItem Content="Seleccionar" Tag="0" IsEnabled="False"/>
+                        <ComboBoxItem Content="Juanchi" Tag="1"/>
+                        <ComboBoxItem Content="Seba" Tag="2"/>
+                        <ComboBoxItem Content="Paulina" Tag="3"/>
+                    </ComboBox>
+                </inputLayout:SfTextInputLayout>
+
+                <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="1"  Hint="Fecha" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                    <syncfusion:DateTimeEdit IsButtonPopUpEnabled="False" Height="13" FontSize="14" MinHeight="15"/>
+                </inputLayout:SfTextInputLayout>
+
+                <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Tipo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                    <ComboBox SelectedValuePath="Tag" FontSize="14" SelectedValue="0">
+                        <ComboBoxItem Content="Seleccionar" Tag="0" IsEnabled="False"/>
+                        <ComboBoxItem Content="Egreso" Tag="1"/>
+                        <ComboBoxItem Content="Ingreso" Tag="2"/>
+                    </ComboBox>
+                </inputLayout:SfTextInputLayout>
+
+                <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="1"  Hint="Metodo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                    <ComboBox SelectedValuePath="Tag" FontSize="14" SelectedValue="0">
+                        <ComboBoxItem Content="Seleccionar" Tag="0" IsEnabled="False"/>
+                        <ComboBoxItem Content="Efectivo" Tag="1"/>
+                        <ComboBoxItem Content="Transferencia" Tag="2"/>
+                    </ComboBox>
+                </inputLayout:SfTextInputLayout>
+
+                <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="0"  Hint="Monto" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                    <syncfusion:CurrencyTextBox CurrencySymbol="$"/>
+                </inputLayout:SfTextInputLayout>
+
+                <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="1"  Hint="Motivo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                    <TextBox Height="15" FontSize="14" MinHeight="15" />
+                </inputLayout:SfTextInputLayout>
+
+                <Button Content="Guardar" Grid.Row="4" Grid.Column="0"
+                        Height="36"
+                        Margin="0,16,0,0"
+                        Command="{Binding GuardarMovimientoCommand}"/>
+
+            </Grid>
+        </Border>
+
+        <!-- LISTADO -->
+        <ListView
+                  
+                  ItemsSource="{Binding MovimientosView}"
+                  BorderThickness="0"
+                  Background="Transparent"
+                  HorizontalContentAlignment="Stretch"
+                  HorizontalAlignment="Center"
+                  VerticalAlignment="Center"
+                  ScrollViewer.VerticalScrollBarVisibility="Auto"
+                  ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+                    Width="400"
+                    >
+
+            <!-- Estilo del item -->
+            <ListView.ItemContainerStyle>
+                <Style TargetType="ListViewItem">
+                    <Setter Property="Padding" Value="0"/>
+                    <Setter Property="Margin" Value="0,6"/>
+                    <Setter Property="BorderThickness" Value="0"/>
+                    <Setter Property="Background" Value="Transparent"/>
+                    <Setter Property="HorizontalContentAlignment" Value="Stretch"/>
+                </Style>
+            </ListView.ItemContainerStyle>
+
+            <!-- HEADER POR FECHA -->
+            <ListView.GroupStyle>
+                <GroupStyle>
+                    <GroupStyle.HeaderTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding Name, StringFormat=dd/MM}"
+                                       FontSize="16"
+                                       FontWeight="Bold"
+                                       Margin="0,16,0,6"
+                                       Foreground="#374151"/>
+                        </DataTemplate>
+                    </GroupStyle.HeaderTemplate>
+                </GroupStyle>
+            </ListView.GroupStyle>
+
+            <!-- ===================== ITEM ===================== -->
+            <ListView.ItemTemplate>
+                <DataTemplate>
+
+                    <Border CornerRadius="12"
+                BorderBrush="#E6E8FF"
+                BorderThickness="1"
+                Padding="12"
+                Background="White">
+
+                        <Grid>
+                            <Grid.ColumnDefinitions>
+                                <ColumnDefinition Width="*"/>
+                                <ColumnDefinition Width="Auto"/>
+                                <ColumnDefinition Width="Auto"/>
+                            </Grid.ColumnDefinitions>
+
+                            <!-- MOTIVO + EMPLEADO -->
+                            <StackPanel>
+                                <TextBlock Text="{Binding Motivo}"
+                               FontWeight="SemiBold"
+                               FontSize="14"/>
+
+                                <TextBlock FontSize="11"
+                               Foreground="#6B7280">
+                        <Run Text="{Binding Empleado}"/>
+                        <Run Text=" • "/>
+                        <Run Text="{Binding Fecha, StringFormat=HH:mm}"/>
+                                </TextBlock>
+                            </StackPanel>
+
+                            <!-- CHIP TIPO -->
+                            <Border Grid.Column="1"
+                        Padding="6,2"
+                        CornerRadius="10"
+                        Margin="8,0">
+                                <Border.Style>
+                                    <Style TargetType="Border">
+                                        <Setter Property="Background" Value="#DCFCE7"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Tipo}" Value="Egreso">
+                                                <Setter Property="Background" Value="#FEE2E2"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Border.Style>
+
+                                <TextBlock Text="{Binding Tipo}"
+                               FontSize="11"
+                               FontWeight="SemiBold"/>
+                            </Border>
+
+                            <!-- MONTO -->
+                            <TextBlock Grid.Column="2"
+                           Margin="12,0,0,0"
+                           FontWeight="Bold"
+                           FontSize="14"
+                           Text="{Binding Monto, StringFormat=$ {0:N0}}"/>
+                        </Grid>
+                    </Border>
+
+                </DataTemplate>
+            </ListView.ItemTemplate>
+
+        </ListView>
+    </StackPanel>
+
+</UserControl>

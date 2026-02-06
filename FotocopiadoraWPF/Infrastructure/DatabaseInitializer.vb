@@ -60,6 +60,21 @@ Namespace Infrastructure
                     fecha TEXT,
                     FOREIGN KEY (id_mes) REFERENCES meses(id_mes)
                 );
+
+                CREATE TABLE IF NOT EXISTS movimientos_caja (
+                    id_movimiento INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id_resumen INTEGER NOT NULL,
+                    fecha TEXT NOT NULL,
+                    tipo TEXT NOT NULL,
+                    metodo_pago TEXT NOT NULL,
+                    monto INTEGER NOT NULL,
+                    motivo TEXT NOT NULL,
+                    observacion TEXT,
+                    empleado TEXT NOT NULL,
+
+                    FOREIGN KEY (id_resumen) REFERENCES resumenes(id_resumen)
+                );
+
                 "
 
                 Using cmd As New SqliteCommand(sql, cn)
