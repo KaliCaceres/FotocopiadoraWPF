@@ -1,5 +1,6 @@
 ﻿Imports System.ComponentModel
 Imports System.Windows.Input
+Imports FotocopiadoraWPF.Services
 
 Namespace ViewModels
 
@@ -130,7 +131,10 @@ Namespace ViewModels
                 .IdMes = balanceActual.IdMes
             }
 
-            _repo.GuardarBalance(entity)
+            Dim idResumen = _repo.GuardarBalance(entity)
+
+            BalanceActualService.BalanceActualId = idResumen
+
 
             ' 🔹 PDF
             BalancePdfGenerator.GenerarYMostrar(balanceActual)
@@ -147,7 +151,10 @@ Namespace ViewModels
             EfectivoFinal = 0
             TransferenciaFinal = 0
 
+            entity.IdResumen = idResumen
             _ultimoBalance = entity
+
+
             InputsHabilitados = False
         End Sub
 
@@ -155,6 +162,11 @@ Namespace ViewModels
 
         Private Sub CargarValoresIniciales()
             _ultimoBalance = _repo.ObtenerUltimoBalance()
+
+            If _ultimoBalance IsNot Nothing Then
+                BalanceActualService.BalanceActualId = _ultimoBalance.IdResumen
+            End If
+
 
             If _ultimoBalance Is Nothing Then
                 ContadorEquipo1Inicio = 0

@@ -1,12 +1,11 @@
-﻿Imports System.Windows
+﻿Imports System.Collections.ObjectModel
+Imports System.ComponentModel
+Imports System.Windows
 Imports System.Windows.Data
 Imports System.Windows.Input
-
-Imports System.Collections.ObjectModel
-Imports System.ComponentModel
-
-Imports FotocopiadoraWPF.Views
 Imports FotocopiadoraWPF.Converters
+Imports FotocopiadoraWPF.Services
+Imports FotocopiadoraWPF.Views
 
 Namespace ViewModels
 
@@ -27,8 +26,11 @@ Namespace ViewModels
         Public Sub New()
 
             Fotocopias = New ObservableCollection(Of Fotocopia)(
-        _repo.ObtenerFotocopias()
-    )
+                _repo.ObtenerFotocopiasPorBalance(
+                    BalanceActualService.BalanceActualId
+                )
+            )
+
 
             Dim view = CollectionViewSource.GetDefaultView(Fotocopias)
 
@@ -137,6 +139,7 @@ Namespace ViewModels
             ' Clonamos para no modificar el original hasta guardar
             Dim copia As New Fotocopia With {
                 .IdFotocopia = f.IdFotocopia,
+                .IdResumen = f.IdResumen,   ' 👈 CLAVE
                 .Nombre = f.Nombre,
                 .Fecha = f.Fecha,
                 .Paginas = f.Paginas,
@@ -147,6 +150,7 @@ Namespace ViewModels
                 .PrecioUnitario = f.PrecioUnitario,
                 .PrecioTotal = f.PrecioTotal
             }
+
 
             Dim vm As New FotocopiasViewModel(copia)
             Dim win As New EditarFotocopiaWindow()
@@ -224,9 +228,12 @@ Namespace ViewModels
         Private Sub RefrescarListado()
             Fotocopias.Clear()
 
-            For Each f In _repo.ObtenerFotocopias()
+            For Each f In _repo.ObtenerFotocopiasPorBalance(
+                BalanceActualService.BalanceActualId
+            )
                 Fotocopias.Add(f)
             Next
+
         End Sub
 
 

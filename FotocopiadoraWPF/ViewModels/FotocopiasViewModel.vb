@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
-Imports System.Windows.Input
 Imports System.Windows
+Imports System.Windows.Input
+Imports FotocopiadoraWPF.Services
 
 Namespace ViewModels
 
@@ -45,12 +46,18 @@ Namespace ViewModels
             Inicializar()
 
             Fotocopia = New Fotocopia With {
-                .Fecha = DateTime.Now
+                .Fecha = DateTime.Now,
+                .IdResumen = BalanceActualService.BalanceActualId   ' 👈 ACÁ
             }
+
+            If Fotocopia.IdResumen <= 0 Then
+                Throw New InvalidOperationException("No hay balance activo.")
+            End If
+
             EsEdicion = False
             TieneCambios = False
-
         End Sub
+
         Private ReadOnly _fotocopiaOriginal As Fotocopia
 
         ' EDICIÓN
@@ -471,23 +478,6 @@ Namespace ViewModels
             Avisar(NameOf(Transferencia))
         End Sub
 
-        'Private Sub Guardar()
-        '    Try
-        '        ' recalcular antes de guardar
-        '        Fotocopia.PrecioTotal =
-        '    (Fotocopia.Paginas * Fotocopia.PrecioUnitario) +
-        '    (Fotocopia.Anillados * ObtenerPrecioAnillado())
-
-        '        _fotocopiasRepo.ActualizarFotocopia(Fotocopia)
-        '        TieneCambios = False
-
-        '        MessageBox.Show("Cambios guardados correctamente")
-        '        Cerrar(True)
-
-        '    Catch ex As Exception
-        '        MessageBox.Show("ERROR al guardar: " & ex.Message)
-        '    End Try
-        'End Sub
 
         Private Sub Guardar()
             Try

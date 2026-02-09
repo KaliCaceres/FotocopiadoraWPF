@@ -10,10 +10,11 @@ Public Class ValoresRepository
             cn.Open()
 
             Dim cmd As New SqliteCommand("
-            SELECT c.descripcion, v.valor
-            FROM valores v
-            INNER JOIN categorias c ON v.id_categoria = c.id_categoria
-        ", cn)
+        SELECT c.descripcion, MAX(v.valor) AS valor
+        FROM valores v
+        INNER JOIN categorias c ON v.id_categoria = c.id_categoria
+        GROUP BY c.descripcion
+    ", cn)
 
             Using dr = cmd.ExecuteReader()
                 While dr.Read()
@@ -27,6 +28,7 @@ Public Class ValoresRepository
 
         Return lista
     End Function
+
 
 
     '==================== GUARDAR ====================

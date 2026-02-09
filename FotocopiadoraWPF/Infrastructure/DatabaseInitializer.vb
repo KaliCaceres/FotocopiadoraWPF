@@ -31,6 +31,7 @@ Namespace Infrastructure
 
                 CREATE TABLE IF NOT EXISTS fotocopias (
                     id_fotocopia INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id_resumen INTEGER NOT NULL,
                     nombre TEXT,
                     fecha TEXT,
                     paginas INTEGER,
@@ -41,6 +42,8 @@ Namespace Infrastructure
                     efectivo INTEGER,
                     comentario TEXT,
                     id_estado INTEGER,
+
+                    FOREIGN KEY (id_resumen) REFERENCES resumenes(id_resumen)
                     FOREIGN KEY (id_estado) REFERENCES estados(id_estado)
                 );
 

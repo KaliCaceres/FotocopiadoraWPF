@@ -1,4 +1,5 @@
 ﻿Public Class BalanceEntity
+    Public Property IdResumen As Integer
     Public Property ContadorEquipo1 As Integer
     Public Property ContadorEquipo2 As Integer
     Public Property Efectivo As Integer

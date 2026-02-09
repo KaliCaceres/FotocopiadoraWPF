@@ -2,15 +2,17 @@
 
 Public Class BalanceRepository
 
-    Public Sub GuardarBalance(b As BalanceEntity)
+    Public Function GuardarBalance(b As BalanceEntity) As Integer
         Using cn As New SqliteConnection(Configuracion.ConnectionString)
             cn.Open()
 
             Dim cmd As New SqliteCommand("
-            INSERT INTO resumenes
-            (contador_equipo1, contador_equipo2, efectivo, transferencia, fecha, anio, id_mes)
-            VALUES
-            (@c1, @c2, @efectivo, @transferencia, @fecha, @anio, @id_mes)
+        INSERT INTO resumenes
+        (contador_equipo1, contador_equipo2, efectivo, transferencia, fecha, anio, id_mes)
+        VALUES
+        (@c1, @c2, @efectivo, @transferencia, @fecha, @anio, @id_mes);
+
+        SELECT last_insert_rowid();
         ", cn)
 
             cmd.Parameters.AddWithValue("@c1", b.ContadorEquipo1)
@@ -20,9 +22,11 @@ Public Class BalanceRepository
             cmd.Parameters.AddWithValue("@fecha", Date.Now.ToString("yyyy-MM-dd HH:mm:ss"))
             cmd.Parameters.AddWithValue("@anio", b.Anio)
             cmd.Parameters.AddWithValue("@id_mes", b.IdMes)
-            cmd.ExecuteNonQuery()
+
+            Return Convert.ToInt32(cmd.ExecuteScalar())
         End Using
-    End Sub
+    End Function
+
 
 
     Public Function ObtenerUltimoBalance() As BalanceEntity
@@ -39,14 +43,15 @@ Public Class BalanceRepository
             Using dr = cmd.ExecuteReader()
                 If dr.Read() Then
                     Return New BalanceEntity With {
-                        .ContadorEquipo1 = If(IsDBNull(dr("contador_equipo1")), 0, CInt(dr("contador_equipo1"))),
-                        .ContadorEquipo2 = If(IsDBNull(dr("contador_equipo2")), 0, CInt(dr("contador_equipo2"))),
-                        .Efectivo = If(IsDBNull(dr("efectivo")), 0, CInt(dr("efectivo"))),
-                        .Transferencia = If(IsDBNull(dr("transferencia")), 0, CInt(dr("transferencia"))),
+                        .IdResumen = CInt(dr("id_resumen")),
+                        .ContadorEquipo1 = CInt(dr("contador_equipo1")),
+                        .ContadorEquipo2 = CInt(dr("contador_equipo2")),
+                        .Efectivo = CInt(dr("efectivo")),
+                        .Transferencia = CInt(dr("transferencia")),
                         .Fecha = Date.Parse(dr("fecha").ToString()),
                         .Anio = CInt(dr("anio")),
                         .IdMes = CInt(dr("id_mes"))
-                    }
+}
                 End If
             End Using
         End Using
