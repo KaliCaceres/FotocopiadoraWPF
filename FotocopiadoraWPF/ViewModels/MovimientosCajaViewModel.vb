@@ -16,6 +16,23 @@ Namespace ViewModels
         Public Property Movimientos As ObservableCollection(Of MovimientoCaja)
         Public Property MovimientosView As ICollectionView
 
+        ' ===================== CONSTRUCTOR =====================
+        Public Sub New(idResumen As Integer)
+            _idResumen = idResumen
+
+            Movimientos = New ObservableCollection(Of MovimientoCaja)(
+                _repo.ObtenerPorResumen(idResumen)
+            )
+
+            PrepararVista()
+            InicializarFormulario()
+
+            GuardarCommand = New RelayCommand(AddressOf GuardarMovimiento)
+        End Sub
+
+        ' ===================== COMMAND =====================
+        Public ReadOnly Property GuardarCommand As ICommand
+
         ' ===================== FORM =====================
         Private _motivo As String
         Public Property Motivo As String
@@ -28,12 +45,12 @@ Namespace ViewModels
             End Set
         End Property
 
-        Private _monto As Integer
-        Public Property Monto As Integer
+        Private _monto As Decimal
+        Public Property Monto As Decimal
             Get
                 Return _monto
             End Get
-            Set(value As Integer)
+            Set(value As Decimal)
                 _monto = value
                 Avisar(NameOf(Monto))
             End Set
@@ -93,23 +110,9 @@ Namespace ViewModels
         Public ReadOnly Property Empleados As List(Of String) =
             New List(Of String) From {"Juanchi", "Seba", "Paulina"}
 
-        ' ===================== COMMAND =====================
-        Public ReadOnly Property GuardarCommand As ICommand
 
-        ' ===================== CONSTRUCTOR =====================
-        Public Sub New(idResumen As Integer)
-            _idResumen = idResumen
 
-            ' 👉 cargar desde BD
-            Movimientos = New ObservableCollection(Of MovimientoCaja)(
-                _repo.ObtenerPorResumen(idResumen)
-            )
 
-            PrepararVista()
-            InicializarFormulario()
-
-            GuardarCommand = New RelayCommand(AddressOf GuardarMovimiento)
-        End Sub
 
         ' ===================== MÉTODOS =====================
         Private Sub PrepararVista()
@@ -133,28 +136,53 @@ Namespace ViewModels
         End Sub
 
         Private Sub GuardarMovimiento()
-            If String.IsNullOrWhiteSpace(Motivo) OrElse Monto <= 0 Then Exit Sub
+            Try
+                If String.IsNullOrWhiteSpace(Motivo) OrElse Monto <= 0 Then
+                    MessageBox.Show("Faltan datos obligatorios", "Validación", MessageBoxButton.OK, MessageBoxImage.Warning)
+                    Exit Sub
+                End If
 
-            Dim m As New MovimientoCaja With {
-                .IdResumen = _idResumen,
-                .Fecha = DateTime.Now,
-                .Motivo = Motivo,
-                .Monto = Monto,
-                .Tipo = TipoSeleccionado,
-                .MetodoPago = MetodoSeleccionado,
-                .Empleado = EmpleadoSeleccionado,
-                .observacion = Observacion
-            }
+                Dim m As New MovimientoCaja With {
+            .IdResumen = _idResumen,
+            .Fecha = Fecha,
+            .Motivo = Motivo,
+            .Monto = Monto,
+            .Tipo = TipoSeleccionado,
+            .MetodoPago = MetodoSeleccionado,
+            .Empleado = EmpleadoSeleccionado,
+            .observacion = Observacion
+        }
 
-            ' 👉 guardar en BD
-            _repo.Insertar(m)
+                _repo.Insertar(m)
 
-            ' 👉 agregar arriba del listado
-            Movimientos.Insert(0, m)
+                Movimientos.Insert(0, m)
 
-            ' 👉 limpiar form
-            InicializarFormulario()
+                InicializarFormulario()
+
+                MessageBox.Show("Movimiento guardado correctamente", "OK", MessageBoxButton.OK, MessageBoxImage.Information)
+
+            Catch ex As Exception
+                MessageBox.Show(
+            ex.Message,
+            "Error al guardar",
+            MessageBoxButton.OK,
+            MessageBoxImage.Error
+        )
+            End Try
         End Sub
+
+
+        Private _fecha As DateTime = DateTime.Now
+        Public Property Fecha As DateTime
+            Get
+                Return _fecha
+            End Get
+            Set(value As DateTime)
+                _fecha = value
+                Avisar(NameOf(Fecha))
+            End Set
+        End Property
+
 
         ' ===================== INotify =====================
         Private Sub Avisar(nombre As String)

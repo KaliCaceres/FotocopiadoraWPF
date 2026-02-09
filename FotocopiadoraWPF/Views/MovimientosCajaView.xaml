@@ -49,46 +49,36 @@
                 <Label Grid.Row="0" Content="Contadores" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
 
                 <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="0"  Hint="Empleado" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <ComboBox SelectedValuePath="Tag" FontSize="14" SelectedValue="0">
-                        <ComboBoxItem Content="Seleccionar" Tag="0" IsEnabled="False"/>
-                        <ComboBoxItem Content="Juanchi" Tag="1"/>
-                        <ComboBoxItem Content="Seba" Tag="2"/>
-                        <ComboBoxItem Content="Paulina" Tag="3"/>
+                    <ComboBox FontSize="14" ItemsSource="{Binding Empleados}" SelectedItem="{Binding EmpleadoSeleccionado}">
                     </ComboBox>
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="1"  Hint="Fecha" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:DateTimeEdit IsButtonPopUpEnabled="False" Height="13" FontSize="14" MinHeight="15"/>
+                    <syncfusion:DateTimeEdit IsButtonPopUpEnabled="False" Height="13" FontSize="14" MinHeight="15" DateTime="{Binding Fecha, Mode=TwoWay}" />
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Tipo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <ComboBox SelectedValuePath="Tag" FontSize="14" SelectedValue="0">
-                        <ComboBoxItem Content="Seleccionar" Tag="0" IsEnabled="False"/>
-                        <ComboBoxItem Content="Egreso" Tag="1"/>
-                        <ComboBoxItem Content="Ingreso" Tag="2"/>
+                    <ComboBox FontSize="14" ItemsSource="{Binding Tipos}" SelectedItem="{Binding TipoSeleccionado}">
                     </ComboBox>
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="1"  Hint="Metodo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <ComboBox SelectedValuePath="Tag" FontSize="14" SelectedValue="0">
-                        <ComboBoxItem Content="Seleccionar" Tag="0" IsEnabled="False"/>
-                        <ComboBoxItem Content="Efectivo" Tag="1"/>
-                        <ComboBoxItem Content="Transferencia" Tag="2"/>
+                    <ComboBox FontSize="14" ItemsSource="{Binding MetodosPago}" SelectedItem="{Binding MetodoSeleccionado}">
                     </ComboBox>
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="0"  Hint="Monto" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:CurrencyTextBox CurrencySymbol="$"/>
+                    <syncfusion:CurrencyTextBox CurrencySymbol="$" Value="{Binding Monto, Mode=TwoWay}"/>
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="1"  Hint="Motivo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <TextBox Height="15" FontSize="14" MinHeight="15" />
+                    <TextBox Height="15" FontSize="14" MinHeight="15" Text="{Binding Motivo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </inputLayout:SfTextInputLayout>
 
                 <Button Content="Guardar" Grid.Row="4" Grid.Column="0"
                         Height="36"
                         Margin="0,16,0,0"
-                        Command="{Binding GuardarMovimientoCommand}"/>
+                        Command="{Binding GuardarCommand}"/>
 
             </Grid>
         </Border>
