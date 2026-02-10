@@ -6,10 +6,6 @@
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF">
 
-    <UserControl.DataContext>
-        <vm:FotocopiasListadoViewModel/>
-    </UserControl.DataContext>
-
     <UserControl.Resources>
         <conv:InicialNombreConverter x:Key="InicialNombreConverter"/>
         <conv:NombreAColorConverter x:Key="NombreAColorConverter"/>

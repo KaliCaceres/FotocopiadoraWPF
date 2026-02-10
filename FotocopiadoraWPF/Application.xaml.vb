@@ -1,4 +1,5 @@
 ﻿Imports System.Windows.Threading
+Imports FotocopiadoraWPF.Services
 
 Class Application
 
@@ -14,6 +15,15 @@ Class Application
 
         Infrastructure.DatabaseInitializer.Inicializar()
         Infrastructure.DatabaseInitializer.InsertarDatosIniciales()
+
+        Dim repo As New BalanceRepository()
+        Dim ultimo = repo.ObtenerUltimoBalance()
+
+        If ultimo IsNot Nothing Then
+            BalanceActualService.BalanceActualId = ultimo.IdResumen
+        End If
+
+
     End Sub
 
 

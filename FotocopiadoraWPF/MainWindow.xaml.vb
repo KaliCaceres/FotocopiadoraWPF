@@ -32,6 +32,9 @@ Namespace FotocopiadoraWPF
 
                 Case "Movimientos"
                     MainContent.Content = New MovimientosCajaView()
+
+                Case "Movimientos Listado"
+                    MainContent.Content = New MovimientosCajaListadoView()
             End Select
 
         End Sub

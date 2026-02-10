@@ -102,13 +102,13 @@ Namespace ViewModels
 
         ' ===================== COMBOS =====================
         Public ReadOnly Property Tipos As List(Of String) =
-            New List(Of String) From {"Ingreso", "Egreso"}
+            New List(Of String) From {"Seleccionar", "Ingreso", "Egreso"}
 
         Public ReadOnly Property MetodosPago As List(Of String) =
-            New List(Of String) From {"Efectivo", "Transferencia"}
+            New List(Of String) From {"Seleccionar", "Efectivo", "Transferencia"}
 
         Public ReadOnly Property Empleados As List(Of String) =
-            New List(Of String) From {"Juanchi", "Seba", "Paulina"}
+            New List(Of String) From {"Seleccionar", "Juanchi", "Seba", "Paulina"}
 
 
 
