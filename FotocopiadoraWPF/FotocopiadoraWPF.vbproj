@@ -8,6 +8,31 @@
   </PropertyGroup>
 
   <ItemGroup>
+    <None Remove="Assets\Icons\add.png" />
+    <None Remove="Assets\Icons\description.png" />
+    <None Remove="Assets\Icons\draft.png" />
+    <None Remove="Assets\Icons\finance.png" />
+    <None Remove="Assets\Icons\list.png" />
+    <None Remove="Assets\Icons\payments.png" />
+    <None Remove="Assets\Icons\print.png" />
+    <None Remove="Assets\Icons\sync.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Icons\description.png" />
+    <Resource Include="Assets\Icons\finance.png" />
+    <Resource Include="Assets\Icons\list.png" />
+  </ItemGroup>
+
+  <ItemGroup>
+    <Resource Include="Assets\Icons\add.png" />
+    <Resource Include="Assets\Icons\draft.png" />
+    <Resource Include="Assets\Icons\payments.png" />
+    <Resource Include="Assets\Icons\print.png" />
+    <Resource Include="Assets\Icons\sync.png" />
+  </ItemGroup>
+
+  <ItemGroup>
     <Import Include="System.Windows" />
     <Import Include="System.Windows.Controls" />
     <Import Include="System.Windows.Data" />
@@ -28,10 +53,6 @@
     <PackageReference Include="Syncfusion.SfNavigationDrawer.WPF" Version="32.1.25" />
     <PackageReference Include="Syncfusion.SfTextInputLayout.WPF" Version="32.1.25" />
     <PackageReference Include="Syncfusion.Shared.WPF" Version="32.1.25" />
-  </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Assets\Icons\" />
   </ItemGroup>
 
 </Project>

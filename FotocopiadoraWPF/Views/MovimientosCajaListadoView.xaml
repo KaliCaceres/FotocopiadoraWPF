@@ -6,21 +6,18 @@
              xmlns:local="clr-namespace:FotocopiadoraWPF"
              mc:Ignorable="d" 
              xmlns:vm="clr-namespace:FotocopiadoraWPF.ViewModels">
-    <Grid Height="AUTO" Width="auto">
-                   <ListView
-                 
-                 ItemsSource="{Binding MovimientosView}"
-                 BorderThickness="0"
-                 Background="Transparent"
-                 HorizontalContentAlignment="Stretch"
-                 HorizontalAlignment="Center"
-                 VerticalAlignment="Center"
-                 ScrollViewer.VerticalScrollBarVisibility="Auto"
-                 ScrollViewer.HorizontalScrollBarVisibility="Disabled"
-                   Width="400"
-                   >
 
-           <!-- Estilo del item -->
+    <ListView
+        ItemsSource="{Binding MovimientosView}"
+        BorderThickness="0"
+        Background="Transparent"
+        HorizontalContentAlignment="Stretch"
+        HorizontalAlignment="Center"
+        VerticalAlignment="Center"
+        ScrollViewer.VerticalScrollBarVisibility="Auto"
+        ScrollViewer.HorizontalScrollBarVisibility="Disabled"
+        Width="400">
+        <!-- Estilo del item -->
            <ListView.ItemContainerStyle>
                <Style TargetType="ListViewItem">
                    <Setter Property="Padding" Value="0"/>
@@ -50,66 +47,86 @@
            <ListView.ItemTemplate>
                <DataTemplate>
 
-                   <Border CornerRadius="12"
-               BorderBrush="#E6E8FF"
-               BorderThickness="1"
-               Padding="12"
-               Background="White">
+                <Border CornerRadius="12"
+                       BorderBrush="#E6E8FF"
+                       BorderThickness="1"
+                       Padding="12"
+                       Background="White">
 
-                       <Grid>
-                           <Grid.ColumnDefinitions>
-                               <ColumnDefinition Width="*"/>
-                               <ColumnDefinition Width="Auto"/>
-                               <ColumnDefinition Width="Auto"/>
-                           </Grid.ColumnDefinitions>
+                    <Grid>
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*"/>
+                            <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
+                        </Grid.ColumnDefinitions>
 
-                           <!-- MOTIVO + EMPLEADO -->
-                           <StackPanel>
-                               <TextBlock Text="{Binding Motivo}"
-                              FontWeight="SemiBold"
-                              FontSize="14"/>
+                        <!-- MOTIVO + EMPLEADO -->
+                        <StackPanel>
+                            <TextBlock Text="{Binding Motivo}" FontWeight="SemiBold" FontSize="14"/>
+                            <TextBlock FontSize="11" Foreground="#6B7280">
+                               <Run Text="{Binding Empleado}"/>
+                               <Run Text=" • "/>
+                               <Run Text="{Binding Fecha, StringFormat=HH:mm}"/>
+                            </TextBlock>
+                        </StackPanel>
+                        <!-- CHIP TIPO -->
+                        <Border Grid.Column="1"
+                                Padding="8,3"
+                                CornerRadius="12"
+                                Margin="8,0"
+                                HorizontalAlignment="Center"
+                                VerticalAlignment="Center">
+                            <Border.Style>
+                                <Style TargetType="Border">
+                                    <Setter Property="Background" Value="#DCFCE7"/>
+                                    <Style.Triggers>
+                                        <DataTrigger Binding="{Binding Tipo}" Value="Egreso">
+                                            <Setter Property="Background" Value="#FEE2E2"/>
+                                        </DataTrigger>
+                                    </Style.Triggers>
+                                </Style>
+                            </Border.Style>
 
-                               <TextBlock FontSize="11"
-                              Foreground="#6B7280">
-                       <Run Text="{Binding Empleado}"/>
-                       <Run Text=" • "/>
-                       <Run Text="{Binding Fecha, StringFormat=HH:mm}"/>
-                               </TextBlock>
-                           </StackPanel>
-
-                           <!-- CHIP TIPO -->
-                           <Border Grid.Column="1"
-                       Padding="6,2"
-                       CornerRadius="10"
-                       Margin="8,0">
-                               <Border.Style>
-                                   <Style TargetType="Border">
-                                       <Setter Property="Background" Value="#DCFCE7"/>
-                                       <Style.Triggers>
-                                           <DataTrigger Binding="{Binding Tipo}" Value="Egreso">
-                                               <Setter Property="Background" Value="#FEE2E2"/>
-                                           </DataTrigger>
-                                       </Style.Triggers>
-                                   </Style>
-                               </Border.Style>
-
-                               <TextBlock Text="{Binding Tipo}"
-                              FontSize="11"
-                              FontWeight="SemiBold"/>
-                           </Border>
-
-                           <!-- MONTO -->
-                           <TextBlock Grid.Column="2"
-                          Margin="12,0,0,0"
-                          FontWeight="Bold"
-                          FontSize="14"
-                          Text="{Binding Monto, StringFormat=$ {0:N0}}"/>
-                       </Grid>
-                   </Border>
-
-               </DataTemplate>
+                            <StackPanel Orientation="Horizontal"
+                                        VerticalAlignment="Center"
+                                        HorizontalAlignment="Center">
+                                <!-- PUNTO -->
+                                <Ellipse Width="6"
+                                         Height="6"
+                                         Margin="0,0,5,0"
+                                         VerticalAlignment="Center">
+                                    <Ellipse.Style>
+                                        <Style TargetType="Ellipse">
+                                            <Setter Property="Fill" Value="#059669"/>
+                                            <Style.Triggers>
+                                                <DataTrigger Binding="{Binding Tipo}" Value="Egreso">
+                                                    <Setter Property="Fill" Value="#DC2626"/>
+                                                </DataTrigger>
+                                            </Style.Triggers>
+                                        </Style>
+                                    </Ellipse.Style>
+                                </Ellipse>
+                                <!-- TEXTO -->
+                                <TextBlock Text="{Binding Tipo}"
+                                           FontSize="11"
+                                           FontWeight="SemiBold"
+                                           VerticalAlignment="Center"/>
+                            </StackPanel>
+                        </Border>
+                        <!-- MONTO -->
+                        <TextBlock Grid.Column="2"
+                                   Margin="12,0,0,0"
+                                   FontWeight="Bold"
+                                   FontSize="14"
+                                   VerticalAlignment="Center"
+                                   HorizontalAlignment="Center"
+                                   TextAlignment="Center"
+                                   Text="{Binding Monto, StringFormat=$ {0:N0}}"/>
+                    </Grid>
+                </Border>
+            </DataTemplate>
            </ListView.ItemTemplate>
 
        </ListView>
-    </Grid>
+
 </UserControl>

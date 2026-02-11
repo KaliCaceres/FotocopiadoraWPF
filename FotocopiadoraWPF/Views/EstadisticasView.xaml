@@ -4,18 +4,52 @@
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
              xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
              xmlns:local="clr-namespace:FotocopiadoraWPF"
+             xmlns:vm="clr-namespace:FotocopiadoraWPF.ViewModels"
              mc:Ignorable="d" 
              d:DesignHeight="450" d:DesignWidth="800">
+    <UserControl.DataContext>
+        <vm:EstadisticasViewModel/>
+    </UserControl.DataContext>
+
+    <UserControl.Resources>
+
+        <!-- Card base -->
+        <Style x:Key="CardStyle" TargetType="Border">
+            <Setter Property="Background" Value="White"/>
+            <Setter Property="CornerRadius" Value="16"/>
+            <Setter Property="Padding" Value="16"/>
+            <Setter Property="Margin" Value="8"/>
+            <Setter Property="Effect">
+                <Setter.Value>
+                    <DropShadowEffect BlurRadius="10"
+                                  ShadowDepth="2"
+                                  Opacity="0.15"/>
+                </Setter.Value>
+            </Setter>
+        </Style>
+
+        <!-- Título card -->
+        <Style x:Key="CardTitleStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="14"/>
+            <Setter Property="Foreground" Value="#6B7280"/>
+            <Setter Property="Margin" Value="0,0,0,4"/>
+        </Style>
+
+        <!-- Valor card -->
+        <Style x:Key="CardValueStyle" TargetType="TextBlock">
+            <Setter Property="FontSize" Value="24"/>
+            <Setter Property="FontWeight" Value="Bold"/>
+            <Setter Property="Foreground" Value="#111827"/>
+        </Style>
+
+    </UserControl.Resources>
+
     <Grid>
         <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Top" HorizontalAlignment="Center" Width="auto" Grid.ColumnSpan="1" Grid.Column="3"   >
-
-
-
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="170"/>
                 <ColumnDefinition Width="170"/>
             </Grid.ColumnDefinitions>
-
             <Grid.RowDefinitions>
                 <!--Titulo-->
                 <RowDefinition Height="Auto"/>
@@ -33,31 +67,37 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Border Grid.Column="0"
-                 Grid.Row="0"
-                 Background="White"
-                 CornerRadius="16"
-                 Grid.ColumnSpan="1"
-                 Padding="10,10,10,10"
-                 Margin="5,0,5,5">
-
-                <StackPanel VerticalAlignment="Center">
-                    <Label FontSize="16" Padding="10,0,0,0" >Fotocopias</Label>
-                    <Label FontSize="25" Padding="10,0,0,0" FontWeight="Bold">3000</Label>
+            <Border Style="{StaticResource CardStyle}" Grid.Column="0" Grid.Row="0">
+                <StackPanel>
+                    <TextBlock Text="Fotocopias"
+                   Style="{StaticResource CardTitleStyle}"/>
+                    <TextBlock Text="{Binding TotalPaginas}"
+                   Style="{StaticResource CardValueStyle}"/>
                 </StackPanel>
             </Border>
 
-            <Border Grid.Column="1"
-                 Grid.Row="0"
-                 Background="White"
-                 CornerRadius="16"
-                 Grid.ColumnSpan="1"
-                 Padding="10,10,10,10"
-                 Margin="5,0,5,5">
-
-                <StackPanel VerticalAlignment="Center">
-                    <Label FontSize="16" Padding="10,0,0,0" >Anillados</Label>
-                    <Label FontSize="25" Padding="10,0,0,0" FontWeight="Bold">50</Label>
+            <Border Style="{StaticResource CardStyle}" Grid.Column="1" Grid.Row="0">
+                <StackPanel>
+                    <TextBlock Text="Anillados"
+                   Style="{StaticResource CardTitleStyle}"/>
+                    <TextBlock Text="{Binding TotalAnillados}"
+                   Style="{StaticResource CardValueStyle}"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardStyle}" Grid.Column="0" Grid.Row="1">
+                <StackPanel>
+                    <TextBlock Text="Efectivo"
+                   Style="{StaticResource CardTitleStyle}"/>
+                    <TextBlock Text="{Binding TotalEfectivo}"
+                   Style="{StaticResource CardValueStyle}"/>
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardStyle}" Grid.Column="1" Grid.Row="1">
+                <StackPanel>
+                    <TextBlock Text="Transferencia"
+                   Style="{StaticResource CardTitleStyle}"/>
+                    <TextBlock Text="{Binding TotalTransferencia}"
+                   Style="{StaticResource CardValueStyle}"/>
                 </StackPanel>
             </Border>
         </Grid>

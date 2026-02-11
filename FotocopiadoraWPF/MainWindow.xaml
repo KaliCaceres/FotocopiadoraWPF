@@ -16,66 +16,61 @@
         x:Name="navigationDrawer"
         DisplayMode="Expanded" DrawerBackground="#FFEAE8E8">
 
-        <!--<syncfusion:NavigationItem
-                Header="Inbox"
-                IsExpanded="True"
-                IsSelected="True">
-                <syncfusion:NavigationItem.Icon>
-                    <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
-                </syncfusion:NavigationItem.Icon>
-                
-                <syncfusion:NavigationItem Header="Primary">
-                    <syncfusion:NavigationItem.Icon>
-                            <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
-                        </syncfusion:NavigationItem.Icon>
-                </syncfusion:NavigationItem>
-                
-                <syncfusion:NavigationItem Header="Social">
-                    <syncfusion:NavigationItem.Icon>
-                            <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
-                        </syncfusion:NavigationItem.Icon>
-                </syncfusion:NavigationItem>
+        <!-- CAJA -->
+        <syncfusion:NavigationItem Header="Movimientos" FontSize="16">
+            <syncfusion:NavigationItem.Icon>
+                <Image Source="/Assets/Icons/sync.png" Width="20" Height="20"/>
+            </syncfusion:NavigationItem.Icon>
 
-                <syncfusion:NavigationItem Header="Promotions">
-                    <syncfusion:NavigationItem.Icon>
-                        <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
-                    </syncfusion:NavigationItem.Icon>
-                </syncfusion:NavigationItem>
-            </syncfusion:NavigationItem>-->
+            <syncfusion:NavigationItem Header="Alta" Tag="CajaAlta" FontSize="16">
+                <syncfusion:NavigationItem.Icon>
+                    <Image Source="/Assets/Icons/add.png" Width="20" Height="20"/>
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+
+            <syncfusion:NavigationItem Header="Listado" Tag="CajaListado" FontSize="16">
+                <syncfusion:NavigationItem.Icon>
+                    <Image Source="/Assets/Icons/list.png" Width="20" Height="20"/>
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+        </syncfusion:NavigationItem>
+
 
         <syncfusion:NavigationItem Header="Fotocopias" FontSize="16">
             <syncfusion:NavigationItem.Icon>
-                <Image Width="20" Height="20" Source="/Assets/Icons/draft.png"/>
+                <Image Source="/Assets/Icons/print.png" Width="20" Height="20"/>
+            </syncfusion:NavigationItem.Icon>
+
+            <syncfusion:NavigationItem Header="Alta" Tag="FotoAlta" FontSize="16">
+                <syncfusion:NavigationItem.Icon>
+                    <Image Source="/Assets/Icons/add.png" Width="20" Height="20"/>
+
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+
+            <syncfusion:NavigationItem Header="Listado" Tag="FotoListado" FontSize="16">
+                <syncfusion:NavigationItem.Icon>
+                    <Image Source="/Assets/Icons/list.png" Width="20" Height="20"/>
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+        </syncfusion:NavigationItem>
+
+
+        <syncfusion:NavigationItem Header="Balance" FontSize="16" Tag="Balance">
+            <syncfusion:NavigationItem.Icon>
+                <Image Source="/Assets/Icons/description.png" Width="20" Height="20"/>
             </syncfusion:NavigationItem.Icon>
         </syncfusion:NavigationItem>
 
-        <syncfusion:NavigationItem Header="Balance" FontSize="16">
+        <syncfusion:NavigationItem Header="Precios" FontSize="16" Tag="Precios">
             <syncfusion:NavigationItem.Icon>
-                <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
+                <Image Source="/Assets/Icons/payments.png" Width="20" Height="20"/>
             </syncfusion:NavigationItem.Icon>
         </syncfusion:NavigationItem>
 
-        <syncfusion:NavigationItem Header="Movimientos Listado" FontSize="16">
+        <syncfusion:NavigationItem Header="Estadisticas" FontSize="16" Tag="Estadisticas">
             <syncfusion:NavigationItem.Icon>
-                <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
-            </syncfusion:NavigationItem.Icon>
-        </syncfusion:NavigationItem>
-
-        <syncfusion:NavigationItem Header="Precios" FontSize="16">
-            <syncfusion:NavigationItem.Icon>
-                <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
-            </syncfusion:NavigationItem.Icon>
-        </syncfusion:NavigationItem>
-
-        <syncfusion:NavigationItem Header="Listado" FontSize="16">
-            <syncfusion:NavigationItem.Icon>
-                <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
-            </syncfusion:NavigationItem.Icon>
-        </syncfusion:NavigationItem>
-
-        <syncfusion:NavigationItem Header="Movimientos" FontSize="16">
-            <syncfusion:NavigationItem.Icon>
-                <Path Data="M20,6 L9,6 C7.9,6 7,6.9 7,8 L7,18 C7,19.1 7.9,20 9,20 L20,20 C21.1,20 22,19.1 22,18 L22,8 C22,6.9 21.1,6 20,6 Z M20,18 L9,18 L9,8 L20,8 L20,18 Z"/>
+                <Image Source="/Assets/Icons/finance.png" Width="20" Height="20"/>
             </syncfusion:NavigationItem.Icon>
         </syncfusion:NavigationItem>
 

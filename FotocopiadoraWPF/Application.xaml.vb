@@ -21,8 +21,10 @@ Class Application
 
         If ultimo IsNot Nothing Then
             BalanceActualService.BalanceActualId = ultimo.IdResumen
+        Else
+            MessageBox.Show(Configuracion.ConnectionString)
+            MessageBox.Show("No se encontró ningún balance en la tabla resumenes.")
         End If
-
 
     End Sub
 

@@ -148,4 +148,43 @@ Public Class FotocopiasRepository
         End Using
     End Sub
 
+
+    Public Function ObtenerResumenFotocopias(idResumen As Integer) As EstadisticaResumen
+
+        Using cn As New SqliteConnection(Configuracion.ConnectionString)
+            cn.Open()
+
+            Dim cmd As New SqliteCommand("
+            SELECT 
+                IFNULL(SUM(paginas),0) as TotalPaginas,
+                IFNULL(SUM(anillados),0) as TotalAnillados,
+                IFNULL(SUM(precio_total),0) as TotalFacturado,
+                IFNULL(SUM(efectivo),0) as TotalEfectivo,
+                IFNULL(SUM(transferencia),0) as TotalTransferencia,
+                COUNT(*) as Cantidad
+            FROM fotocopias
+            WHERE id_resumen = @id
+              AND id_estado <> 3
+        ", cn)
+
+            cmd.Parameters.AddWithValue("@id", idResumen)
+
+            Using dr = cmd.ExecuteReader()
+                If dr.Read() Then
+                    Return New EstadisticaResumen With {
+                    .TotalPaginas = Convert.ToInt32(dr("TotalPaginas")),
+                    .TotalAnillados = Convert.ToInt32(dr("TotalAnillados")),
+                    .TotalFacturado = Convert.ToDecimal(dr("TotalFacturado")),
+                    .TotalEfectivo = Convert.ToDecimal(dr("TotalEfectivo")),
+                    .TotalTransferencia = Convert.ToDecimal(dr("TotalTransferencia")),
+                    .Cantidad = Convert.ToInt32(dr("Cantidad"))
+                }
+                End If
+            End Using
+        End Using
+
+        Return New EstadisticaResumen()
+
+    End Function
+
 End Class
