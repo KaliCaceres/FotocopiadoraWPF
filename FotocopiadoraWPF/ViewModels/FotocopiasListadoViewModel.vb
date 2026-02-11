@@ -20,7 +20,7 @@ Namespace ViewModels
         Public Property Fotocopias As ObservableCollection(Of Fotocopia)
         Public ReadOnly Property EditarCommand As ICommand
         Public ReadOnly Property EliminarCommand As ICommand
-
+        'Public ReadOnly Property PagarCommand As ICommand
         Public Property FotocopiasView As ICollectionView
 
         Public Sub New()
@@ -31,22 +31,14 @@ Namespace ViewModels
                 )
             )
 
-
             Dim view = CollectionViewSource.GetDefaultView(Fotocopias)
-
-            ' 🔹 FILTRO
             view.Filter = AddressOf FiltrarPorEstado
-
-            ' 🔹 GROUPING
             view.GroupDescriptions.Clear()
-            view.GroupDescriptions.Add(
-        New PropertyGroupDescription("Fecha", New FechaSoloDiaConverter())
-    )
+            view.GroupDescriptions.Add(New PropertyGroupDescription("Fecha", New FechaSoloDiaConverter()))
+            'PagarCommand = New RelayCommand(Of Fotocopia)(AddressOf PagarFotocopia)
 
-            ' 👉 PRIMERO asignás la vista
             FotocopiasView = view
 
-            ' 👉 DESPUÉS seteás el filtro
             EstadoSeleccionado = EstadosFiltro.First() ' "Todos"
 
             EditarCommand = New RelayCommand(Of Fotocopia)(AddressOf EditarFotocopia)
@@ -57,6 +49,35 @@ Namespace ViewModels
         Private Sub Avisar(nombre As String)
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(nombre))
         End Sub
+
+        'Private Sub PagarFotocopia(f As Fotocopia)
+        '    If f Is Nothing Then Return
+        '    If f.IdEstado <> 1 Then Return ' Solo deudores
+
+        '    If MessageBox.Show("¿Marcar como pagada?",
+        '               "Confirmar",
+        '               MessageBoxButton.YesNo,
+        '               MessageBoxImage.Question) <> MessageBoxResult.Yes Then
+        '        Return
+        '    End If
+
+        '    Try
+        '         Cambiar estado
+        '        f.IdEstado = 0
+
+        '         Asignar pago completo a efectivo (podés mejorar esto después)
+        '        f.Efectivo = f.PrecioTotal
+        '        f.Transferencia = 0
+
+        '         Actualizar en BD
+        '        _repo.ActualizarFotocopia(f)
+
+        '        FotocopiasView.Refresh()
+
+        '    Catch ex As Exception
+        '        MessageBox.Show("Error al pagar: " & ex.Message)
+        '    End Try
+        'End Sub
 
         Public Class EstadoItem
             Public Property Id As Integer?
@@ -111,35 +132,13 @@ Namespace ViewModels
         End Property
 
 
-        Private Sub CargarDatos()
-            Fotocopias.Add(New Fotocopia With {.Nombre = "Juan", .Fecha = #01/15/2026#})
-            Fotocopias.Add(New Fotocopia With {.Nombre = "Ana", .Fecha = #01/15/2026#})
-            Fotocopias.Add(New Fotocopia With {.Nombre = "Pedro", .Fecha = #01/14/2026#})
-        End Sub
-
-        '    Private Sub CargarDatosDesdeBD()
-        '        For Each f In _repo.ObtenerFotocopias()
-        '            Fotocopias.Add(f)
-        '        Next
-        '    End Sub
-
-        '    Private Sub PrepararVista()
-        '        Dim view = CollectionViewSource.GetDefaultView(Fotocopias)
-        '        view.GroupDescriptions.Clear()
-        '        view.GroupDescriptions.Add(
-        '    New PropertyGroupDescription("Fecha", New FechaSoloDiaConverter())
-        ')
-
-        '        FotocopiasView = view
-        '    End Sub
-
         Private Sub EditarFotocopia(f As Fotocopia)
             If f Is Nothing Then Return
 
             ' Clonamos para no modificar el original hasta guardar
             Dim copia As New Fotocopia With {
                 .IdFotocopia = f.IdFotocopia,
-                .IdResumen = f.IdResumen,   ' 👈 CLAVE
+                .IdResumen = f.IdResumen,
                 .Nombre = f.Nombre,
                 .Fecha = f.Fecha,
                 .Paginas = f.Paginas,
@@ -148,7 +147,8 @@ Namespace ViewModels
                 .Efectivo = f.Efectivo,
                 .Comentario = f.Comentario,
                 .PrecioUnitario = f.PrecioUnitario,
-                .PrecioTotal = f.PrecioTotal
+                .PrecioTotal = f.PrecioTotal,
+                .IdEstado = f.IdEstado
             }
 
 

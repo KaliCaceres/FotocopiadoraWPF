@@ -80,8 +80,8 @@ Namespace ViewModels
             EsEdicion = True
             TieneCambios = False
 
-            EsDeudor = (Fotocopia.IdEstado = 1)
-            EsPerdida = (Fotocopia.IdEstado = 2)
+            _esDeudor = (Fotocopia.IdEstado = 1)
+            _esPerdida = (Fotocopia.IdEstado = 2)
 
             Avisar(NameOf(EsDeudor))
             Avisar(NameOf(EsPerdida))
@@ -299,7 +299,7 @@ Namespace ViewModels
                 If _esDeudor <> value Then
                     _esDeudor = value
                     Avisar(NameOf(EsDeudor))
-
+                    Avisar(NameOf(PuedeEditarPago))
                     If value Then
                         ' 👉 DEUDOR
                         EsPerdida = False
@@ -338,7 +338,7 @@ Namespace ViewModels
                 If _esPerdida <> value Then
                     _esPerdida = value
                     Avisar(NameOf(EsPerdida))
-
+                    Avisar(NameOf(PuedeEditarPago))
                     If value Then
                         ' 👉 Perdida gana siempre
                         EsDeudor = False
