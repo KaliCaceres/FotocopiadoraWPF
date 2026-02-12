@@ -8,7 +8,6 @@
 
 
     <UserControl.Resources>
-        <conv:ModificadoBorderConverter x:Key="ModificadoBorderConverter"/>
 
         <Style TargetType="{x:Type inputLayout:SfTextInputLayout}">
                 <Setter Property="Margin" Value="0,0,10,10"/>
@@ -47,16 +46,13 @@
 
                 <StackPanel Grid.Row="1">
                     <inputLayout:SfTextInputLayout
+                          
                           Hint="Nombre"
-                          FocusedBorderBrush="{Binding NombreModificado,
-                                                       Converter={StaticResource ModificadoBorderConverter}}"
                           ContainerType="Outlined"
                           HasError="{Binding NombreTieneError}"
                           ErrorText="{Binding NombreErrorText}">
 
-                        <TextBox Text="{Binding Nombre,
-                          Mode=TwoWay,
-                          UpdateSourceTrigger=PropertyChanged}"/>
+                        <TextBox Text="{Binding Nombre,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" />
                     </inputLayout:SfTextInputLayout>
 
 
@@ -68,13 +64,13 @@
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Paginas" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:IntegerTextBox x:Name="TxtPaginas" Height="15" UseNullOption="True" FontSize="14" Value="{Binding Paginas,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" NullValue="0" MinValue="0" MaxValue="5000" ValueValidation="OnKeyPress"/>
+                    <syncfusion:IntegerTextBox x:Name="TxtPaginas" Height="15" UseNullOption="True" FontSize="14" Value="{Binding Paginas,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" NullValue="0" MinValue="0" MaxValue="5000" ValueValidation="OnKeyPress"/>
                 </inputLayout:SfTextInputLayout>
 
                 <CheckBox  Grid.Column="0" Grid.Row="3" Content="Perdida" Margin="5,-20,0,10" IsChecked="{Binding EsPerdida}"/>
 
                 <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="1"  Hint="Anillados" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Anillados,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" NullValue="0"/>
+                    <syncfusion:IntegerTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Anillados,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" NullValue="0"/>
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="0"  Grid.ColumnSpan="2" Hint="Comentario" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
@@ -84,12 +80,12 @@
                 <Label Grid.Row="4" Height="40" Content="Metodo de pago" ToolTip="Click here and something will happen!" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" BorderBrush="{x:Null}" />
 
                 <inputLayout:SfTextInputLayout Grid.Row="5" Grid.Column="1"  Hint="Transferencia" HelperText="" ContainerType="Outlined" VerticalAlignment="Top">
-                    <syncfusion:CurrencyTextBox Height="15" FontSize="14" UseNullOption="True" Value="{Binding Transferencia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseDoubleClick="Transferencia_DoubleClick" Cursor="IBeam" NullValue="0" IsEnabled="{Binding PuedeEditarPago}" IsReadOnly="{Binding EsDeudor}"></syncfusion:CurrencyTextBox>
+                    <syncfusion:CurrencyTextBox Height="15" FontSize="14" UseNullOption="True" Value="{Binding Transferencia, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" PreviewMouseDoubleClick="Transferencia_DoubleClick" Cursor="IBeam" NullValue="0" IsEnabled="{Binding PuedeEditarPago}" IsReadOnly="{Binding EsDeudor}"></syncfusion:CurrencyTextBox>
                 </inputLayout:SfTextInputLayout>
 
                 <StackPanel Grid.Row="5">
                     <inputLayout:SfTextInputLayout Hint="Efectivo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                        <syncfusion:CurrencyTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Efectivo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" PreviewMouseDoubleClick="Efectivo_DoubleClick" NullValue="0" IsEnabled="{Binding PuedeEditarPago}" IsReadOnly="{Binding EsDeudor}"/>
+                        <syncfusion:CurrencyTextBox Height="15" ValueValidation="OnKeyPress" UseNullOption="True" FontSize="14" Value="{Binding Efectivo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" PreviewMouseDoubleClick="Efectivo_DoubleClick" NullValue="0" IsEnabled="{Binding PuedeEditarPago}" IsReadOnly="{Binding EsDeudor}"/>
                     </inputLayout:SfTextInputLayout>
                     <CheckBox Content="Deudor" Margin="5,-20,0,10" IsChecked="{Binding EsDeudor, Mode=TwoWay}"/>
                 </StackPanel>

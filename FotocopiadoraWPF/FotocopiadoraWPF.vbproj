@@ -15,6 +15,7 @@
     <None Remove="Assets\Icons\list.png" />
     <None Remove="Assets\Icons\payments.png" />
     <None Remove="Assets\Icons\print.png" />
+    <None Remove="Assets\Icons\stad.png" />
     <None Remove="Assets\Icons\sync.png" />
   </ItemGroup>
 
@@ -29,6 +30,7 @@
     <Resource Include="Assets\Icons\draft.png" />
     <Resource Include="Assets\Icons\payments.png" />
     <Resource Include="Assets\Icons\print.png" />
+    <Resource Include="Assets\Icons\stad.png" />
     <Resource Include="Assets\Icons\sync.png" />
   </ItemGroup>
 

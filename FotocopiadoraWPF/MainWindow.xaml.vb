@@ -39,6 +39,12 @@ Namespace FotocopiadoraWPF
 
                 Case "Estadisticas"
                     MainContent.Content = New EstadisticasView()
+
+                Case "LibroAlta"
+                    MainContent.Content = New BibliotecaView()
+
+                Case "LibroListado"
+                    MainContent.Content = New BibliotecaView()
             End Select
         End Sub
 

@@ -74,6 +74,25 @@
             </syncfusion:NavigationItem.Icon>
         </syncfusion:NavigationItem>
 
+        <syncfusion:NavigationItem Header="Libros" FontSize="16">
+            <syncfusion:NavigationItem.Icon>
+                <Image Source="/Assets/Icons/stad.png" Width="20" Height="20"/>
+            </syncfusion:NavigationItem.Icon>
+
+            <syncfusion:NavigationItem Header="Alta" Tag="LibroAlta" FontSize="16">
+                <syncfusion:NavigationItem.Icon>
+                    <Image Source="/Assets/Icons/add.png" Width="20" Height="20"/>
+
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+
+            <syncfusion:NavigationItem Header="Listado" Tag="LibroListado" FontSize="16">
+                <syncfusion:NavigationItem.Icon>
+                    <Image Source="/Assets/Icons/list.png" Width="20" Height="20"/>
+                </syncfusion:NavigationItem.Icon>
+            </syncfusion:NavigationItem>
+        </syncfusion:NavigationItem>
+
         <syncfusion:SfNavigationDrawer.ContentView >
             <Grid Background="#F5F5F5">
                 <ContentControl x:Name="MainContent"/>

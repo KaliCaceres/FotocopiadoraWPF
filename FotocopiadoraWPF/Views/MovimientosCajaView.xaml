@@ -9,10 +9,13 @@
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF">
 
+
     <UserControl.Resources>
-        <Style TargetType="inputLayout:SfTextInputLayout">
-            <Setter Property="Margin" Value="10,0,10,0"/>
+
+        <Style TargetType="{x:Type inputLayout:SfTextInputLayout}">
+            <Setter Property="Margin" Value="10,0,10,10"/>
         </Style>
+
     </UserControl.Resources>
 
     <StackPanel Margin="12" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center">
@@ -124,17 +127,16 @@
                 <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="1"  Hint="Motivo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
                     <TextBox Height="15" FontSize="14" MinHeight="15" Text="{Binding Motivo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
                 </inputLayout:SfTextInputLayout>
-
-                <Button Content="Guardar" Grid.Row="4" Grid.Column="0"
-                        Height="36"
-                        Margin="0,16,0,0"
-                        Command="{Binding GuardarCommand}"/>
-
             </Grid>
         </Border>
+        <Button 
+            Content="Guardar"
+            Command="{Binding GuardarCommand}"
+            Width="120"
+            Height="35"
+            HorizontalAlignment="Left" 
+            Margin="20,20,0,0"/>
 
-        <!-- LISTADO -->
- 
     </StackPanel>
 
 </UserControl>

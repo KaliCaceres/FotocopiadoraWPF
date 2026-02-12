@@ -1,6 +1,7 @@
 ﻿Imports System.ComponentModel
 Imports System.Windows
 Imports System.Windows.Input
+
 Imports FotocopiadoraWPF.Services
 
 Namespace ViewModels
@@ -8,6 +9,7 @@ Namespace ViewModels
 
     Public Class FotocopiasViewModel
         Implements INotifyPropertyChanged
+        Implements INotifyDataErrorInfo
 
         Public Event PropertyChanged As PropertyChangedEventHandler _
             Implements INotifyPropertyChanged.PropertyChanged
@@ -15,6 +17,90 @@ Namespace ViewModels
         Private Sub Avisar(nombre As String)
             RaiseEvent PropertyChanged(Me, New PropertyChangedEventArgs(nombre))
         End Sub
+
+        Private ReadOnly _errores As New Dictionary(Of String, List(Of String))
+
+        Public Event ErrorsChanged As EventHandler(Of DataErrorsChangedEventArgs) _
+        Implements INotifyDataErrorInfo.ErrorsChanged
+
+        Public ReadOnly Property HasErrors As Boolean _
+        Implements INotifyDataErrorInfo.HasErrors
+            Get
+                Return _errores.Any()
+            End Get
+        End Property
+
+        Public Function GetErrors(propertyName As String) As IEnumerable _
+        Implements INotifyDataErrorInfo.GetErrors
+
+            If String.IsNullOrEmpty(propertyName) Then
+                Return _errores.SelectMany(Function(e) e.Value)
+            End If
+
+            If _errores.ContainsKey(propertyName) Then
+                Return _errores(propertyName)
+            End If
+
+            Return Nothing
+        End Function
+
+        Private Sub AgregarError(propiedad As String, mensaje As String)
+            If Not _errores.ContainsKey(propiedad) Then
+                _errores(propiedad) = New List(Of String)
+            End If
+
+            If Not _errores(propiedad).Contains(mensaje) Then
+                _errores(propiedad).Add(mensaje)
+                RaiseEvent ErrorsChanged(Me, New DataErrorsChangedEventArgs(propiedad))
+            End If
+        End Sub
+
+        Private Sub LimpiarErrores(propiedad As String)
+            If _errores.ContainsKey(propiedad) Then
+                _errores.Remove(propiedad)
+                RaiseEvent ErrorsChanged(Me, New DataErrorsChangedEventArgs(propiedad))
+            End If
+        End Sub
+
+        Private Sub Validar()
+
+            For Each key In _errores.Keys.ToList()
+                RaiseEvent ErrorsChanged(Me, New DataErrorsChangedEventArgs(key))
+            Next
+
+            _errores.Clear()
+
+
+            ' 🔹 Nombre obligatorio
+            If String.IsNullOrWhiteSpace(Nombre) Then
+                AgregarError(NameOf(Nombre), "El nombre es obligatorio.")
+            End If
+
+            ' 🔹 Debe tener algo para cobrar
+            If (Paginas Is Nothing OrElse Paginas = 0) AndAlso
+       (Anillados Is Nothing OrElse Anillados = 0) Then
+
+                AgregarError(NameOf(Paginas), "Debe ingresar páginas o anillados.")
+            End If
+
+            ' 🔹 Validar pagos si no es deudor ni perdida
+            If Not EsDeudor AndAlso Not EsPerdida Then
+
+                Dim efectivoValor = If(Efectivo, 0)
+                Dim transferenciaValor = If(Transferencia, 0)
+
+                If (efectivoValor + transferenciaValor) <> Total Then
+                    AgregarError(NameOf(Efectivo), "El pago debe cubrir el total.")
+                End If
+
+
+            End If
+
+            RaiseEvent ErrorsChanged(Me, New DataErrorsChangedEventArgs(Nothing))
+            CType(GuardarCommand, RelayCommand).RaiseCanExecuteChanged()
+
+        End Sub
+
 
         '==================== REPOS ====================
 
@@ -92,6 +178,7 @@ Namespace ViewModels
             Avisar(NameOf(Efectivo))
             Avisar(NameOf(Transferencia))
             Avisar(NameOf(Fecha))
+            Validar()
 
 
         End Sub
@@ -117,7 +204,8 @@ Namespace ViewModels
             PagarConEfectivoCommand = New RelayCommand(AddressOf PagarConEfectivo)
             PagarConTransferenciaCommand = New RelayCommand(AddressOf PagarConTransferencia)
             CancelarCommand = New RelayCommand(AddressOf Cancelar)
-            GuardarCommand = New RelayCommand(AddressOf Guardar, Function() TieneCambios)
+            GuardarCommand = New RelayCommand(AddressOf Guardar, Function() TieneCambios AndAlso Not HasErrors)
+
 
             _valores = _repo.ObtenerValores()
 
@@ -136,9 +224,9 @@ Namespace ViewModels
             End Get
             Set(value As String)
                 Fotocopia.Nombre = value
+
                 Avisar(NameOf(Nombre))
-                Avisar(NameOf(NombreTieneError))
-                Avisar(NameOf(NombreErrorText))
+                Validar()
                 If Not EsEdicion Then
                     TieneCambios = True
                 Else
@@ -175,7 +263,7 @@ Namespace ViewModels
                                   ObtenerPrecioPorCantidad(Fotocopia.Paginas),
                                   PrecioNormal)
                 Avisar(NameOf(PrecioPagina))
-
+                Validar()
                 RecalcularTodo()
                 If Not EsEdicion Then
                     TieneCambios = True
@@ -194,6 +282,7 @@ Namespace ViewModels
             Set(value As Integer?)
                 Fotocopia.Anillados = If(value, 0)
                 RecalcularTodo()
+                Validar()
                 If Not EsEdicion Then
                     TieneCambios = True
                 Else
@@ -298,25 +387,26 @@ Namespace ViewModels
             Set(value As Boolean)
                 If _esDeudor <> value Then
                     _esDeudor = value
-                    Avisar(NameOf(EsDeudor))
-                    Avisar(NameOf(PuedeEditarPago))
+
                     If value Then
-                        ' 👉 DEUDOR
-                        EsPerdida = False
+                        ' Forzar perdida en false SIN usar setter
+                        _esPerdida = False
                         Fotocopia.IdEstado = 1
 
                         Fotocopia.Efectivo = 0
                         Fotocopia.Transferencia = 0
-
-                        Avisar(NameOf(Efectivo))
-                        Avisar(NameOf(Transferencia))
-
-                    ElseIf Not EsPerdida Then
+                    ElseIf Not _esPerdida Then
                         Fotocopia.IdEstado = 0
                     End If
 
-
+                    Avisar(NameOf(EsDeudor))
+                    Avisar(NameOf(EsPerdida)) ' importante si lo cambiaste directo
+                    Avisar(NameOf(PuedeEditarPago))
+                    Avisar(NameOf(Efectivo))
+                    Avisar(NameOf(Transferencia))
                     Avisar(NameOf(IdEstado))
+
+                    Validar()
 
                     If Not EsEdicion Then
                         TieneCambios = True
@@ -326,6 +416,7 @@ Namespace ViewModels
                 End If
             End Set
         End Property
+
 
 
         Private _esPerdida As Boolean
@@ -338,6 +429,7 @@ Namespace ViewModels
                 If _esPerdida <> value Then
                     _esPerdida = value
                     Avisar(NameOf(EsPerdida))
+                    Validar()
                     Avisar(NameOf(PuedeEditarPago))
                     If value Then
                         ' 👉 Perdida gana siempre
@@ -390,6 +482,7 @@ Namespace ViewModels
 
                 Fotocopia.Efectivo = If(value, 0)
                 Avisar(NameOf(Efectivo))
+                Validar()
             End Set
 
 
@@ -404,39 +497,12 @@ Namespace ViewModels
 
                 Fotocopia.Transferencia = If(value, 0)
                 Avisar(NameOf(Transferencia))
+                Validar()
             End Set
 
 
         End Property
 
-        '==================== VALIDACIONES ====================
-
-        Private _mostrarErrores As Boolean
-
-        Public Property MostrarErrores As Boolean
-            Get
-                Return _mostrarErrores
-            End Get
-            Set(value As Boolean)
-                _mostrarErrores = value
-                Avisar(NameOf(NombreTieneError))
-                Avisar(NameOf(NombreErrorText))
-            End Set
-        End Property
-
-        Public ReadOnly Property NombreTieneError As Boolean
-            Get
-                If Not MostrarErrores Then Return False
-                Return String.IsNullOrWhiteSpace(Nombre)
-            End Get
-        End Property
-
-        Public ReadOnly Property NombreErrorText As String
-            Get
-                If NombreTieneError Then Return "Ingrese un nombre."
-                Return String.Empty
-            End Get
-        End Property
 
         '==================== HELPERS ====================
 
@@ -516,11 +582,6 @@ Namespace ViewModels
 
 
         Public Property GuardadoConExito As Boolean
-
-
-        Private Function ObtenerPrecioAnillado() As Integer
-            Return 0 ' si luego lo manejás dinámico, acá va
-        End Function
 
 
         Private Sub Cancelar()
@@ -606,9 +667,6 @@ Namespace ViewModels
             Avisar(NameOf(TotalAnillados))
             Avisar(NameOf(Total))
             Avisar(NameOf(HelperPrecioPagina))
-
-            Avisar(NameOf(NombreTieneError))
-            Avisar(NameOf(NombreErrorText))
 
         End Sub
         ' ================== CAMPOS MODIFICADOS ==================
