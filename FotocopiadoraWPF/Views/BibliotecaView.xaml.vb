@@ -1,3 +1,9 @@
-﻿Public Class BibliotecaView
+﻿Namespace Views
+    Partial Public Class BibliotecaView
+        Inherits UserControl
 
-End Class
+        Public Sub New()
+            InitializeComponent()
+        End Sub
+    End Class
+End Namespace

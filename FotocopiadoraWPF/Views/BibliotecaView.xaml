@@ -1,4 +1,4 @@
-﻿<UserControl x:Class="BibliotecaView"
+﻿<UserControl x:Class="Views.BibliotecaView"
              xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
              xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
              xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
@@ -8,6 +8,11 @@
             
              xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
              xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF">
+
+    <UserControl.DataContext>
+        <vm:BibliotecaViewModel/>
+    </UserControl.DataContext>
+
 
     <UserControl.Resources>
 
@@ -50,17 +55,40 @@
 
                 <Label Grid.Row="0" Content="Libros" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
 
-                <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="0"  Hint="Identificador" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:IntegerTextBox x:Name="TxtPaginas" Height="15" UseNullOption="True" FontSize="14" Value="{Binding Paginas,Mode=TwoWay, UpdateSourceTrigger=PropertyChanged, ValidatesOnNotifyDataErrors=True}" NullValue="0" MinValue="0" MaxValue="5000" ValueValidation="OnKeyPress"/>
+                <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="0"
+                               Hint="Identificador"
+                               ContainerType="Outlined">
+                    <syncfusion:IntegerTextBox
+        Height="15"
+        UseNullOption="True"
+        FontSize="14"
+        Value="{Binding NuevoLibro.IdLibro,
+                Mode=TwoWay,
+                UpdateSourceTrigger=PropertyChanged}"
+        NullValue="0"/>
                 </inputLayout:SfTextInputLayout>
 
-                <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="1"  Hint="Editorial" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <TextBox Height="15" FontSize="14" MinHeight="15" Text="{Binding Comentario, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="1"
+                               Hint="Editorial"
+                               ContainerType="Outlined">
+                    <TextBox Height="15"
+             FontSize="14"
+             Text="{Binding NuevoLibro.Editorial,
+                    Mode=TwoWay,
+                    UpdateSourceTrigger=PropertyChanged}" />
                 </inputLayout:SfTextInputLayout>
 
-                <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2"  Hint="Nombre" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <TextBox Height="15" FontSize="14" MinHeight="15" Text="{Binding Comentario, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"
+                               Grid.ColumnSpan="2"
+                               Hint="Titulo"
+                               ContainerType="Outlined">
+                    <TextBox Height="15"
+             FontSize="14"
+             Text="{Binding NuevoLibro.Titulo,
+                    Mode=TwoWay,
+                    UpdateSourceTrigger=PropertyChanged}" />
                 </inputLayout:SfTextInputLayout>
+
             </Grid>
         </Border>
         <Button 

@@ -1,23 +1,31 @@
-﻿<UserControl x:Class="Views.MovimientosCajaView"
-             xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-             xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-             xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006" 
-             xmlns:d="http://schemas.microsoft.com/expression/blend/2008" 
-             xmlns:local="clr-namespace:FotocopiadoraWPF"
-             xmlns:vm="clr-namespace:FotocopiadoraWPF.ViewModels"
-            
-             xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
-             xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF">
+﻿<Window x:Class="EditarMovimientoWindow"
+        xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+        xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+        xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+        xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+        xmlns:local="clr-namespace:FotocopiadoraWPF"
+        xmlns:syncfusion="http://schemas.syncfusion.com/wpf"
+        xmlns:inputLayout="clr-namespace:Syncfusion.UI.Xaml.TextInputLayout;assembly=Syncfusion.SfTextInputLayout.WPF"
+        mc:Ignorable="d"
+        Title="EditarMovimientoWindow" Height="450" Width="800">
+    <!--<StackPanel Margin="20">
 
+        <TextBlock Text="Motivo"/>
+        <TextBox  Margin="0,0,0,10"/>
 
-    <UserControl.Resources>
+        <TextBlock Text="Monto"/>
+        <TextBox Text="{Binding Monto}" Margin="0,0,0,10"/>
 
-        <Style TargetType="{x:Type inputLayout:SfTextInputLayout}">
-            <Setter Property="Margin" Value="10,0,10,10"/>
-        </Style>
+        <TextBlock Text="Método"/>
+        <ComboBox ItemsSource="{Binding Metodos}"
+                  SelectedItem="{Binding MetodoPago}"
+                  Margin="0,0,0,10"/>
 
-    </UserControl.Resources>
+        <Button Content="Guardar"
+                Height="30"
+                Click="Guardar_Click"/>
 
+    </StackPanel>-->
     <StackPanel Margin="12" Width="auto" HorizontalAlignment="Center" VerticalAlignment="Center">
         <Border 
            CornerRadius="16" 
@@ -53,9 +61,9 @@
 
                 <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="0"  Hint="Empleado" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
                     <ComboBox FontSize="14"
-                          ItemsSource="{Binding Empleados}"
-                          SelectedItem="{Binding EmpleadoSeleccionado}"
-                          SelectedIndex="0">
+                                ItemsSource="{Binding Empleados}"
+                                SelectedValue="{Binding Movimiento.Empleado, Mode=TwoWay}"
+                                SelectedValuePath="." >
 
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
@@ -73,14 +81,15 @@
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="1" Grid.Column="1"  Hint="Fecha" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                    <syncfusion:DateTimeEdit IsButtonPopUpEnabled="False" Height="13" FontSize="14" MinHeight="15" DateTime="{Binding Fecha, Mode=TwoWay}" />
+                    <syncfusion:DateTimeEdit IsButtonPopUpEnabled="False" Height="13" FontSize="14" MinHeight="15" DateTime="{Binding Movimiento.Fecha, Mode=TwoWay}" />
                 </inputLayout:SfTextInputLayout>
 
                 <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="0"  Hint="Tipo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
                     <ComboBox FontSize="14"
-                          ItemsSource="{Binding Tipos}"
-                          SelectedItem="{Binding TipoSeleccionado}"
-                          SelectedIndex="0">
+                        
+                            ItemsSource="{Binding Tipos}"
+                            SelectedValue="{Binding Movimiento.Tipo, Mode=TwoWay}"
+                            SelectedValuePath=".">
 
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
@@ -101,9 +110,9 @@
                 <inputLayout:SfTextInputLayout Grid.Row="2" Grid.Column="1"  Hint="Metodo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
 
                     <ComboBox FontSize="14"
-                          ItemsSource="{Binding MetodosPago}"
-                          SelectedItem="{Binding MetodoSeleccionado}"
-                          SelectedIndex="0">
+                            ItemsSource="{Binding MetodosPago}"
+                            SelectedValue="{Binding Movimiento.MetodoPago, Mode=TwoWay}"
+                            SelectedValuePath="." >
 
                         <ComboBox.ItemContainerStyle>
                             <Style TargetType="ComboBoxItem">
@@ -111,32 +120,32 @@
                                     <!-- Deshabilita "Seleccionar" -->
                                     <DataTrigger Binding="{Binding}" Value="Seleccionar">
                                         <Setter Property="IsEnabled" Value="False"/>
-                                            <Setter Property="Foreground" Value="Gray"/>
-                                        </DataTrigger>
-                                    </Style.Triggers>
-                                </Style>
-                            </ComboBox.ItemContainerStyle>
+                                        <Setter Property="Foreground" Value="Gray"/>
+                                    </DataTrigger>
+                                </Style.Triggers>
+                            </Style>
+                        </ComboBox.ItemContainerStyle>
 
-                        </ComboBox>
-                    </inputLayout:SfTextInputLayout>
+                    </ComboBox>
+                </inputLayout:SfTextInputLayout>
 
-                    <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="0"  Hint="Monto" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                        <syncfusion:CurrencyTextBox CurrencySymbol="$" Value="{Binding Monto, Mode=TwoWay}"/>
-                    </inputLayout:SfTextInputLayout>
+                <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="0"  Hint="Monto" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                    <syncfusion:CurrencyTextBox CurrencySymbol="$" Value="{Binding Movimiento.Monto, Mode=TwoWay}"/>
+                </inputLayout:SfTextInputLayout>
 
-                    <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="1"  Hint="Motivo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
-                        <TextBox Height="15" FontSize="14" MinHeight="15" Text="{Binding Motivo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
-                    </inputLayout:SfTextInputLayout>
-                </Grid>
-            </Border>
-            <Button 
+                <inputLayout:SfTextInputLayout Grid.Row="3" Grid.Column="1"  Hint="Motivo" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
+                    <TextBox Height="15" FontSize="14" MinHeight="15" Text="{Binding Movimiento.Motivo, Mode=TwoWay, UpdateSourceTrigger=PropertyChanged}" />
+                </inputLayout:SfTextInputLayout>
+            </Grid>
+        </Border>
+        <Button 
                 Content="Guardar"
-                Command="{Binding GuardarCommand}"
                 Width="120"
                 Height="35"
                 HorizontalAlignment="Left" 
-                Margin="20,20,0,0"/>
+                Margin="20,20,0,0"
+                Command="{Binding GuardarCommand}"
+            />
 
-        </StackPanel>
-
-</UserControl>
+    </StackPanel>
+</Window>

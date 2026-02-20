@@ -7,6 +7,8 @@
     Public Property Monto As Integer
     Public Property Motivo As String
 
-    Public Property observacion As String
+    'Public Property observacion As String
     Public Property Empleado As String
+
+    Public Property IdMovimientoRelacionado As Integer?
 End Class

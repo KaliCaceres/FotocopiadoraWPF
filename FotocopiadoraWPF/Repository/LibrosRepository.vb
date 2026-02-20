@@ -31,14 +31,17 @@ Public Class LibrosRepository
             cn.Open()
 
             Dim cmd As New SqliteCommand("
-                INSERT INTO libros (titulo)
-                VALUES (@titulo);
-            ", cn)
+            INSERT INTO libros (id_libro, titulo, editorial)
+            VALUES (@id, @titulo, @editorial);
+        ", cn)
 
+            cmd.Parameters.AddWithValue("@id", libro.IdLibro)
             cmd.Parameters.AddWithValue("@titulo", libro.Titulo)
+            cmd.Parameters.AddWithValue("@editorial", libro.Editorial)
             cmd.ExecuteNonQuery()
         End Using
 
     End Sub
+
 
 End Class

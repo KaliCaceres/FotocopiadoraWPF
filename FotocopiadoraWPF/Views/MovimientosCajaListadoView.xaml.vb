@@ -5,6 +5,8 @@ Namespace Views
         Public Sub New()
             InitializeComponent()
             DataContext = New MovimientosCajaViewModel(1)
+            'MessageBox.Show(Me.DataContext?.GetType().ToString())
+
         End Sub
     End Class
 

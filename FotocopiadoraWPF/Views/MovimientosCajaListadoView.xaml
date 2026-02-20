@@ -58,6 +58,7 @@
                             <ColumnDefinition Width="*"/>
                             <ColumnDefinition Width="Auto"/>
                             <ColumnDefinition Width="Auto"/>
+                            <ColumnDefinition Width="Auto"/>
                         </Grid.ColumnDefinitions>
 
                         <!-- MOTIVO + EMPLEADO -->
@@ -122,6 +123,42 @@
                                    HorizontalAlignment="Center"
                                    TextAlignment="Center"
                                    Text="{Binding Monto, StringFormat=$ {0:N0}}"/>
+                        <StackPanel Grid.Column="3"
+            Orientation="Horizontal"
+            Margin="10,0,0,0">
+
+                            <Button Content="✏"
+            Width="28"
+            Height="28"
+            Margin="0,0,5,0"
+            Command="{Binding DataContext.EditarCommand,RelativeSource={RelativeSource AncestorType=UserControl}}"
+            CommandParameter="{Binding}" />
+
+                            <Button Content="🗑"
+            Width="28"
+            Height="28"
+            Command="{Binding DataContext.EliminarCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+            CommandParameter="{Binding}" />
+                            <Button Content="💳"
+        Width="28"
+        Height="28"
+        Margin="5,0,0,0"
+        Command="{Binding DataContext.PagarCommand, RelativeSource={RelativeSource AncestorType=ListView}}"
+        CommandParameter="{Binding}">
+                                <Button.Style>
+                                    <Style TargetType="Button">
+                                        <Setter Property="Visibility" Value="Collapsed"/>
+                                        <Style.Triggers>
+                                            <DataTrigger Binding="{Binding Tipo}" Value="Egreso">
+                                                <Setter Property="Visibility" Value="Visible"/>
+                                            </DataTrigger>
+                                        </Style.Triggers>
+                                    </Style>
+                                </Button.Style>
+                            </Button>
+
+                        </StackPanel>
+
                     </Grid>
                 </Border>
             </DataTemplate>

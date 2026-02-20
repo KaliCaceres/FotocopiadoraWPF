@@ -64,19 +64,21 @@ Namespace Infrastructure
                     FOREIGN KEY (id_mes) REFERENCES meses(id_mes)
                 );
 
-                CREATE TABLE IF NOT EXISTS movimientos_caja (
-                    id_movimiento INTEGER PRIMARY KEY AUTOINCREMENT,
-                    id_resumen INTEGER NOT NULL,
-                    fecha TEXT NOT NULL,
-                    tipo TEXT NOT NULL,
-                    metodo_pago TEXT NOT NULL,
-                    monto INTEGER NOT NULL,
-                    motivo TEXT NOT NULL,
-                    observacion TEXT,
-                    empleado TEXT NOT NULL,
+                    CREATE TABLE movimientos_caja (
+                        id_movimiento INTEGER PRIMARY KEY AUTOINCREMENT,
+                        id_resumen INTEGER NOT NULL,
+                        fecha TEXT NOT NULL,
+                        tipo TEXT NOT NULL,
+                        metodo_pago TEXT NOT NULL,
+                        monto REAL NOT NULL,
+                        motivo TEXT NOT NULL,
+                        observacion TEXT,
+                        empleado TEXT NOT NULL,
+                        id_movimiento_relacionado INTEGER,
 
-                    FOREIGN KEY (id_resumen) REFERENCES resumenes(id_resumen)
-                );
+                        FOREIGN KEY (id_resumen) REFERENCES resumenes(id_resumen),
+                        FOREIGN KEY (id_movimiento_relacionado) REFERENCES movimientos_caja(id_movimiento)
+                    );
 
                 "
 

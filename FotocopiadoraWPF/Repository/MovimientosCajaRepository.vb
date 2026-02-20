@@ -8,9 +8,9 @@ Public Class MovimientosCajaRepository
 
             Dim sql As String =
             "INSERT INTO movimientos_caja
-            (id_resumen, fecha, tipo, metodo_pago, monto, motivo, observacion, empleado)
+            (id_resumen, fecha, tipo, metodo_pago, monto, motivo, empleado)
             VALUES
-            (@id_resumen, @fecha, @tipo, @metodo, @monto, @motivo, @obs, @empleado)"
+            (@id_resumen, @fecha, @tipo, @metodo, @monto, @motivo, @empleado)"
 
             Using cmd As New SqliteCommand(sql, cn)
                 cmd.Parameters.AddWithValue("@id_resumen", m.IdResumen)
@@ -19,9 +19,49 @@ Public Class MovimientosCajaRepository
                 cmd.Parameters.AddWithValue("@metodo", m.MetodoPago)
                 cmd.Parameters.AddWithValue("@monto", m.Monto)
                 cmd.Parameters.AddWithValue("@motivo", m.Motivo)
-                cmd.Parameters.AddWithValue("@obs", If(m.Observacion, ""))
                 cmd.Parameters.AddWithValue("@empleado", m.Empleado)
 
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
+    Public Sub Actualizar(m As MovimientoCaja)
+        Using cn As New SqliteConnection(Configuracion.ConnectionString)
+            cn.Open()
+
+            Dim sql As String =
+        "UPDATE movimientos_caja SET
+            fecha = @fecha,
+            tipo = @tipo,
+            metodo_pago = @metodo,
+            monto = @monto,
+            motivo = @motivo,
+            empleado = @empleado
+         WHERE id_movimiento = @id"
+
+            Using cmd As New SqliteCommand(sql, cn)
+                cmd.Parameters.AddWithValue("@id", m.IdMovimiento)
+                cmd.Parameters.AddWithValue("@fecha", m.Fecha.ToString("yyyy-MM-dd HH:mm:ss"))
+                cmd.Parameters.AddWithValue("@tipo", m.Tipo)
+                cmd.Parameters.AddWithValue("@metodo", m.MetodoPago)
+                cmd.Parameters.AddWithValue("@monto", m.Monto)
+                cmd.Parameters.AddWithValue("@motivo", m.Motivo)
+                cmd.Parameters.AddWithValue("@empleado", m.Empleado)
+
+                cmd.ExecuteNonQuery()
+            End Using
+        End Using
+    End Sub
+
+    Public Sub Eliminar(idMovimiento As Integer)
+        Using cn As New SqliteConnection(Configuracion.ConnectionString)
+            cn.Open()
+
+            Dim sql = "DELETE FROM movimientos_caja WHERE id_movimiento = @id"
+
+            Using cmd As New SqliteCommand(sql, cn)
+                cmd.Parameters.AddWithValue("@id", idMovimiento)
                 cmd.ExecuteNonQuery()
             End Using
         End Using
@@ -51,7 +91,6 @@ Public Class MovimientosCajaRepository
                             .MetodoPago = rd.GetString(4),
                             .Monto = rd.GetInt32(5),
                             .Motivo = rd.GetString(6),
-                            .Observacion = rd.GetString(7),
                             .Empleado = rd.GetString(8)
                         })
                     End While
