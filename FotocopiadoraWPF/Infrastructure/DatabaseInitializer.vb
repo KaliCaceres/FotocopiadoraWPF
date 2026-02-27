@@ -43,7 +43,7 @@ Namespace Infrastructure
                     comentario TEXT,
                     id_estado INTEGER,
 
-                    FOREIGN KEY (id_resumen) REFERENCES resumenes(id_resumen)
+                    FOREIGN KEY (id_resumen) REFERENCES resumenes(id_resumen),
                     FOREIGN KEY (id_estado) REFERENCES estados(id_estado)
                 );
 
@@ -64,21 +64,21 @@ Namespace Infrastructure
                     FOREIGN KEY (id_mes) REFERENCES meses(id_mes)
                 );
 
-                    CREATE TABLE movimientos_caja (
-                        id_movimiento INTEGER PRIMARY KEY AUTOINCREMENT,
-                        id_resumen INTEGER NOT NULL,
-                        fecha TEXT NOT NULL,
-                        tipo TEXT NOT NULL,
-                        metodo_pago TEXT NOT NULL,
-                        monto REAL NOT NULL,
-                        motivo TEXT NOT NULL,
-                        observacion TEXT,
-                        empleado TEXT NOT NULL,
-                        id_movimiento_relacionado INTEGER,
+                CREATE TABLE IF NOT EXISTS movimientos_caja (
+                    id_movimiento INTEGER PRIMARY KEY AUTOINCREMENT,
+                    id_resumen INTEGER NOT NULL,
+                    fecha TEXT NOT NULL,
+                    tipo TEXT NOT NULL,
+                    metodo_pago TEXT NOT NULL,
+                    monto REAL NOT NULL,
+                    motivo TEXT NOT NULL,
+                    observacion TEXT,
+                    empleado TEXT NOT NULL,
+                    id_movimiento_relacionado INTEGER,
 
-                        FOREIGN KEY (id_resumen) REFERENCES resumenes(id_resumen),
-                        FOREIGN KEY (id_movimiento_relacionado) REFERENCES movimientos_caja(id_movimiento)
-                    );
+                    FOREIGN KEY (id_resumen) REFERENCES resumenes(id_resumen),
+                    FOREIGN KEY (id_movimiento_relacionado) REFERENCES movimientos_caja(id_movimiento)
+                );
 
                 "
 
@@ -96,29 +96,29 @@ Namespace Infrastructure
                 cn.Open()
 
                 Dim sql As String = "
-        INSERT OR IGNORE INTO estados (id_estado, descripcion) VALUES (0, 'Pagado'), (1, 'Deudor'), (2, 'Perdida'), (3, 'Eliminada');
+                    INSERT OR IGNORE INTO estados (id_estado, descripcion) VALUES (0, 'Pagado'), (1, 'Deudor'), (2, 'Perdida'), (3, 'Eliminada');
 
-        INSERT OR IGNORE INTO categorias (id_categoria, descripcion) VALUES
-        (1,'Anillado'),
-        (2,'Empleado'),
-        (3,'1 - 100'),
-        (4,'101 - 400'),
-        (5,'401 - 700'),
-        (6,'+700');
+                    INSERT OR IGNORE INTO categorias (id_categoria, descripcion) VALUES
+                    (1,'Anillado'),
+                    (2,'Empleado'),
+                    (3,'1 - 100'),
+                    (4,'101 - 400'),
+                    (5,'401 - 700'),
+                    (6,'+700');
 
-        INSERT OR IGNORE INTO valores (id_categoria, valor) VALUES
-        (1,2000),
-        (2,30),
-        (3,80),
-        (4,70),
-        (5,60),
-        (6,50);
+                    INSERT OR IGNORE INTO valores (id_categoria, valor) VALUES
+                    (1,2000),
+                    (2,30),
+                    (3,80),
+                    (4,70),
+                    (5,60),
+                    (6,50);
 
-        INSERT OR IGNORE INTO meses (id_mes, descripcion) VALUES
-        (1,'Enero'),(2,'Febrero'),(3,'Marzo'),(4,'Abril'),
-        (5,'Mayo'),(6,'Junio'),(7,'Julio'),(8,'Agosto'),
-        (9,'Septiembre'),(10,'Octubre'),(11,'Noviembre'),(12,'Diciembre');
-        "
+                    INSERT OR IGNORE INTO meses (id_mes, descripcion) VALUES
+                    (1,'Enero'),(2,'Febrero'),(3,'Marzo'),(4,'Abril'),
+                    (5,'Mayo'),(6,'Junio'),(7,'Julio'),(8,'Agosto'),
+                    (9,'Septiembre'),(10,'Octubre'),(11,'Noviembre'),(12,'Diciembre');
+                    "
 
                 Using cmd As New SqliteCommand(sql, cn)
                     cmd.ExecuteNonQuery()

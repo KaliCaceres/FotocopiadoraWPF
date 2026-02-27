@@ -33,7 +33,6 @@ Namespace ViewModels
                 .MetodoPago = original.MetodoPago,
                 .Monto = original.Monto,
                 .Motivo = original.Motivo,
-                .observacion = original.observacion,
                 .Empleado = original.Empleado
             }
 

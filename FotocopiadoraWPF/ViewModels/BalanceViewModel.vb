@@ -15,6 +15,9 @@ Namespace ViewModels
         End Sub
 
         Private ReadOnly _repo As New BalanceRepository()
+        Private ReadOnly _repoFotocopias As New FotocopiasRepository()
+        Private ReadOnly _repoMovimientos As New MovimientosCajaRepository()
+
         Private _ultimoBalance As BalanceEntity
 
         ' ==================== ESTADO UI ====================
@@ -45,6 +48,7 @@ Namespace ViewModels
                 Return InputsHabilitados
             End Get
         End Property
+
 
         ' ==================== COMMANDS ====================
 
@@ -81,10 +85,113 @@ Namespace ViewModels
         Public Property EfectivoFinal As Decimal
         Public Property TransferenciaFinal As Decimal
 
-        ' ==================== VALORES INICIALES ====================
-
         Public Property ContadorEquipo1Inicio As Integer
         Public Property ContadorEquipo2Inicio As Integer
+
+
+        ' ==================== VALORES INICIALES ====================
+
+        Public ReadOnly Property ContadorEquipo1Diferencia As Integer
+            Get
+                Return ContadorEquipo1Final - ContadorEquipo1Inicio
+            End Get
+        End Property
+
+        Public ReadOnly Property ContadorEquipo2Diferencia As Integer
+            Get
+                Return ContadorEquipo2Final - ContadorEquipo2Inicio
+            End Get
+        End Property
+
+
+        Public ReadOnly Property TotalContadores As Integer
+            Get
+                Return ContadorEquipo1Diferencia + ContadorEquipo2Diferencia
+            End Get
+        End Property
+
+        Public ReadOnly Property EfectivoDiferencia As Decimal
+            Get
+                Return EfectivoFinal - EfectivoInicio - TotalEgresoTransferencia + TotalIngresoEfectivo
+            End Get
+        End Property
+
+        Public ReadOnly Property TransferenciaDiferencia As Decimal
+            Get
+                Return TransferenciaFinal - TransferenciaInicio - TotalEgresoEfectivo + TotalIngresoTransferencia
+            End Get
+        End Property
+
+        Public ReadOnly Property TotalCaja As Decimal
+            Get
+                Return TransferenciaDiferencia + EfectivoDiferencia
+            End Get
+        End Property
+
+        ' ==================== FOTOCOPIAS ====================
+
+        Public ReadOnly Property TotalPerdida As Integer
+            Get
+                If BalanceActualService.BalanceActualId <= 0 Then Return 0
+                Return _repoFotocopias.ObtenerTotalPaginasPorEstado(
+            BalanceActualService.BalanceActualId, 2)
+            End Get
+        End Property
+
+        Public ReadOnly Property TotalDeudor As Integer
+            Get
+                If BalanceActualService.BalanceActualId <= 0 Then Return 0
+                Return _repoFotocopias.ObtenerTotalPaginasPorEstado(
+            BalanceActualService.BalanceActualId, 1)
+            End Get
+        End Property
+
+        Public ReadOnly Property TotalPagadas As Integer
+            Get
+                If BalanceActualService.BalanceActualId <= 0 Then Return 0
+                Return _repoFotocopias.ObtenerTotalPaginasPorEstado(
+            BalanceActualService.BalanceActualId, 0)
+            End Get
+        End Property
+
+        Public ReadOnly Property Registradas As Integer
+            Get
+                Return TotalPerdida + TotalDeudor + TotalPagadas
+            End Get
+        End Property
+
+        Public ReadOnly Property NoRegistradas As Integer
+            Get
+                Return TotalContadores - Registradas
+            End Get
+        End Property
+
+
+        ' ==================== MOVIMIENTOS ====================
+
+        Public ReadOnly Property MovimientosCajaEgreso As List(Of MovimientoCaja)
+            Get
+                If BalanceActualService.BalanceActualId <= 0 Then
+                    Return New List(Of MovimientoCaja)
+                End If
+
+                Return _repoMovimientos.ObtenerPorTipo(
+            BalanceActualService.BalanceActualId, "Egreso")
+            End Get
+        End Property
+
+        Public ReadOnly Property MovimientosCajaIngreso As List(Of MovimientoCaja)
+            Get
+                If BalanceActualService.BalanceActualId <= 0 Then
+                    Return New List(Of MovimientoCaja)
+                End If
+
+                Return _repoMovimientos.ObtenerPorTipo(
+            BalanceActualService.BalanceActualId, "Ingreso")
+            End Get
+        End Property
+
+
         Public Property EfectivoInicio As Decimal
         Public Property TransferenciaInicio As Decimal
 
@@ -114,6 +221,38 @@ Namespace ViewModels
             End Set
         End Property
 
+        Public ReadOnly Property TotalEgresoTransferencia As Decimal
+            Get
+                If BalanceActualService.BalanceActualId <= 0 Then Return 0
+                Return _repoMovimientos.ObtenerTotales(
+            BalanceActualService.BalanceActualId, "Egreso", "Transferencia")
+            End Get
+        End Property
+
+        Public ReadOnly Property TotalEgresoEfectivo As Decimal
+            Get
+                If BalanceActualService.BalanceActualId <= 0 Then Return 0
+                Return _repoMovimientos.ObtenerTotales(
+            BalanceActualService.BalanceActualId, "Egreso", "Efectivo")
+            End Get
+        End Property
+
+        Public ReadOnly Property TotalIngresoTransferencia As Decimal
+            Get
+                If BalanceActualService.BalanceActualId <= 0 Then Return 0
+                Return _repoMovimientos.ObtenerTotales(
+            BalanceActualService.BalanceActualId, "Ingreso", "Transferencia")
+            End Get
+        End Property
+
+        Public ReadOnly Property TotalIngresoEfectivo As Decimal
+            Get
+                If BalanceActualService.BalanceActualId <= 0 Then Return 0
+                Return _repoMovimientos.ObtenerTotales(
+            BalanceActualService.BalanceActualId, "Ingreso", "Efectivo")
+            End Get
+        End Property
+
         ' ==================== GUARDAR ====================
 
         Private Sub Guardar()
@@ -134,7 +273,6 @@ Namespace ViewModels
             Dim idResumen = _repo.GuardarBalance(entity)
 
             BalanceActualService.BalanceActualId = idResumen
-
 
             ' 🔹 PDF
             BalancePdfGenerator.GenerarYMostrar(balanceActual)
@@ -206,8 +344,25 @@ Namespace ViewModels
         .TransferenciaInicio = TransferenciaInicio,
         .TransferenciaFinal = TransferenciaFinal,
         .IdMes = MesSeleccionado,
-        .Anio = Anio
-    }
+        .Anio = Anio,
+        .ContadorEquipo1Diferencia = ContadorEquipo1Diferencia,
+        .ContadorEquipo2Diferencia = ContadorEquipo2Diferencia,
+        .TotalContadores = TotalContadores,
+        .EfectivoDiferencia = EfectivoDiferencia,
+        .TransferenciaDiferencia = TransferenciaDiferencia,
+        .TotalCaja = TotalCaja,
+        .TotalPerdida = TotalPerdida,
+        .TotalDeudor = TotalDeudor,
+        .TotalPagadas = TotalPagadas,
+        .Registradas = Registradas,
+        .NoRegistradas = NoRegistradas,
+        .movimientosCajaEgreso = movimientosCajaEgreso,
+        .movimientosCajaIngreso = movimientosCajaIngreso,
+        .TotalEgresoTransferencia = TotalEgresoTransferencia,
+        .TotalEgresoEfectivo = TotalEgresoEfectivo,
+        .TotalIngresoTransferencia = TotalIngresoTransferencia,
+        .TotalIngresoEfectivo = TotalIngresoEfectivo
+            }
         End Function
 
 

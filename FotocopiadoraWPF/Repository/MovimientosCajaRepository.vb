@@ -100,4 +100,66 @@ Public Class MovimientosCajaRepository
 
         Return lista
     End Function
+
+    Public Function ObtenerPorTipo(idResumen As Integer, tipo As String) As List(Of MovimientoCaja)
+        Dim lista As New List(Of MovimientoCaja)
+
+        Using cn As New SqliteConnection(Configuracion.ConnectionString)
+            cn.Open()
+
+            Dim sql As String =
+            "SELECT * FROM movimientos_caja
+             WHERE id_resumen = @id AND tipo = @tipo
+             ORDER BY fecha DESC"
+
+            Using cmd As New SqliteCommand(sql, cn)
+                cmd.Parameters.AddWithValue("@id", idResumen)
+                cmd.Parameters.AddWithValue("@tipo", tipo)
+
+                Using rd = cmd.ExecuteReader()
+                    While rd.Read()
+                        lista.Add(New MovimientoCaja With {
+                            .IdMovimiento = rd.GetInt32(0),
+                            .IdResumen = rd.GetInt32(1),
+                            .Fecha = DateTime.Parse(rd.GetString(2)),
+                            .Tipo = rd.GetString(3),
+                            .MetodoPago = rd.GetString(4),
+                            .Monto = rd.GetInt32(5),
+                            .Motivo = rd.GetString(6),
+                            .Empleado = rd.GetString(8)
+                        })
+                    End While
+                End Using
+            End Using
+        End Using
+
+        Return lista
+    End Function
+
+    Public Function ObtenerTotales(idResumen As Integer, tipo As String, metodo As String) As Decimal
+
+        Using cn As New SqliteConnection(Configuracion.ConnectionString)
+            cn.Open()
+
+            Dim cmd As New SqliteCommand("
+            SELECT IFNULL(SUM(monto), 0)
+            FROM movimientos_caja
+            WHERE tipo = @tipo 
+              AND metodo_pago = @metodo 
+              AND id_resumen = @id", cn)
+
+            cmd.Parameters.AddWithValue("@id", idResumen)
+            cmd.Parameters.AddWithValue("@tipo", tipo)
+            cmd.Parameters.AddWithValue("@metodo", metodo)
+
+            Dim result = cmd.ExecuteScalar()
+
+            If result Is Nothing OrElse result Is DBNull.Value Then
+                Return 0
+            End If
+
+            Return Convert.ToDecimal(result)
+        End Using
+
+    End Function
 End Class

@@ -187,4 +187,24 @@ Public Class FotocopiasRepository
 
     End Function
 
+    Public Function ObtenerTotalPaginasPorEstado(idResumen As Integer, idEstado As Integer) As Integer
+
+        Using cn As New SqliteConnection(Configuracion.ConnectionString)
+            cn.Open()
+
+            Dim cmd As New SqliteCommand("
+            SELECT IFNULL(SUM(paginas), 0)
+            FROM fotocopias
+            WHERE id_resumen = @id
+              AND id_estado = @estado
+        ", cn)
+
+            cmd.Parameters.AddWithValue("@id", idResumen)
+            cmd.Parameters.AddWithValue("@estado", idEstado)
+
+            Return Convert.ToInt32(cmd.ExecuteScalar())
+        End Using
+
+    End Function
+
 End Class
