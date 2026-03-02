@@ -9,10 +9,10 @@
     Public Property ContadorEquipo2Final As Integer
 
     Public Property EfectivoInicio As Decimal
-    Public Property EfectivoFinal As Decimal
+    Public Property TotalEfectivo As Decimal
 
     Public Property TransferenciaInicio As Decimal
-    Public Property TransferenciaFinal As Decimal
+    Public Property TotalTransferencia As Decimal
 
     Public Property IdMes As Integer
     Public Property Anio As Integer
@@ -49,4 +49,6 @@
 
     Public Property TotalIngresoTransferencia As Integer
     Public Property TotalIngresoEfectivo As Integer
+
+    Public Property TotalPendientes As Integer
 End Class

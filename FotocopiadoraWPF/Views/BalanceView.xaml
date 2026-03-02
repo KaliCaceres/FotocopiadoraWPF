@@ -20,9 +20,6 @@
         </Style>
     </UserControl.Resources>
 
-    <UserControl.DataContext>
-        <vm:BalanceViewModel/>
-    </UserControl.DataContext>
 
     <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Center" HorizontalAlignment="Center">
         <Grid.ColumnDefinitions>
@@ -89,7 +86,7 @@
                     
                 </inputLayout:SfTextInputLayout>
 
-                <Label Grid.Row="5" Content="Caja" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
+                <!--<Label Grid.Row="5" Content="Caja" FontSize="18" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Center" />
 
                 <Label Grid.Row="6" Content="Efectivo" FontSize="14" FontWeight="Bold" Grid.ColumnSpan="2" HorizontalAlignment="Left" />
 
@@ -112,7 +109,7 @@
                 <inputLayout:SfTextInputLayout Grid.Row="9" Grid.Column="1"  Hint="Final" HelperText="" ContainerType="Outlined" VerticalAlignment="Center">
                     <syncfusion:CurrencyTextBox CurrencySymbol="$" Value="{Binding TransferenciaFinal, Mode=TwoWay}" IsEnabled="{Binding InputsHabilitados}"/>
                    
-                </inputLayout:SfTextInputLayout>
+                </inputLayout:SfTextInputLayout>-->
             </Grid>
 
         </Border>

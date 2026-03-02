@@ -1,11 +1,14 @@
 ﻿
-Imports Syncfusion.UI.Xaml.NavigationDrawer
+Imports FotocopiadoraWPF.ViewModels
 Imports FotocopiadoraWPF.Views
 Imports Microsoft.Data.Sqlite
+Imports Syncfusion.UI.Xaml.NavigationDrawer
 Namespace FotocopiadoraWPF
 
     Partial Class MainWindow
         Inherits Window
+
+        Private ReadOnly _balanceVM As New BalanceViewModel()
 
 
 
@@ -32,13 +35,17 @@ Namespace FotocopiadoraWPF
                     MainContent.Content = New FotocopiasListadoView()
 
                 Case "Balance"
-                    MainContent.Content = New BalanceView()
+                    Dim view As New BalanceView()
+                    view.DataContext = _balanceVM
+                    MainContent.Content = view
+
+                Case "Estadisticas"
+                    Dim view As New EstadisticasView()
+                    view.DataContext = _balanceVM
+                    MainContent.Content = view
 
                 Case "Precios"
                     MainContent.Content = New PreciosView()
-
-                Case "Estadisticas"
-                    MainContent.Content = New EstadisticasView()
 
                 Case "LibroAlta"
                     MainContent.Content = New BibliotecaView()

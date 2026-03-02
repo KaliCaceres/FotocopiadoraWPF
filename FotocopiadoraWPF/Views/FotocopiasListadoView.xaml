@@ -12,30 +12,31 @@
     </UserControl.Resources>
 
     <!-- 🔹 GRID en lugar de StackPanel -->
-    <Grid Margin="10" Width="550">
+    <Grid Margin="10" Width="800">
         <Grid.RowDefinitions>
-            <!-- Filtro -->
             <RowDefinition Height="Auto"/>
-            <!-- Listado con scroll -->
+            <!-- Estado -->
+            <RowDefinition Height="Auto"/>
+            <!-- Resumen -->
+            <RowDefinition Height="Auto"/>
+            <!-- Busqueda -->
             <RowDefinition Height="*"/>
+            <!-- Lista -->
         </Grid.RowDefinitions>
 
-        <!-- ===================== FILTRO ===================== -->
-        <inputLayout:SfTextInputLayout
-            Grid.Row="0"
-            Hint="Estado"
-            ContainerType="Outlined"
-            Margin="0,0,0,10"
-            Width="200"
-            HorizontalAlignment="Left"
-            >
-
-            <ComboBox ItemsSource="{Binding EstadosFiltro}"
-                      SelectedItem="{Binding EstadoSeleccionado}"
-                      DisplayMemberPath="Nombre"
-                      />
-        </inputLayout:SfTextInputLayout>
-
+        <StackPanel Orientation="Horizontal" Grid.Row="0" HorizontalAlignment="Center">
+            <!-- ===================== FILTROS ===================== -->
+            <inputLayout:SfTextInputLayout Hint="Buscar por nombre" ContainerType="Outlined" Margin="0,0,0,10" Width="250" HorizontalAlignment="Left">
+                <TextBox Text="{Binding BusquedaNombre, UpdateSourceTrigger=PropertyChanged}" />
+            </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Hint="Estado" ContainerType="Outlined" Margin="0,0,0,10" Width="200" HorizontalAlignment="Left">
+                <ComboBox ItemsSource="{Binding EstadosFiltro}" SelectedItem="{Binding EstadoSeleccionado}" DisplayMemberPath="Nombre"/>
+            </inputLayout:SfTextInputLayout>
+            <inputLayout:SfTextInputLayout Hint="Resumen" ContainerType="Outlined" Margin="0,0,0,10" Width="200" HorizontalAlignment="Left">
+                <ComboBox ItemsSource="{Binding ResumenesFiltro}" SelectedItem="{Binding ResumenSeleccionado}" DisplayMemberPath="Nombre"/>
+            </inputLayout:SfTextInputLayout>
+        </StackPanel>
+ 
         <!-- ===================== LISTADO ===================== -->
         <ListView Grid.Row="1"
                   x:Name="ListaFotocopias"
@@ -153,6 +154,9 @@
                                                 <DataTrigger Binding="{Binding IdEstado}" Value="2">
                                                     <Setter Property="Background" Value="#FEE2E2"/>
                                                 </DataTrigger>
+                                                <DataTrigger Binding="{Binding IdEstado}" Value="4">
+                                                    <Setter Property="Background" Value="#DBEAFE"/>
+                                                </DataTrigger>
                                             </Style.Triggers>
                                         </Style>
                                     </Border.Style>
@@ -171,7 +175,7 @@
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding IdEstado}" Value="2">
                                                             <Setter Property="Fill" Value="#DC2626"/>
-                                                        </DataTrigger>
+                                                        </DataTrigger>  
                                                     </Style.Triggers>
                                                 </Style>
                                             </Ellipse.Style>
@@ -187,6 +191,9 @@
                                                         </DataTrigger>
                                                         <DataTrigger Binding="{Binding IdEstado}" Value="2">
                                                             <Setter Property="Text" Value="Perdida"/>
+                                                        </DataTrigger>
+                                                        <DataTrigger Binding="{Binding IdEstado}" Value="4">
+                                                            <Setter Property="Text" Value="Pendiente"/>
                                                         </DataTrigger>
                                                     </Style.Triggers>
                                                 </Style>
@@ -212,6 +219,9 @@
                                                     <Setter Property="Visibility" Value="Collapsed"/>
                                                 </DataTrigger>
                                                 <DataTrigger Binding="{Binding IdEstado}" Value="2">
+                                                    <Setter Property="Visibility" Value="Collapsed"/>
+                                                </DataTrigger>
+                                                <DataTrigger Binding="{Binding IdEstado}" Value="4">
                                                     <Setter Property="Visibility" Value="Collapsed"/>
                                                 </DataTrigger>
                                             </Style.Triggers>

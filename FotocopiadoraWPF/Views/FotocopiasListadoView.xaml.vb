@@ -17,6 +17,7 @@ Namespace Views
             End If
 
             DataContext = New FotocopiasListadoViewModel()
+
         End Sub
         Private Sub AbrirMenu(sender As Object, e As RoutedEventArgs)
             Dim btn = CType(sender, Button)

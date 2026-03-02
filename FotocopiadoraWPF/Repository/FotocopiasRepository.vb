@@ -207,4 +207,24 @@ Public Class FotocopiasRepository
 
     End Function
 
+    Public Function ObtenerTotales(idResumen As Integer, idEstado As Integer, columna As String) As Integer
+
+        Using cn As New SqliteConnection(Configuracion.ConnectionString)
+            cn.Open()
+
+            Dim sql As String =
+            $"SELECT IFNULL(SUM({columna}),0)
+              FROM fotocopias
+              WHERE id_estado = @estado
+              AND id_resumen = @resumen"
+
+            Using cmd As New SqliteCommand(sql, cn)
+                cmd.Parameters.AddWithValue("@resumen", idResumen)
+                cmd.Parameters.AddWithValue("@estado", idEstado)
+
+                Return Convert.ToInt32(cmd.ExecuteScalar())
+            End Using
+        End Using
+
+    End Function
 End Class

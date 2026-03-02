@@ -6,11 +6,8 @@
              xmlns:local="clr-namespace:FotocopiadoraWPF"
              xmlns:vm="clr-namespace:FotocopiadoraWPF.ViewModels"
              mc:Ignorable="d" 
-             d:DesignHeight="450" d:DesignWidth="800">
-    <UserControl.DataContext>
-        <vm:EstadisticasViewModel/>
-    </UserControl.DataContext>
-
+             d:DesignHeight="450" d:DesignWidth="800"
+             d:DataContext="{d:DesignInstance Type=vm:BalanceViewModel}">
     <UserControl.Resources>
 
         <!-- Card base -->
@@ -45,10 +42,10 @@
     </UserControl.Resources>
 
     <Grid>
-        <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Top" HorizontalAlignment="Center" Width="auto" Grid.ColumnSpan="1" Grid.Column="3"   >
+        <Grid RenderTransformOrigin="0.372,0.297" VerticalAlignment="Top" HorizontalAlignment="Center" Width="800" Grid.ColumnSpan="1" Grid.Column="3"   >
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="170"/>
-                <ColumnDefinition Width="170"/>
+                <ColumnDefinition Width="400"/>
+                <ColumnDefinition Width="400"/>
             </Grid.ColumnDefinitions>
             <Grid.RowDefinitions>
                 <!--Titulo-->
@@ -67,37 +64,164 @@
                 <RowDefinition Height="Auto"/>
             </Grid.RowDefinitions>
 
-            <Border Style="{StaticResource CardStyle}" Grid.Column="0" Grid.Row="0">
-                <StackPanel>
-                    <TextBlock Text="Fotocopias"
-                   Style="{StaticResource CardTitleStyle}"/>
-                    <TextBlock Text="{Binding TotalPaginas}"
-                   Style="{StaticResource CardValueStyle}"/>
-                </StackPanel>
-            </Border>
-
-            <Border Style="{StaticResource CardStyle}" Grid.Column="1" Grid.Row="0">
-                <StackPanel>
-                    <TextBlock Text="Anillados"
-                   Style="{StaticResource CardTitleStyle}"/>
-                    <TextBlock Text="{Binding TotalAnillados}"
-                   Style="{StaticResource CardValueStyle}"/>
-                </StackPanel>
-            </Border>
-            <Border Style="{StaticResource CardStyle}" Grid.Column="0" Grid.Row="1">
-                <StackPanel>
-                    <TextBlock Text="Efectivo"
-                   Style="{StaticResource CardTitleStyle}"/>
-                    <TextBlock Text="{Binding TotalEfectivo}"
-                   Style="{StaticResource CardValueStyle}"/>
-                </StackPanel>
-            </Border>
-            <Border Style="{StaticResource CardStyle}" Grid.Column="1" Grid.Row="1">
+            <!--<Border Style="{StaticResource CardStyle}" Grid.Column="3" Grid.Row="2">
                 <StackPanel>
                     <TextBlock Text="Transferencia"
                    Style="{StaticResource CardTitleStyle}"/>
                     <TextBlock Text="{Binding TotalTransferencia}"
                    Style="{StaticResource CardValueStyle}"/>
+                </StackPanel>
+            </Border>-->
+            <Border Style="{StaticResource CardStyle}" Grid.Column="0" Grid.Row="0" >
+                <StackPanel>
+
+                    <!-- Título -->
+                    <TextBlock Text="Transferencia"
+                   Style="{StaticResource CardTitleStyle}"
+                   Margin="0,0,0,12"/>
+
+                    <!-- Filas -->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Saldo Inicial -->
+                        <TextBlock Text="Saldo Inicial" Grid.Row="0" Grid.Column="0"/>
+                        <TextBlock Text="{Binding TransferenciaInicio}" TextAlignment="Right"
+                       Grid.Row="0" Grid.Column="1"/>
+
+                        <!-- Ingreso -->
+                        <TextBlock Text="Ingreso" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock Text="{Binding TotalIngresoTransferencia}" TextAlignment="Right"
+                       Grid.Row="1" Grid.Column="1"/>
+
+                        <!-- Egreso -->
+                        <TextBlock Text="Egreso" Grid.Row="2" Grid.Column="0"/>
+                        <TextBlock Text="{Binding TotalEgresoTransferencia}" TextAlignment="Right"
+                       Grid.Row="2" Grid.Column="1"/>
+
+                        <!-- Total -->
+                        <TextBlock Text="Total"
+                       FontWeight="Bold"
+                       Grid.Row="3" Grid.Column="0"/>
+                        <TextBlock Text="{Binding TransferenciaDiferencia}" TextAlignment="Right"
+                       FontWeight="Bold"
+                       Grid.Row="3" Grid.Column="1"/>
+                    </Grid>
+
+                </StackPanel>
+            </Border>
+
+            <Border Style="{StaticResource CardStyle}" Grid.Column="1" Grid.Row="0" >
+                <StackPanel>
+
+                    <!-- Título -->
+                    <TextBlock Text="Efectivo"
+                   Style="{StaticResource CardTitleStyle}"
+                   Margin="0,0,0,12"/>
+
+                    <!-- Filas -->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Saldo Inicial -->
+                        <TextBlock Text="Saldo Inicial" Grid.Row="0" Grid.Column="0"/>
+                        <TextBlock Text="{Binding EfectivoInicio}" TextAlignment="Right"
+                       Grid.Row="0" Grid.Column="1"/>
+
+                        <!-- Ingreso -->
+                        <TextBlock Text="Ingreso" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock Text="{Binding TotalIngresoEfectivo}" TextAlignment="Right"
+                       Grid.Row="1" Grid.Column="1"/>
+
+                        <!-- Egreso -->
+                        <TextBlock Text="Egreso" Grid.Row="2" Grid.Column="0"/>
+                        <TextBlock Text="{Binding TotalEgresoEfectivo}" TextAlignment="Right"
+                       Grid.Row="2" Grid.Column="1"/>
+
+                        <!-- Total -->
+                        <TextBlock Text="Total"
+                       FontWeight="Bold"
+                       Grid.Row="3" Grid.Column="0"/>
+                        <TextBlock Text="{Binding EfectivoDiferencia}" TextAlignment="Right"
+                       FontWeight="Bold"
+                       Grid.Row="3" Grid.Column="1"/>
+                    </Grid>
+
+                </StackPanel>
+            </Border>
+            <Border Style="{StaticResource CardStyle}" Grid.Column="0" Grid.Row="1" Margin="10">
+                <StackPanel>
+
+                    <!-- Título -->
+                    <TextBlock Text="Paginas"
+                   Style="{StaticResource CardTitleStyle}"
+                   Margin="0,0,0,12"/>
+
+                    <!-- Filas -->
+                    <Grid>
+                        <Grid.RowDefinitions>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                            <RowDefinition Height="Auto"/>
+                        </Grid.RowDefinitions>
+
+                        <Grid.ColumnDefinitions>
+                            <ColumnDefinition Width="*" />
+                            <ColumnDefinition Width="Auto" />
+                        </Grid.ColumnDefinitions>
+
+                        <!-- Deudores -->
+                        <TextBlock Text="Deudores" Grid.Row="0" Grid.Column="0"/>
+                        <TextBlock Text="{Binding TotalDeudor}" TextAlignment="Right"
+                       Grid.Row="0" Grid.Column="1"/>
+
+                        <!-- Perdidas -->
+                        <TextBlock Text="Perdidas" Grid.Row="1" Grid.Column="0"/>
+                        <TextBlock Text="{Binding TotalPerdida}" TextAlignment="Right"
+                       Grid.Row="1" Grid.Column="1"/>
+
+                        <!-- Pagadas -->
+                        <TextBlock Text="Pagadas" Grid.Row="2" Grid.Column="0"/>
+                        <TextBlock Text="{Binding TotalPagadas}" TextAlignment="Right"
+                       Grid.Row="2" Grid.Column="1"/>
+
+                        <!-- Pendientes -->
+                        <TextBlock Text="Pendientes" Grid.Row="3" Grid.Column="0"/>
+                        <TextBlock Text="{Binding TotalPendientes}" TextAlignment="Right"
+                       Grid.Row="3" Grid.Column="1"/>
+
+                        <!-- Total -->
+                        <TextBlock Text="Total"
+                       FontWeight="Bold"
+                       Grid.Row="4" Grid.Column="0"/>
+                        <TextBlock Text="{Binding Registradas}" TextAlignment="Right"
+                       FontWeight="Bold"
+                       Grid.Row="4" Grid.Column="1"/>
+                    </Grid>
+
                 </StackPanel>
             </Border>
         </Grid>

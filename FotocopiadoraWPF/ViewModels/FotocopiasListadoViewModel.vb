@@ -16,7 +16,7 @@ Namespace ViewModels
             Implements INotifyPropertyChanged.PropertyChanged
 
         Private ReadOnly _repo As New FotocopiasRepository()
-
+        Private ReadOnly _repoBalance As New BalanceRepository()
         Public Property Fotocopias As ObservableCollection(Of Fotocopia)
         Public ReadOnly Property EditarCommand As ICommand
         Public ReadOnly Property EliminarCommand As ICommand
@@ -40,7 +40,9 @@ Namespace ViewModels
             FotocopiasView = view
 
             EstadoSeleccionado = EstadosFiltro.First() ' "Todos"
+            ResumenesFiltro = _repoBalance.ObtenerTodos().Select(Function(r) New ResumenItem With {.Id = r.IdResumen, .Nombre = $"{r.IdMes}/{r.Anio}"}).ToList()
 
+            ResumenSeleccionado = ResumenesFiltro.FirstOrDefault(Function(r) r.Id = BalanceActualService.BalanceActualId)
             EditarCommand = New RelayCommand(Of Fotocopia)(AddressOf EditarFotocopia)
             EliminarCommand = New RelayCommand(Of Fotocopia)(AddressOf EliminarFotocopia)
         End Sub
@@ -114,7 +116,8 @@ Namespace ViewModels
         New EstadoItem With {.Id = Nothing, .Nombre = "Todos"},
         New EstadoItem With {.Id = 0, .Nombre = "Pagado"},
         New EstadoItem With {.Id = 1, .Nombre = "Deudor"},
-        New EstadoItem With {.Id = 2, .Nombre = "Perdida"}
+        New EstadoItem With {.Id = 2, .Nombre = "Perdida"},
+        New EstadoItem With {.Id = 4, .Nombre = "Pendiente"}
         }
 
 
@@ -181,26 +184,68 @@ Namespace ViewModels
         Private Function FiltrarPorEstado(obj As Object) As Boolean
             Dim f = CType(obj, Fotocopia)
 
+            ' Ocultar anuladas
             If f.IdEstado = 3 Then Return False
 
-            If EstadoSeleccionado Is Nothing OrElse EstadoSeleccionado.Id Is Nothing Then
-                Return True
-            End If
-
-            If f.IdEstado <> EstadoSeleccionado.Id.Value Then
+            ' ===== FILTRO POR ESTADO =====
+            If EstadoSeleccionado IsNot Nothing AndAlso
+       EstadoSeleccionado.Id IsNot Nothing AndAlso
+       f.IdEstado <> EstadoSeleccionado.Id.Value Then
                 Return False
             End If
 
-            If EstadoSeleccionado.Id.Value = 0 Then
-                Return f.Efectivo > 0 OrElse f.Transferencia > 0
+            ' ===== FILTRO POR NOMBRE =====
+            If Not String.IsNullOrWhiteSpace(BusquedaNombre) Then
+                If f.Nombre Is Nothing OrElse
+           Not f.Nombre.ToLower().Contains(BusquedaNombre.ToLower()) Then
+                    Return False
+                End If
             End If
 
             Return True
         End Function
 
+        Private _busquedaNombre As String
+        Public Property BusquedaNombre As String
+            Get
+                Return _busquedaNombre
+            End Get
+            Set(value As String)
+                _busquedaNombre = value
+                Avisar(NameOf(BusquedaNombre))
+                FotocopiasView.Refresh()
+            End Set
+        End Property
 
 
+        Public Class ResumenItem
+            Public Property Id As Integer
+            Public Property Nombre As String
+        End Class
 
+        Private _resumenesFiltro As List(Of ResumenItem)
+        Public Property ResumenesFiltro As List(Of ResumenItem)
+            Get
+                Return _resumenesFiltro
+            End Get
+            Set(value As List(Of ResumenItem))
+                _resumenesFiltro = value
+                Avisar(NameOf(ResumenesFiltro))
+            End Set
+        End Property
+
+        Private _resumenSeleccionado As ResumenItem
+
+        Public Property ResumenSeleccionado As ResumenItem
+            Get
+                Return _resumenSeleccionado
+            End Get
+            Set(value As ResumenItem)
+                _resumenSeleccionado = value
+                Avisar(NameOf(ResumenSeleccionado))
+                RefrescarListado()
+            End Set
+        End Property
 
         Private Sub EliminarFotocopia(f As Fotocopia)
             If f Is Nothing Then Return
@@ -226,14 +271,18 @@ Namespace ViewModels
         End Sub
 
         Private Sub RefrescarListado()
+
             Fotocopias.Clear()
 
-            For Each f In _repo.ObtenerFotocopiasPorBalance(
-                BalanceActualService.BalanceActualId
-            )
+            If ResumenSeleccionado Is Nothing Then
+                Return
+            End If
+
+            For Each f In _repo.ObtenerFotocopiasPorBalance(ResumenSeleccionado.Id)
                 Fotocopias.Add(f)
             Next
 
+            FotocopiasView.Refresh()
         End Sub
 
 

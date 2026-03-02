@@ -59,5 +59,36 @@ Public Class BalanceRepository
         Return Nothing
     End Function
 
+    Public Function ObtenerTodos() As List(Of BalanceEntity)
 
+        Dim lista As New List(Of BalanceEntity)
+
+        Using cn As New SqliteConnection(Configuracion.ConnectionString)
+            cn.Open()
+
+            Dim cmd As New SqliteCommand("
+            SELECT *
+            FROM resumenes
+            ORDER BY fecha DESC
+        ", cn)
+
+            Using dr = cmd.ExecuteReader()
+                While dr.Read()
+                    lista.Add(New BalanceEntity With {
+                        .IdResumen = CInt(dr("id_resumen")),
+                        .ContadorEquipo1 = CInt(dr("contador_equipo1")),
+                        .ContadorEquipo2 = CInt(dr("contador_equipo2")),
+                        .Efectivo = CInt(dr("efectivo")),
+                        .Transferencia = CInt(dr("transferencia")),
+                        .Fecha = Date.Parse(dr("fecha").ToString()),
+                        .Anio = CInt(dr("anio")),
+                        .IdMes = CInt(dr("id_mes"))
+                    })
+                End While
+            End Using
+        End Using
+
+        Return lista
+
+    End Function
 End Class

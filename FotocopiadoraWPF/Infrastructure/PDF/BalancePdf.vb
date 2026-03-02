@@ -127,6 +127,11 @@ Public Class BalancePdf
                                                                                                                                    row.RelativeItem().AlignLeft().Text("Deudores:").FontSize(10)
                                                                                                                                    row.RelativeItem().AlignRight().Text(_balance.TotalDeudor.ToString).FontSize(10)
                                                                                                                                End Sub)
+
+                                                                                           innerCol.Item().PaddingLeft(30).Row(Sub(row)
+                                                                                                                                   row.RelativeItem().AlignLeft().Text("Pendientes:").FontSize(10)
+                                                                                                                                   row.RelativeItem().AlignRight().Text(_balance.TotalPendientes.ToString).FontSize(10)
+                                                                                                                               End Sub)
                                                                                            innerCol.Item().PaddingLeft(30).Row(Sub(row)
                                                                                                                                    row.RelativeItem().AlignLeft().Text("Perdidas:").FontSize(10)
                                                                                                                                    row.RelativeItem().AlignRight().Text(_balance.TotalPerdida.ToString).FontSize(10)
@@ -241,7 +246,7 @@ Public Class BalancePdf
 
                                                                                            innerCol.Item().Row(Sub(row)
                                                                                                                    row.RelativeItem().AlignLeft().Text("Fin:").FontSize(10)
-                                                                                                                   row.RelativeItem().AlignRight().Text(_balance.EfectivoFinal.ToString).FontSize(10)
+                                                                                                                   row.RelativeItem().AlignRight().Text(_balance.TotalEfectivo.ToString).FontSize(10)
                                                                                                                End Sub)
                                                                                            innerCol.Item().Row(Sub(row)
                                                                                                                    row.RelativeItem().AlignLeft().Text("Subtotal:").ExtraBold().FontSize(10)
@@ -274,7 +279,7 @@ Public Class BalancePdf
 
                                                                                            innerCol.Item().Row(Sub(row)
                                                                                                                    row.RelativeItem().AlignLeft().Text("Fin:").FontSize(10)
-                                                                                                                   row.RelativeItem().AlignRight().Text(_balance.TransferenciaFinal.ToString).FontSize(10)
+                                                                                                                   row.RelativeItem().AlignRight().Text(_balance.TotalTransferencia.ToString).FontSize(10)
                                                                                                                End Sub)
                                                                                            innerCol.Item().Row(Sub(row)
                                                                                                                    row.RelativeItem().AlignLeft().Text("Subtotal:").ExtraBold().FontSize(10)
